@@ -1,11 +1,10 @@
-import './App.css';
 import RetirementCalculator from './components/RetirementCalculator';
+
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   return (
-    <main>
-      <RetirementCalculator />
-    </main>
+    <RetirementCalculator />
   );
 }
 
