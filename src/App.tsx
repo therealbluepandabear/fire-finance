@@ -1,4 +1,4 @@
-import RetirementCalculator from './components/RetirementCalculator';
+import RetirementCalculator from './components/retirement-calculator/RetirementCalculator';
 
 import { ChakraProvider } from '@chakra-ui/react'
 

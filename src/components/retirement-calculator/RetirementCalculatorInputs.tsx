@@ -1,28 +1,20 @@
-import { Flex, Input, InputGroup, InputLeftElement, Text, Button } from '@chakra-ui/react'
-import { MdAttachMoney, MdFace, MdPercent } from 'react-icons/md'
+import { Flex, Text, InputGroup, InputLeftElement, Input, Button } from '@chakra-ui/react'
+import { MdFace, MdAttachMoney, MdPercent } from 'react-icons/md'
 
-function calculateYearsToRetirement(
-    age: number, 
-    annualIncome: number,
-    annualSpending: number, 
-    networth: number,
-    investmentReturn: number,
-    inflationRate: number
-): number {
-    return 5;
-}
-
-export default function RetirementCalculator(): JSX.Element {
+export default function RetirementCalculatorInputs(): JSX.Element {
     const inputStyle = {
         borderRadius: "24px",
         size: "md",
         type: "number"
     }
 
-    const gap = "12px"
-
     return (
-        <Flex flexDirection="column" padding="24px" gap={gap} width={{ base: "100%", md: "50%" }}>
+        <Flex 
+            flexDirection="column" 
+            padding="24px" 
+            gap="12px" 
+            width="30%"
+        >
             <Text fontSize="3xl">Retirement Calculator</Text>
 
             <InputGroup>
