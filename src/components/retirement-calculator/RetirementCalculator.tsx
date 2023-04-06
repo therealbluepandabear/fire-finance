@@ -14,7 +14,7 @@ export default function RetirementCalculator(): JSX.Element {
     }
 
     return (
-        <Flex flexDirection="row">
+        <Flex flexDirection={{ base: "column", md: "row" }}>
             <RetirementCalculatorForm onSubmit={submitHandler} />
 
             <Flex 
@@ -24,6 +24,7 @@ export default function RetirementCalculator(): JSX.Element {
                 height="100vh"
                 padding="56px"
                 flexDirection="column"
+                minWidth="0" /* Allow resizing */
             >
                 <Text fontSize="3xl">Your networth in 100 years will be <Text as="span" fontWeight="bold" color="orange" textDecoration="underline">${networth100yrs}</Text></Text>
                 <RetirementCalculatorChart />
