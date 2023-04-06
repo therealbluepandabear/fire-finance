@@ -8,12 +8,18 @@ import {
     LineElement, 
     Title, 
     Tooltip, 
-    Filler, 
-    Legend 
+    Filler
 } from 'chart.js'
 import { Line as LineChart } from 'react-chartjs-2'
+import { range } from '../../utils'
+import { calculateRetirementAge, RetirementCalculatorInputs } from '../../models/Calculator'
 
-export default function RetirementCalculatorChart(): JSX.Element {
+interface RetirementCalculatorChartProps {
+    age: number,
+    networth: number
+}
+
+export default function RetirementCalculatorChart(props: RetirementCalculatorChartProps): JSX.Element {
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -21,17 +27,10 @@ export default function RetirementCalculatorChart(): JSX.Element {
         LineElement,
         Title,
         Tooltip,
-        Filler,
+        Filler
     )
 
     ChartJS.defaults.font.family = 'Noto Sans'
-    ChartJS.defaults.font.size = 16
-
-    const labels: number[] = []
-
-    for (let i = 17; i < 85; ++i) {
-        labels.push(i)
-    }
 
     const lineChartOptions: ChartOptions<"line"> = {
         responsive: true,
@@ -46,18 +45,31 @@ export default function RetirementCalculatorChart(): JSX.Element {
                 title: {
                     display: true,
                     text: "Networth"
+                },
+                ticks: {
+                    callback: function(value: string | number): string {
+                        return '$' + value;
+                    }
                 }
             }
+        },
+        interaction: {
+            mode: 'x',
+            intersect: false
         }
+
     }
+
+    const labels = range(0, 100)
 
     const lineChartData: ChartData<"line"> = {
         labels: labels,
         datasets: [
             {
                 fill: true, // For Area effect
-                data: labels.map((num) => num ** 2),
-                backgroundColor: 'rgba(255, 165, 0, 0.2)'
+                data: calculateRetirementAge({} as RetirementCalculatorInputs),
+                backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                pointRadius: 0
             }
         ]
     }
