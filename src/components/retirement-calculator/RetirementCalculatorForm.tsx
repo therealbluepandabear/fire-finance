@@ -9,9 +9,9 @@ interface RetirementCalculatorInputProps {
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorInputProps): JSX.Element {
     const inputStyle = {
-        borderRadius: "24px",
-        size: "md",
-        errorBorderColor: "red.500",
+        borderRadius: '24px',
+        size: 'md',
+        errorBorderColor: 'red.500',
     }
 
     const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()

@@ -26,7 +26,7 @@ export default function RetirementCalculator(): JSX.Element {
                 flexDirection="column"
             >
                 <Text fontSize="3xl">Your networth in 100 years will be <Text as="span" fontWeight="bold" color="orange" textDecoration="underline">${networth100yrs}</Text></Text>
-                <RetirementCalculatorChart age={inputs?.age ?? 0} networth={networth100yrs} />
+                <RetirementCalculatorChart />
             </Flex>
         </Flex>
     )
