@@ -69,35 +69,14 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
         y: props.outputs.data.filter((value) => value.age === props.outputs.retirementAge)[0].networth
     }
 
-    const retirementIndicator: { dot: JSX.Element, line: JSX.Element } = {
-        dot: (
-            <ReferenceDot 
-                r={10} 
-                x={pointOfRetirement.x} 
-                y={pointOfRetirement.y} 
-            />
-        ),
-        line: (
-            <ReferenceLine 
-                y={pointOfRetirement.y} 
-                stroke="red"
-                strokeWidth={0.5}
-            />
-        )
-    }
-
-    const chartGradient: JSX.Element = (
-        <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
-        </linearGradient>
-    )
-
     return (
         <ResponsiveContainer>
             <AreaChart data={data}>
                 <defs>
-                    {chartGradient}
+                    <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
+                    </linearGradient>
                 </defs>
                 <Area 
                     fill="url(#colorPv)" 
@@ -120,8 +99,16 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                     content={<ChartTooltip />}
                 />
 
-                {retirementIndicator.line}
-                {retirementIndicator.dot}
+                <ReferenceLine 
+                    y={pointOfRetirement.y} 
+                    stroke="red"
+                    strokeWidth={0.5}
+                />
+                <ReferenceDot 
+                    r={10} 
+                    x={pointOfRetirement.x} 
+                    y={pointOfRetirement.y} 
+                />
             </AreaChart>
         </ResponsiveContainer>
     )

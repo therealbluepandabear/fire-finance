@@ -13,8 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
-import { RegisterOptions, SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form'
-import { useEffect } from 'react'
+import { RegisterOptions, useForm, UseFormRegisterReturn } from 'react-hook-form'
 
 interface RetirementCalculatorInputProps {
     isInvalid: boolean
