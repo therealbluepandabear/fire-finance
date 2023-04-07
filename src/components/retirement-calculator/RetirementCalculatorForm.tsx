@@ -14,6 +14,7 @@ import {
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
 import { RegisterOptions, SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form'
+import { useEffect } from 'react'
 
 interface RetirementCalculatorInputProps {
     isInvalid: boolean
@@ -64,11 +65,15 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
         _active: { filter: "brightness(92%)" }
     }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()
-    
-    const submitHandler: SubmitHandler<RetirementCalculatorInputs> = function(inputs: RetirementCalculatorInputs): void {
-        props.onSubmit(inputs)
-    }
+    const { register, handleSubmit, formState: { errors }, clearErrors, watch } = useForm<RetirementCalculatorInputs>({
+        reValidateMode: 'onSubmit'
+    })
+
+    watch((value, { name, type }) => {
+        if (name && errors[name]) {
+            clearErrors(name)
+        }
+    });
 
     const registerOptions: RegisterOptions = { 
         required: true, 
@@ -77,7 +82,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
     return (
         <Box width={{ base: "100vw", md: "30%" }} padding="24px">
-            <form onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit(props.onSubmit)}>
                 <Flex 
                     flexDirection="column" 
                     gap="12px" 
