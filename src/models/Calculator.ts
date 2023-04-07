@@ -26,8 +26,6 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
         money = calculateMoney()
     }
 
-    console.log(data)
-
     return { 
         retirementAge: age,
         data: data
