@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { Flex, Text } from '@chakra-ui/react'
-import { calculateRetirementAge, RetirementCalculatorInputs } from '../../models/Calculator'
+import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs } from '../../models/Calculator'
 
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
 
 export default function RetirementCalculator(): JSX.Element {
-    const [networth100yrs, setNetworth100yrs] = useState<number>(0)
-    const [inputs, setInputs] = useState<RetirementCalculatorInputs | null>(null)
+    const [outputs, setOutputs] = useState<RetirementCalculatorOutputs | null>(null)
 
     function submitHandler(inputs: RetirementCalculatorInputs): void {
-        setInputs(inputs)
+        setOutputs(calculateRetirementAge(inputs))
     }
 
     return (
@@ -26,8 +25,8 @@ export default function RetirementCalculator(): JSX.Element {
                 flexDirection="column"
                 minWidth="0" /* Allow resizing */
             >
-                <Text fontSize="3xl">Your networth in 100 years will be <Text as="span" fontWeight="bold" color="orange" textDecoration="underline">${networth100yrs}</Text></Text>
-                <RetirementCalculatorChart />
+                {outputs && <Text fontSize="3xl">You can retire by age <Text as="span" fontWeight="bold" color="#82ca9d">{outputs.retirementAge}</Text></Text>}
+                {outputs && <RetirementCalculatorChart outputs={outputs} />}
             </Flex>
         </Flex>
     )

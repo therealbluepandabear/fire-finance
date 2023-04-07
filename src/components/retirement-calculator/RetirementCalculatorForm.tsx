@@ -1,7 +1,7 @@
 import { Flex, Text, InputGroup, InputLeftElement, Input, Button, FormErrorMessage, FormControl, Box } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { RegisterOptions, SubmitHandler, useForm } from 'react-hook-form'
 
 interface RetirementCalculatorInputProps {
     onSubmit: (params: RetirementCalculatorInputs) => void
@@ -14,10 +14,23 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
         errorBorderColor: 'red.500',
     }
 
+    const buttonStyle = {
+        fontWeight: "normal" ,
+        background: "linear-gradient(160deg, #00e9dd 0%, #91d080 100%)",
+        textColor: "white",
+        _hover: { filter: "brightness(108%)" },
+        _active: { filter: "brightness(92%)" }
+    }
+
     const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()
     
     const submitHandler: SubmitHandler<RetirementCalculatorInputs> = function(inputs: RetirementCalculatorInputs): void {
         props.onSubmit(inputs)
+    }
+
+    const registerOptions: RegisterOptions = { 
+        required: true, 
+        setValueAs: (value: string): number => parseInt(value) 
     }
 
     return (
@@ -39,22 +52,10 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                                 sx={inputStyle} 
                                 placeholder="Age" 
                                 type="number"
-                                {...register(
-                                    "age", 
-                                    { 
-                                        required: { 
-                                            value: true, 
-                                            message: 'Age is required.'
-                                        }, 
-                                        min: { 
-                                            value: 0, 
-                                            message: 'Value cannot be less than zero.' 
-                                        } 
-                                    }
-                                )}
+                                {...register("age", registerOptions)}
                             />
                         </InputGroup>
-                        <FormErrorMessage>{errors.age?.message ?? ''}</FormErrorMessage>
+                        <FormErrorMessage>Age is required.</FormErrorMessage>
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.annualIncome}>
@@ -66,7 +67,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                             <Input 
                                 sx={inputStyle} 
                                 placeholder="Annual Income" 
-                                {...register("annualIncome", { required: true })}
+                                {...register("annualIncome", registerOptions)}
                             />
                         </InputGroup>
                         <FormErrorMessage>Annual Income is required.</FormErrorMessage>
@@ -81,7 +82,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                             <Input 
                                 sx={inputStyle} 
                                 placeholder="Annual Spending"  
-                                {...register("annualSpending", { required: true })}
+                                {...register("annualSpending", registerOptions)}
                             />
                         </InputGroup>
                         <FormErrorMessage>Annual Spending is required.</FormErrorMessage>
@@ -96,7 +97,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                             <Input 
                                 sx={inputStyle} 
                                 placeholder="Networth"  
-                                {...register("networth", { required: true })}
+                                {...register("networth", registerOptions)}
                             />
                         </InputGroup>
                         <FormErrorMessage>Networth is required.</FormErrorMessage>
@@ -111,25 +112,10 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                             <Input 
                                 sx={inputStyle} 
                                 placeholder="Investment Return Rate"   
-                                {...register("investmentReturnRate", { required: true })}
+                                {...register("investmentReturnRate", registerOptions)}
                             />
                         </InputGroup>
                         <FormErrorMessage>Investment Return Rate is required.</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.inflationRate}>
-                        <InputGroup>
-                            <InputLeftElement>
-                                <MdPercent color="lightgray" />
-                            </InputLeftElement>
-
-                            <Input
-                                sx={inputStyle} 
-                                placeholder="Inflation Rate"  
-                                {...register("inflationRate", { required: true })}
-                            />
-                        </InputGroup>
-                        <FormErrorMessage>Inflation Rate is required.</FormErrorMessage>
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.safeWithdrawalRate}>
@@ -141,18 +127,14 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorInpu
                             <Input 
                                 sx={inputStyle} 
                                 placeholder="Safe Withdrawal Rate"  
-                                {...register("safeWithdrawalRate", { required: true })}
+                                {...register("safeWithdrawalRate", registerOptions)}
                             />
                         </InputGroup>
                         <FormErrorMessage>Safe Withdrawal Rate is required.</FormErrorMessage>
                     </FormControl>
 
                     <Button 
-                        fontWeight="normal" 
-                        background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)" 
-                        textColor="white"
-                        _hover={{ filter: "brightness(108%)" }}
-                        _active={{ filter: "brightness(92%)" }}
+                        sx={buttonStyle}
                         type="submit"
                     >Calculate</Button>
                 </Flex>

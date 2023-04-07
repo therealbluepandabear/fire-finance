@@ -1,19 +1,42 @@
-function compoundInterestFormula(
-    principalBalance: number,
-    annualInterestRate: number,
-    timeInYears: number
-): number {
-    return principalBalance * (1 + annualInterestRate) ** timeInYears;
-}
+export function calculateRetirementAge(params: RetirementCalculatorInputs): RetirementCalculatorOutputs {    
+    const data: { age: number, networth: number }[] = []
 
-export function calculateRetirementAge(params: RetirementCalculatorInputs): number[] {
-    const data: number[] = []
+    const yearlySavings = params.annualIncome - params.annualSpending
+    let money = params.networth
+    let age = params.age
 
-    for (let i = 0; i < 100; ++i) {
-        data.push(compoundInterestFormula(params.networth, params.investmentReturnRate / 100, i))
+    function calculateMoney(): number {
+        return money + yearlySavings + (money * (params.investmentReturnRate / 100))
     }
 
-    return data
+    while (money * (params.safeWithdrawalRate / 100) < params.annualSpending) {
+        data.push({ age: age, networth: money })
+        money = calculateMoney()
+
+        ++age
+    }
+
+    data.push({ age: age, networth: money })
+    money = calculateMoney()
+
+    const retirementYears = 30
+
+    for (let i = 1; i <= retirementYears; ++i) {
+        data.push({ age: age + i, networth: money })
+        money = calculateMoney()
+    }
+
+    console.log(data)
+
+    return { 
+        retirementAge: age,
+        data: data
+    }
+}
+
+export interface RetirementCalculatorOutputs {
+    retirementAge: number,
+    data: { age: number, networth: number }[]
 }
 
 export interface RetirementCalculatorInputs {
@@ -22,6 +45,5 @@ export interface RetirementCalculatorInputs {
     annualSpending: number,
     networth: number,
     investmentReturnRate: number,
-    inflationRate: number,
     safeWithdrawalRate: number
 }
