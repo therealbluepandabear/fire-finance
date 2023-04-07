@@ -6,7 +6,6 @@ import { RegisterOptions, SubmitHandler, useForm, UseFormRegisterReturn } from '
 interface RetirementCalculatorInputProps {
     isInvalid: boolean
     placeholder: string
-    errorMessage: string
     icon: JSX.Element
     register: UseFormRegisterReturn
 }
@@ -28,7 +27,7 @@ function RetirementCalculatorInput(props: RetirementCalculatorInputProps): JSX.E
                     {...props.register}
                 />
             </InputGroup>
-            <FormErrorMessage>{props.errorMessage}</FormErrorMessage>
+            <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
         </FormControl>
     )
 }
@@ -70,7 +69,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Age" 
                         icon={<MdFace color="lightgray" />} 
                         isInvalid={!!errors.age}
-                        errorMessage="Age is required."
                         register={register("age", registerOptions)} 
                     />
 
@@ -78,7 +76,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Annual Income" 
                         icon={<MdAttachMoney color="lightgray" />} 
                         isInvalid={!!errors.annualIncome}
-                        errorMessage="Annual Income is required."
                         register={register("annualIncome", registerOptions)} 
                     />
 
@@ -86,7 +83,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Annual Spending" 
                         icon={<MdAttachMoney color="lightgray" />} 
                         isInvalid={!!errors.annualSpending}
-                        errorMessage="Annual Spending is required."
                         register={register("annualSpending", registerOptions)} 
                     />
 
@@ -94,7 +90,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Networth" 
                         icon={<MdAttachMoney color="lightgray" />} 
                         isInvalid={!!errors.networth}
-                        errorMessage="Networth is required."
                         register={register("networth", registerOptions)} 
                     />
 
@@ -102,7 +97,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Investment Return Rate" 
                         icon={<MdPercent color="lightgray" />} 
                         isInvalid={!!errors.investmentReturnRate}
-                        errorMessage="Investment Return Rate is required."
                         register={register("investmentReturnRate", registerOptions)} 
                     />
 
@@ -110,7 +104,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         placeholder="Safe Withdrawal Rate" 
                         icon={<MdPercent color="lightgray" />} 
                         isInvalid={!!errors.safeWithdrawalRate}
-                        errorMessage="Safe Withdrawal Rate is required."
                         register={register("safeWithdrawalRate", registerOptions)} 
                     />
 
