@@ -56,14 +56,6 @@ interface RetirementCalculatorFormProps {
 }
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
-    const buttonStyle = {
-        fontWeight: "normal" ,
-        background: "linear-gradient(160deg, #00e9dd 0%, #91d080 100%)",
-        textColor: "white",
-        _hover: { filter: "brightness(108%)" },
-        _active: { filter: "brightness(92%)" }
-    }
-
     const { register, handleSubmit, formState: { errors }, clearErrors, watch } = useForm<RetirementCalculatorInputs>({
         reValidateMode: 'onSubmit'
     })
@@ -145,7 +137,11 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                     />
 
                     <Button 
-                        sx={buttonStyle}
+                        fontWeight="normal"
+                        background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)"
+                        textColor="white"
+                        _hover={{ filter: "brightness(108%)" }}
+                        _active={{ filter: "brightness(92%)" }}
                         type="submit"
                     >Calculate</Button>
                 </Flex>
