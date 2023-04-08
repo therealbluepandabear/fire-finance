@@ -17,9 +17,12 @@ export default function RetirementCalculatorTable(props: RetirementCalculatorTab
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {props.outputs.data.map((obj): JSX.Element => {
+                    {props.outputs.data.map((obj, key): JSX.Element => {
                         return (
-                            <Tr background={obj.age === props.outputs.retirementAge ? 'gold' : 'white' }>
+                            <Tr 
+                                background={obj.age === props.outputs.retirementAge ? 'gold' : 'white'}
+                                key={key}
+                            >
                                 <Td>{obj.age}</Td>
                                 <Td>{currency(obj.networth)}</Td>
                             </Tr>

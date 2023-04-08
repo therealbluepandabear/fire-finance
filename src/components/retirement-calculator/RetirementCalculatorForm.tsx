@@ -7,7 +7,6 @@ import {
     Button, 
     FormErrorMessage,
     FormControl, 
-    Box,
     InputRightElement,
     Tooltip
 } from '@chakra-ui/react'

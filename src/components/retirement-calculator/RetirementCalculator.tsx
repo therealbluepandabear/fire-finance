@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Flex, Text } from '@chakra-ui/react'
+import { Button, Flex, Text } from '@chakra-ui/react'
 import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs } from '../../models/Calculator'
+import { writeXLSX } from '../../utils'
 
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
@@ -17,6 +18,14 @@ export default function RetirementCalculator(): JSX.Element {
         <Flex flexDirection={{ base: "column", md: "row" }}>
             <Flex flexDirection="column" width={{ base: "100vw", md: "30%" }} padding="24px">
                 <RetirementCalculatorForm onSubmit={submitHandler} />
+                {outputs && (
+                    <Button 
+                        fontWeight="normal"
+                        onClick={() => {
+                            writeXLSX(outputs)
+                        }}
+                    >Download Excel File</Button>
+                )}
                 {outputs && <RetirementCalculatorTable outputs={outputs} />}
             </Flex>
 
