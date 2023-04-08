@@ -28,12 +28,14 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     return { 
         retirementAge: age,
+        fireNumber: params.annualSpending / (params.safeWithdrawalRate / 100),
         data: data
     }
 }
 
 export interface RetirementCalculatorOutputs {
     retirementAge: number,
+    fireNumber: number,
     data: { age: number, networth: number }[]
 }
 
