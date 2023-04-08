@@ -33,7 +33,7 @@ function getWorkbook(outputs: RetirementCalculatorOutputs): Workbook {
     ]
 
     outputs.data.forEach(value => {
-        worksheet.addRow({ age: value.age, networth: value.networth })
+        worksheet.addRow({ age: value.age, networth: currency(value.networth) })
     })
 
     const retirementAgeRowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
