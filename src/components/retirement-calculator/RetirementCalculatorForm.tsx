@@ -136,6 +136,14 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         tooltipText="Percentage of retirement savings to withdraw yearly."
                     />
 
+                    <RetirementCalculatorInput 
+                        placeholder="Inflation Rate" 
+                        icon={<MdPercent color="lightgray" />} 
+                        isInvalid={!!errors.inflationRate}
+                        register={register("inflationRate", registerOptions)} 
+                        tooltipText="Annual inflation rate."
+                    />
+
                     <Button 
                         sx={buttonStyle}
                         type="submit"

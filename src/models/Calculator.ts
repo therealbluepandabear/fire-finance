@@ -2,11 +2,14 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     const data: { age: number, networth: number }[] = []
 
     const yearlySavings = params.annualIncome - params.annualSpending
+
     let money = params.networth
     let age = params.age
 
+    const adjustedInvestmentReturnRate = params.investmentReturnRate - params.inflationRate
+
     function calculateMoney(): number {
-        return money + yearlySavings + (money * (params.investmentReturnRate / 100))
+        return money + yearlySavings + (money * (adjustedInvestmentReturnRate / 100))
     }
 
     while (money * (params.safeWithdrawalRate / 100) < params.annualSpending) {
@@ -45,5 +48,6 @@ export interface RetirementCalculatorInputs {
     annualSpending: number,
     networth: number,
     investmentReturnRate: number,
-    safeWithdrawalRate: number
+    safeWithdrawalRate: number,
+    inflationRate: number
 }
