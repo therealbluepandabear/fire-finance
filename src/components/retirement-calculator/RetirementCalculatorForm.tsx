@@ -72,80 +72,78 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
     }
 
     return (
-        <Box width={{ base: "100vw", md: "30%" }} padding="24px">
-            <form onSubmit={handleSubmit(props.onSubmit)}>
-                <Flex 
-                    flexDirection="column" 
-                    gap="12px" 
-                >
-                    <Text fontSize="3xl">Retirement Calculator</Text>
+        <form onSubmit={handleSubmit(props.onSubmit)}>
+            <Flex 
+                flexDirection="column" 
+                gap="12px" 
+            >
+                <Text fontSize="3xl">Retirement Calculator</Text>
 
-                    <RetirementCalculatorInput 
-                        placeholder="Age" 
-                        icon={<MdFace color="lightgray" />} 
-                        isInvalid={!!errors.age}
-                        register={register("age", registerOptions)} 
-                        tooltipText="Your current age."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Age" 
+                    icon={<MdFace color="lightgray" />} 
+                    isInvalid={!!errors.age}
+                    register={register("age", registerOptions)} 
+                    tooltipText="Your current age."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Annual Income" 
-                        icon={<MdAttachMoney color="lightgray" />} 
-                        isInvalid={!!errors.annualIncome}
-                        register={register("annualIncome", registerOptions)} 
-                        tooltipText="Total income earned yearly after tax."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Annual Income" 
+                    icon={<MdAttachMoney color="lightgray" />} 
+                    isInvalid={!!errors.annualIncome}
+                    register={register("annualIncome", registerOptions)} 
+                    tooltipText="Total income earned yearly after tax."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Annual Spending" 
-                        icon={<MdAttachMoney color="lightgray" />} 
-                        isInvalid={!!errors.annualSpending}
-                        register={register("annualSpending", registerOptions)} 
-                        tooltipText="Total money spent yearly."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Annual Spending" 
+                    icon={<MdAttachMoney color="lightgray" />} 
+                    isInvalid={!!errors.annualSpending}
+                    register={register("annualSpending", registerOptions)} 
+                    tooltipText="Total money spent yearly."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Networth" 
-                        icon={<MdAttachMoney color="lightgray" />} 
-                        isInvalid={!!errors.networth}
-                        register={register("networth", registerOptions)} 
-                        tooltipText="Total value of assets minus liabilities."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Networth" 
+                    icon={<MdAttachMoney color="lightgray" />} 
+                    isInvalid={!!errors.networth}
+                    register={register("networth", registerOptions)} 
+                    tooltipText="Total value of assets minus liabilities."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Investment Return Rate" 
-                        icon={<MdPercent color="lightgray" />} 
-                        isInvalid={!!errors.investmentReturnRate}
-                        register={register("investmentReturnRate", registerOptions)} 
-                        tooltipText="Yearly stock market rate of return."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Investment Return Rate" 
+                    icon={<MdPercent color="lightgray" />} 
+                    isInvalid={!!errors.investmentReturnRate}
+                    register={register("investmentReturnRate", registerOptions)} 
+                    tooltipText="Yearly stock market rate of return."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Safe Withdrawal Rate" 
-                        icon={<MdPercent color="lightgray" />} 
-                        isInvalid={!!errors.safeWithdrawalRate}
-                        register={register("safeWithdrawalRate", registerOptions)} 
-                        tooltipText="Percentage of retirement savings to withdraw yearly."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Safe Withdrawal Rate" 
+                    icon={<MdPercent color="lightgray" />} 
+                    isInvalid={!!errors.safeWithdrawalRate}
+                    register={register("safeWithdrawalRate", registerOptions)} 
+                    tooltipText="Percentage of retirement savings to withdraw yearly."
+                />
 
-                    <RetirementCalculatorInput 
-                        placeholder="Inflation Rate" 
-                        icon={<MdPercent color="lightgray" />} 
-                        isInvalid={!!errors.inflationRate}
-                        register={register("inflationRate", registerOptions)} 
-                        tooltipText="Annual inflation rate."
-                    />
+                <RetirementCalculatorInput 
+                    placeholder="Inflation Rate" 
+                    icon={<MdPercent color="lightgray" />} 
+                    isInvalid={!!errors.inflationRate}
+                    register={register("inflationRate", registerOptions)} 
+                    tooltipText="Annual inflation rate."
+                />
 
-                    <Button 
-                        fontWeight="normal"
-                        background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)"
-                        textColor="white"
-                        _hover={{ filter: "brightness(108%)" }}
-                        _active={{ filter: "brightness(92%)" }}
-                        type="submit"
-                    >Calculate</Button>
-                </Flex>
-            </form>
-        </Box>
+                <Button 
+                    fontWeight="normal"
+                    background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)"
+                    textColor="white"
+                    _hover={{ filter: "brightness(108%)" }}
+                    _active={{ filter: "brightness(92%)" }}
+                    type="submit"
+                >Calculate</Button>
+            </Flex>
+        </form>
     )
 }

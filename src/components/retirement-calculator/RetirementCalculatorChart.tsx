@@ -18,9 +18,9 @@ import { RetirementCalculatorOutputs } from '../../models/Calculator'
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
     if (active && payload && payload[0]) {
         const inlineFlexStyle = {
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "6px"
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '6px'
         }
 
         const tooltipData = payload[0];

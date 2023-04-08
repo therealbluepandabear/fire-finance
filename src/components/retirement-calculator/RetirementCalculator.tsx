@@ -4,6 +4,7 @@ import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculato
 
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
+import RetirementCalculatorTable from './RetirementCalculatorTable'
 
 export default function RetirementCalculator(): JSX.Element {
     const [outputs, setOutputs] = useState<RetirementCalculatorOutputs | null>(null)
@@ -14,7 +15,10 @@ export default function RetirementCalculator(): JSX.Element {
 
     return (
         <Flex flexDirection={{ base: "column", md: "row" }}>
-            <RetirementCalculatorForm onSubmit={submitHandler} />
+            <Flex flexDirection="column" width={{ base: "100vw", md: "30%" }} padding="24px">
+                <RetirementCalculatorForm onSubmit={submitHandler} />
+                {outputs && <RetirementCalculatorTable outputs={outputs} />}
+            </Flex>
 
             <Flex 
                 flexGrow="1" 
