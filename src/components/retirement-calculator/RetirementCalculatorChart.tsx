@@ -61,7 +61,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
     const data = props.outputs.data
 
     function tickFormatter(value: number): string {
-        return currency(value)
+        return currency(value, true)
     }
 
     const pointOfRetirement: { x: number, y: number } = {
@@ -74,7 +74,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
             <AreaChart data={data}>
                 <defs>
                     <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                        <stop offset="5%" stopColor="#00d450" stopOpacity={0.8}/>
                         <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
                     </linearGradient>
                 </defs>
@@ -82,16 +82,12 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                     fill="url(#colorPv)" 
                     dataKey="networth" 
                     stroke="#82ca9d" 
-                    strokeWidth={2} 
+                    strokeWidth={4} 
                 />
-                <CartesianGrid stroke="lightgray" strokeDasharray="5 5" />
-                <XAxis 
-                    label={{ value: "Age", dy: 10 }} 
-                    dataKey="age" 
-                />
+                <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+                <XAxis dataKey="age" />
                 <YAxis 
-                    label={{ value: "Networth", dx: -30, angle: -90 }} 
-                    tickCount={8} 
+                    tickCount={12} 
                     tickFormatter={tickFormatter} 
                 />
                 <Tooltip

@@ -14,7 +14,7 @@ import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
 import { RegisterOptions, useForm, UseFormRegisterReturn } from 'react-hook-form'
 
-interface RetirementCalculatorInputProps {
+interface FormInputProps {
     isInvalid: boolean
     placeholder: string
     icon: JSX.Element
@@ -22,7 +22,7 @@ interface RetirementCalculatorInputProps {
     tooltipText: string
 }
 
-function RetirementCalculatorInput(props: RetirementCalculatorInputProps): JSX.Element {
+function FormInput(props: FormInputProps): JSX.Element {
     return (
         <FormControl isInvalid={props.isInvalid}>
             <InputGroup>
@@ -54,6 +54,27 @@ interface RetirementCalculatorFormProps {
     onSubmit: (params: RetirementCalculatorInputs) => void
 }
 
+function PercentageIcon(): JSX.Element {
+    return <MdPercent color="lightgray" />
+}
+
+function DollarsIcon(): JSX.Element {
+    return <MdAttachMoney color="lightgray" />
+}
+
+function FormSubmitButton(): JSX.Element {
+    return (
+        <Button 
+            fontWeight="normal"
+            background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)"
+            textColor="white"
+            _hover={{ filter: "brightness(108%)" }}
+            _active={{ filter: "brightness(92%)" }}
+            type="submit"
+        >Calculate</Button>
+    )
+}
+
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
     const { register, handleSubmit, formState: { errors }, clearErrors, watch } = useForm<RetirementCalculatorInputs>({
         reValidateMode: 'onSubmit'
@@ -62,12 +83,17 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
     watch((value, { name, type }) => {
         if (name && errors[name]) {
             clearErrors(name)
-        }
-    });
+        } 
+    })
 
-    const registerOptions: RegisterOptions = { 
+    const numberRegisterOptions: RegisterOptions = { 
         required: true, 
         setValueAs: (value: string): number => parseInt(value)
+    }
+    
+    const percentageRegisterOptions: RegisterOptions = {
+        required: true,
+        setValueAs: (value: string): number => parseInt(value) / 100
     }
 
     return (
@@ -78,70 +104,111 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
             >
                 <Text fontSize="3xl">Retirement Calculator</Text>
 
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Age" 
                     icon={<MdFace color="lightgray" />} 
                     isInvalid={!!errors.age}
-                    register={register("age", registerOptions)} 
+                    register={register("age", numberRegisterOptions)} 
                     tooltipText="Your current age."
                 />
 
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Annual Income" 
-                    icon={<MdAttachMoney color="lightgray" />} 
+                    icon={<DollarsIcon />} 
                     isInvalid={!!errors.annualIncome}
-                    register={register("annualIncome", registerOptions)} 
+                    register={register("annualIncome", numberRegisterOptions)} 
                     tooltipText="Total income earned yearly after tax."
                 />
 
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Annual Spending" 
-                    icon={<MdAttachMoney color="lightgray" />} 
+                    icon={<DollarsIcon />} 
                     isInvalid={!!errors.annualSpending}
-                    register={register("annualSpending", registerOptions)} 
+                    register={register("annualSpending", numberRegisterOptions)} 
                     tooltipText="Total money spent yearly."
                 />
 
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Networth" 
-                    icon={<MdAttachMoney color="lightgray" />} 
+                    icon={<DollarsIcon />} 
                     isInvalid={!!errors.networth}
-                    register={register("networth", registerOptions)} 
+                    register={register("networth", numberRegisterOptions)} 
                     tooltipText="Total value of assets minus liabilities."
                 />
 
-                <RetirementCalculatorInput 
-                    placeholder="Investment Return Rate" 
-                    icon={<MdPercent color="lightgray" />} 
-                    isInvalid={!!errors.investmentReturnRate}
-                    register={register("investmentReturnRate", registerOptions)} 
-                    tooltipText="Yearly stock market rate of return."
-                />
-
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Safe Withdrawal Rate" 
-                    icon={<MdPercent color="lightgray" />} 
+                    icon={<PercentageIcon />} 
                     isInvalid={!!errors.safeWithdrawalRate}
-                    register={register("safeWithdrawalRate", registerOptions)} 
+                    register={register("safeWithdrawalRate", percentageRegisterOptions)} 
                     tooltipText="Percentage of retirement savings to withdraw yearly."
                 />
 
-                <RetirementCalculatorInput 
+                <FormInput 
                     placeholder="Inflation Rate" 
-                    icon={<MdPercent color="lightgray" />} 
+                    icon={<PercentageIcon />} 
                     isInvalid={!!errors.inflationRate}
-                    register={register("inflationRate", registerOptions)} 
+                    register={register("inflationRate", percentageRegisterOptions)} 
                     tooltipText="Annual inflation rate."
                 />
 
-                <Button 
-                    fontWeight="normal"
-                    background="linear-gradient(160deg, #00e9dd 0%, #91d080 100%)"
-                    textColor="white"
-                    _hover={{ filter: "brightness(108%)" }}
-                    _active={{ filter: "brightness(92%)" }}
-                    type="submit"
-                >Calculate</Button>
+                <Text>Asset Allocation</Text>
+
+                <Flex flexDirection="row" gap="12px">
+                    <FormInput
+                        placeholder="Stocks"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.stocksAllocationRate}
+                        register={register("stocksAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of annual income to invest in stocks."
+                    />
+
+                    <FormInput
+                        placeholder="Bonds"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.bondsAllocationRate}
+                        register={register("bondsAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of annual income to invest in bonds."
+                    />
+
+                    <FormInput 
+                        placeholder="Cash"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.cashAllocationRate}
+                        register={register("cashAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of annual income to invest in cash."
+                    />
+                </Flex>
+
+                <Text>Expected Rate of Return</Text>
+
+                <Flex flexDirection="row" gap="12px">
+                    <FormInput
+                        placeholder="Stocks"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.stocksReturnRate}
+                        register={register("stocksReturnRate", percentageRegisterOptions)}
+                        tooltipText="Expected annual rate of return for your money invested in stocks."
+                    />
+
+                    <FormInput
+                        placeholder="Bonds"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.bondsReturnRate}
+                        register={register("bondsReturnRate", percentageRegisterOptions)}
+                        tooltipText="Expected annual rate of return for your money invested in bonds."
+                    />
+
+                    <FormInput
+                        placeholder="Cash"
+                        icon={<PercentageIcon />}
+                        isInvalid={!!errors.cashReturnRate}
+                        register={register("cashReturnRate", percentageRegisterOptions)}
+                        tooltipText="Expected annual rate of return for your money invested in cash."
+                    />
+                </Flex>
+
+                <FormSubmitButton />
             </Flex>
         </form>
     )

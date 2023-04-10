@@ -11,14 +11,11 @@ export function range(start: number, end: number): number[] {
     return array
 }
 
-export function currency(amount: number): string {
+export function currency(amount: number, compact: boolean = false): string {
     return new Intl.NumberFormat(
-        'en-US', 
-        { 
-            style: 'currency',
-            currency: 'USD' 
-        }
-    ).format(amount).replace('.00', '')
+        'en-US',
+        { style: 'currency', currency: 'USD', notation: compact ? "compact" : "standard" }
+    ).format(amount)
 }
 
 function getWorkbook(outputs: RetirementCalculatorOutputs): Workbook {
@@ -29,20 +26,27 @@ function getWorkbook(outputs: RetirementCalculatorOutputs): Workbook {
     worksheet.headerFooter.oddHeader = 'FIRE Outlook'
     worksheet.columns = [
         { header: 'Age', key: 'age' },
+        { header: 'Year', key: 'year' },
         { header: 'Networth', key: 'networth' }
     ]
 
-    outputs.data.forEach(value => {
-        worksheet.addRow({ age: value.age, networth: currency(value.networth) })
+    outputs.data.forEach((value, index) => {
+        worksheet.addRow({ age: value.age, year: new Date().getFullYear() + index, networth: currency(value.networth) })
     })
 
     const retirementAgeRowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
-    const rowToHighlight = worksheet.getRow(retirementAgeRowIndex)
 
-    rowToHighlight.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'ffd700' }
+    const row = worksheet.getRow(retirementAgeRowIndex)
+    const cellsToHighlight = [row.getCell(1), row.getCell(2), row.getCell(3)]
+
+    const highlightColor = 'ffd700'
+
+    for (const cell of cellsToHighlight) {
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: highlightColor }
+        }
     }
 
     return workbook
