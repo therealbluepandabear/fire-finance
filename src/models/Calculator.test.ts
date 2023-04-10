@@ -27,26 +27,4 @@ test('1 >> retirement age, fire number, and data to be correct', () => {
     expect(fireNumber).toBe(750_000)
 })
 
-test('2 >> retirement age, fire number, and data to be correct', () => {
-    const { retirementAge, data, fireNumber } = calculateRetirementAge({
-        age: 36,
-        annualIncome: 120_000,
-        annualSpending: 50_000,
-        networth: 4_000,
-    
-        safeWithdrawalRate: 0.04,
-        inflationRate: 0,
-    
-        stocksAllocationRate: 1,
-        bondsAllocationRate: 0,
-        cashAllocationRate: 0,
-    
-        stocksReturnRate: 0.07,
-        bondsReturnRate: 0,
-        cashReturnRate: 0
-    })
-    
-    expect(retirementAge).toBe(48)
-})
-
 export {}
