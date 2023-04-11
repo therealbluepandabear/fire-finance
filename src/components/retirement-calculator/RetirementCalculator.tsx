@@ -15,7 +15,7 @@ export default function RetirementCalculator(): JSX.Element {
     }
 
     async function excelClickHandler() {
-        if (outputs === null) {
+        if (!outputs) {
             return
         }
 

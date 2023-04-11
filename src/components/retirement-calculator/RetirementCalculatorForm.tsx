@@ -8,7 +8,13 @@ import {
     FormErrorMessage,
     FormControl, 
     InputRightElement,
-    Tooltip
+    Tooltip,
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
@@ -199,6 +205,26 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         tooltipText="Expected annual rate of return for your money invested in cash."
                     />
                 </Flex>
+
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <AccordionButton>
+                            <Flex width="100%">
+                                Advanced
+                                <AccordionIcon marginLeft="auto" />
+                            </Flex>
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                            <FormInput
+                                placeholder="Income growth rate"
+                                icon={<PercentageIcon />}
+                                isInvalid={!!errors.incomeGrowthRate}
+                                register={register("incomeGrowthRate", { ...percentageRegisterOptions, required: false })}
+                                tooltipText="Expected annual rate of growth for your annual income."
+                            />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
 
                 <FormSubmitButton />
             </Flex>

@@ -1,10 +1,6 @@
 import { Workbook } from 'exceljs'
 import { currency } from '../utils'
 
-function calculateAnnualSavings(params: RetirementCalculatorInputs): number {
-    return params.annualIncome - params.annualSpending
-}
-
 function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
     return {
         adjustedStocksReturnRate: params.stocksReturnRate - params.inflationRate,
@@ -16,13 +12,14 @@ function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
 export function calculateRetirementAge(params: RetirementCalculatorInputs): RetirementCalculatorOutputs {    
     const data: { age: number, networth: number }[] = []
 
-    const annualSavings = calculateAnnualSavings(params)
+    let annualIncome = params.annualIncome
+    let annualSavings = calculateAnnualSavings()
 
     const total = { 
         networth: params.networth, 
         stocks: 0, 
         bonds: 0, 
-        cash: 0 
+        cash: 0
     }
 
     // Calculates the adjusted return RATE by factoring in inflation
@@ -65,10 +62,22 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
         // Calculate total networth
         total.networth = calculateTotalNetworth()
     }
+    
+    function calculateAnnualSavings(): number {
+        return annualIncome - params.annualSpending
+    }
+
+    function updateAnnualIncome() {
+        if (params.incomeGrowthRate) {
+            annualIncome = annualIncome + (annualIncome * params.incomeGrowthRate)
+            annualSavings = calculateAnnualSavings()
+        }
+    }
 
     while ((total.networth * params.safeWithdrawalRate) < params.annualSpending) {
         data.push({ age: age, networth: total.networth })
         updateTotal()
+        updateAnnualIncome()
 
         ++age
     }
@@ -150,4 +159,6 @@ export interface RetirementCalculatorInputs {
     stocksReturnRate: number
     bondsReturnRate: number
     cashReturnRate: number
+
+    incomeGrowthRate?: number
 }
