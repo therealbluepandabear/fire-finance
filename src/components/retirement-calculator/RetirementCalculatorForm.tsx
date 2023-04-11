@@ -76,15 +76,7 @@ function FormSubmitButton(): JSX.Element {
 }
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
-    const { register, handleSubmit, formState: { errors }, clearErrors, watch } = useForm<RetirementCalculatorInputs>({
-        reValidateMode: 'onSubmit'
-    })
-
-    watch((value, { name, type }) => {
-        if (name && errors[name]) {
-            clearErrors(name)
-        } 
-    })
+    const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()
 
     const numberRegisterOptions: RegisterOptions = { 
         required: true, 

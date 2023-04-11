@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Flex, Text } from '@chakra-ui/react'
-import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs } from '../../models/Calculator'
-import { writeXLSX } from '../../utils'
+import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs, getExcelWorkbook } from '../../models/Calculator'
+import { saveToFile } from '../../utils'
 
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
@@ -14,6 +14,21 @@ export default function RetirementCalculator(): JSX.Element {
         setOutputs(calculateRetirementAge(inputs))
     }
 
+    async function excelClickHandler() {
+        if (outputs === null) {
+            return
+        }
+
+        const workbook = getExcelWorkbook(outputs)
+
+        const xlsxId = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    
+        const buffer = await workbook.xlsx.writeBuffer()
+        const xlsxBlob = new Blob([buffer], { type: xlsxId })
+    
+        saveToFile('fire_outlook.xlsx', URL.createObjectURL(xlsxBlob))
+    }
+
     return (
         <Flex flexDirection={{ base: "column", md: "row" }}>
             <Flex flexDirection="column" width={{ base: "100vw", md: "30%" }} padding="24px">
@@ -21,9 +36,7 @@ export default function RetirementCalculator(): JSX.Element {
                 {outputs && (
                     <Button 
                         fontWeight="normal"
-                        onClick={() => {
-                            writeXLSX(outputs)
-                        }}
+                        onClick={excelClickHandler}
                     >Download Excel File</Button>
                 )}
                 {outputs && <RetirementCalculatorTable outputs={outputs} />}

@@ -1,3 +1,6 @@
+import { Workbook } from 'exceljs'
+import { currency } from '../utils'
+
 function calculateAnnualSavings(params: RetirementCalculatorInputs): number {
     return params.annualIncome - params.annualSpending
 }
@@ -91,6 +94,40 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     }
 }
 
+export function getExcelWorkbook(outputs: RetirementCalculatorOutputs) {
+    const workbook = new Workbook()
+    workbook.created = new Date()
+
+    const worksheet = workbook.addWorksheet('FIRE Outlook')
+    worksheet.headerFooter.oddHeader = 'FIRE Outlook'
+    worksheet.columns = [
+        { header: 'Age', key: 'age' },
+        { header: 'Year', key: 'year' },
+        { header: 'Networth', key: 'networth' }
+    ]
+
+    outputs.data.forEach((value, index) => {
+        worksheet.addRow({ age: value.age, year: new Date().getFullYear() + index, networth: currency(value.networth) })
+    })
+
+    const retirementAgeRowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
+
+    const row = worksheet.getRow(retirementAgeRowIndex)
+    const cellsToHighlight = [row.getCell(1), row.getCell(2), row.getCell(3)]
+
+    const highlightColor = 'ffd700'
+
+    for (const cell of cellsToHighlight) {
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: highlightColor }
+        }
+    }
+
+    return workbook
+}
+
 export interface RetirementCalculatorOutputs {
     retirementAge: number,
     fireNumber: number,
@@ -98,19 +135,19 @@ export interface RetirementCalculatorOutputs {
 }
 
 export interface RetirementCalculatorInputs {
-    age: number,
-    annualIncome: number,
-    annualSpending: number,
-    networth: number,
+    age: number
+    annualIncome: number
+    annualSpending: number
+    networth: number
 
-    safeWithdrawalRate: number,
-    inflationRate: number,
+    safeWithdrawalRate: number
+    inflationRate: number
 
-    stocksAllocationRate: number,
-    bondsAllocationRate: number,
-    cashAllocationRate: number,
+    stocksAllocationRate: number
+    bondsAllocationRate: number
+    cashAllocationRate: number
 
     stocksReturnRate: number
-    bondsReturnRate: number,
+    bondsReturnRate: number
     cashReturnRate: number
 }
