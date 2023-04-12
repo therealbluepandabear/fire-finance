@@ -103,7 +103,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     }
 }
 
-export function getExcelWorkbook(outputs: RetirementCalculatorOutputs) {
+export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook {
     const workbook = new Workbook()
     workbook.created = new Date()
 
