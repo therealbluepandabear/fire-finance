@@ -28,6 +28,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     let age = params.age
 
     function calculateTotalStocks(): number {
+        console.log(annualSavings)
         const stocksSavingsContribution = (annualSavings * params.stocksAllocationRate)
 
         return total.stocks + (total.stocks * adjustedStocksReturnRate) + stocksSavingsContribution
@@ -62,7 +63,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
         // Calculate total networth
         total.networth = calculateTotalNetworth()
     }
-    
+
     function calculateAnnualSavings(): number {
         return annualIncome - params.annualSpending
     }
@@ -74,23 +75,28 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
         }
     }
 
-    while ((total.networth * params.safeWithdrawalRate) < params.annualSpending) {
-        data.push({ age: age, networth: total.networth })
+    function update() {
         updateTotal()
         updateAnnualIncome()
+    }
+
+
+    while ((total.networth * params.safeWithdrawalRate) < params.annualSpending) {
+        data.push({ age: age, networth: total.networth })
+        update()
 
         ++age
     }
 
     data.push({ age: age, networth: total.networth })
-    updateTotal()
+    update()
 
     // Calculate for the next 30 years after retirement
     const retirementYears = 30
 
     for (let i = 1; i <= retirementYears; ++i) {
         data.push({ age: age + i, networth: total.networth })
-        updateTotal()
+        update()
     }
 
     // fireNumber is the minimum amount of money needed for retirement

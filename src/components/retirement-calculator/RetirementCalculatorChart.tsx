@@ -85,10 +85,16 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                     strokeWidth={4} 
                 />
                 <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
-                <XAxis dataKey="age" />
+                <XAxis 
+                    dataKey="age" 
+                    axisLine={false} 
+                    interval={1}
+                />
                 <YAxis 
                     tickCount={12} 
                     tickFormatter={tickFormatter} 
+                    axisLine={false}
+                    tickLine={false}
                 />
                 <Tooltip
                     wrapperStyle={{ outline: "none" }} 
