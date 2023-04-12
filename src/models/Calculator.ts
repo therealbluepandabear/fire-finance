@@ -16,7 +16,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     let annualSavings = calculateAnnualSavings()
 
     const total = { 
-        networth: params.networth, 
+        networth: 0, 
         stocks: 0, 
         bonds: 0, 
         cash: 0
