@@ -53,11 +53,16 @@ test('excel workbook to be correct', () => {
     expect(worksheet).toBeTruthy()
 
     const rowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
-    const cell = worksheet.getRow(rowIndex).getCell(1)
+    const row = worksheet.getRow(rowIndex)
+    const cells = [row.getCell(1), row.getCell(2), row.getCell(3)]
+    
+    for (const cell of cells) {
+        expect(cell.fill.type).toBe('pattern')
 
-    expect(cell.fill.type).toBe('pattern')
-    expect((cell.fill as FillPattern).pattern).toBe('solid')
-    expect((cell.fill as FillPattern).fgColor?.argb).toBe('ffd700')
+        const fillAsFillPattern = cell.fill as FillPattern
+        expect(fillAsFillPattern.pattern).toBe('solid')
+        expect(fillAsFillPattern.fgColor?.argb).toBe('ffd700')
+    }
 })
 
 export {}
