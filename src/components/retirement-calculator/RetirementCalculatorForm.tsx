@@ -13,8 +13,7 @@ import {
     AccordionButton,
     AccordionIcon,
     AccordionItem,
-    AccordionPanel,
-    Box
+    AccordionPanel
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
