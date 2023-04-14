@@ -235,15 +235,29 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                                 <FormControl 
                                     flexDirection="row"
                                     display="flex"
-                                    alignItems="center"
                                 >
-                                    <FormLabel htmlFor="visualize-retirement" mb="0">
-                                        Visualize retirement
-                                    </FormLabel>
-                                    <Switch 
-                                        id="visualize-retirement"
-                                        {...register("visualizeRetirement")}
-                                    />
+                                    <InputGroup alignItems="center">
+                                        <FormLabel htmlFor="visualize-retirement" mb="0">
+                                            Visualize retirement
+                                        </FormLabel>
+                                        <Switch 
+                                            id="visualize-retirement"
+                                            {...register("visualizeRetirement")}
+                                        />
+                                        <Tooltip 
+                                            label="Check this if you want to visualize your financial situation for the next 30 years after retirement" 
+                                            textAlign="center" 
+                                            fontSize="12px"
+                                        >
+                                            <InputRightElement 
+                                                display="flex" 
+                                                height="100%" 
+                                                alignItems="center"
+                                            >
+                                                <MdHelp color="lightgray" />
+                                            </InputRightElement>
+                                        </Tooltip>
+                                    </InputGroup>
                                 </FormControl>
                             </Flex>
                         </AccordionPanel>
