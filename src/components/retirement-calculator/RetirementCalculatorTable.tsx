@@ -18,15 +18,15 @@ export default function RetirementCalculatorTable(props: RetirementCalculatorTab
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {props.outputs.data.map((obj, key): JSX.Element => {
+                    {props.outputs.data.map((point, key): JSX.Element => {
                         return (
                             <Tr 
-                                background={obj.age === props.outputs.retirementAge ? 'gold' : 'white'}
+                                background={point.age === props.outputs.retirementAge ? 'gold' : 'white'}
                                 key={key}
                             >
-                                <Td>{obj.age}</Td>
-                                <Td>{new Date().getFullYear() + key}</Td>
-                                <Td>{currency(obj.networth)}</Td>
+                                <Td>{point.age}</Td>
+                                <Td>{point.year}</Td>
+                                <Td>{currency(point.networth)}</Td>
                             </Tr>
                         )
                     })}

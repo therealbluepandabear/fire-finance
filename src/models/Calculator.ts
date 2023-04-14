@@ -10,7 +10,9 @@ function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
 }
 
 export function calculateRetirementAge(params: RetirementCalculatorInputs): RetirementCalculatorOutputs {    
-    const data: { age: number, networth: number }[] = []
+    const data: RetirementProjectionPoint[] = []
+
+    let hasRetired = false
 
     let annualIncome = params.annualIncome
     let annualSavings = calculateAnnualSavings()
@@ -25,25 +27,47 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     // Calculates the adjusted return RATE by factoring in inflation
     const { adjustedStocksReturnRate, adjustedBondsReturnRate, adjustedCashReturnRate } = calculateAdjustedReturnRate(params)
 
+    // Starting age and year which will be incrementally updated in the loop
     let age = params.age
+    let year = new Date().getFullYear()
 
     function calculateTotalStocks(): number {
-        console.log(annualSavings)
         const stocksSavingsContribution = (annualSavings * params.stocksAllocationRate)
 
-        return total.stocks + (total.stocks * adjustedStocksReturnRate) + stocksSavingsContribution
+        let totalStocks = total.stocks + (total.stocks * adjustedStocksReturnRate) + stocksSavingsContribution
+
+        // Take away the safe withdrawal amount as the user is retired
+        if (hasRetired) {
+            totalStocks = totalStocks * (1 - params.safeWithdrawalRate)
+        }
+
+        return totalStocks
     }
 
     function calculateTotalBonds(): number {
         const bondsSavingsContribution = (annualSavings * params.bondsAllocationRate)
 
-        return total.bonds + (total.bonds * adjustedBondsReturnRate) + bondsSavingsContribution
+        let totalBonds = total.bonds + (total.bonds * adjustedBondsReturnRate) + bondsSavingsContribution
+
+        // Take away the safe withdrawal amount as the user is retired
+        if (hasRetired) {
+            totalBonds = totalBonds * (1 - params.safeWithdrawalRate)
+        }
+
+        return totalBonds
     }
 
     function calculateTotalCash(): number {
         const cashSavingsContribution = (annualSavings * params.cashAllocationRate)
 
-        return total.cash + (total.cash * adjustedCashReturnRate) + cashSavingsContribution
+        let totalCash = total.cash + (total.cash * adjustedCashReturnRate) + cashSavingsContribution
+
+        // Take away the safe withdrawal amount as the user is retired
+        if (hasRetired) {
+            totalCash = totalCash * (1 - params.safeWithdrawalRate)
+        }
+
+        return totalCash
     }
 
     function calculateTotalNetworth(): number {
@@ -51,16 +75,16 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     }
 
     function updateTotal(): void {
-        // Calculate total stocks
+        // Update total stocks
         total.stocks = calculateTotalStocks()
         
-        // Calculate total bonds
+        // Update total bonds
         total.bonds = calculateTotalBonds()
 
-        // Calculate total cash
+        // Update total cash
         total.cash = calculateTotalCash()
 
-        // Calculate total networth
+        // Update total networth
         total.networth = calculateTotalNetworth()
     }
 
@@ -68,35 +92,50 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
         return annualIncome - params.annualSpending
     }
 
-    function updateAnnualIncome() {
+    function updateAnnualIncomeAndSavings() {
         if (params.incomeGrowthRate) {
             annualIncome = annualIncome + (annualIncome * params.incomeGrowthRate)
-            annualSavings = calculateAnnualSavings()
         }
+
+        annualSavings = calculateAnnualSavings()
     }
 
     function update() {
         updateTotal()
-        updateAnnualIncome()
+
+        // Only calculate at a point in time in which the user is not retired, this is 
+        // because we are setting the savings to 0 when the user retires anyways, so this
+        // function does not need to be called
+        if (!hasRetired) {
+            updateAnnualIncomeAndSavings()
+        }
     }
 
-
     while ((total.networth * params.safeWithdrawalRate) < params.annualSpending) {
-        data.push({ age: age, networth: total.networth })
+        data.push({ age: age, year: year, networth: total.networth })
         update()
 
         ++age
+        ++year
     }
 
-    data.push({ age: age, networth: total.networth })
-    update()
+    data.push({ age: age, year: year, networth: total.networth })
 
-    // Calculate for the next 30 years after retirement
-    const retirementYears = 30
+    // At this point the user has retired, so the annual savings will be set to 0 and each year
+    // the safe withdrawal percentage will be taken away from their asset allocations etc.
+    hasRetired = true
 
-    for (let i = 1; i <= retirementYears; ++i) {
-        data.push({ age: age + i, networth: total.networth })
-        update()
+    // Set annual savings to 0, the person will be retired at this point of time so they are not
+    // capable of 'saving' anything as they are not working at a job
+    annualSavings = 0
+
+    const retirementAge = age
+
+    if (params.visualizeRetirement) {
+        for (let i = 1; i <= (retirementAge + 30) - retirementAge; ++i) {
+            update()      
+            data.push({ age: age + i, year: ++year, networth: total.networth })
+        }
     }
 
     // fireNumber is the minimum amount of money needed for retirement
@@ -122,7 +161,7 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
     ]
 
     outputs.data.forEach((value, index) => {
-        worksheet.addRow({ age: value.age, year: new Date().getFullYear() + index, networth: currency(value.networth) })
+        worksheet.addRow({ age: value.age, year: value.year, networth: currency(value.networth) })
     })
 
     const retirementAgeRowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
@@ -130,23 +169,27 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
     const row = worksheet.getRow(retirementAgeRowIndex)
     const cellsToHighlight = [row.getCell(1), row.getCell(2), row.getCell(3)]
 
-    const highlightColor = 'ffd700'
-
     for (const cell of cellsToHighlight) {
         cell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: highlightColor }
+            fgColor: { argb: 'ffd700' }
         }
     }
 
     return workbook
 }
 
+interface RetirementProjectionPoint {
+    age: number
+    year: number
+    networth: number
+}
+
 export interface RetirementCalculatorOutputs {
     retirementAge: number,
     fireNumber: number,
-    data: { age: number, networth: number }[]
+    data: RetirementProjectionPoint[]
 }
 
 export interface RetirementCalculatorInputs {
@@ -167,4 +210,5 @@ export interface RetirementCalculatorInputs {
     cashReturnRate: number
 
     incomeGrowthRate?: number
+    visualizeRetirement?: boolean
 }

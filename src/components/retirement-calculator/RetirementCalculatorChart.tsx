@@ -1,5 +1,5 @@
 import { Box, Text, Flex } from '@chakra-ui/react'
-import { MdFace, MdAccountBalanceWallet } from 'react-icons/md'
+import { MdFace, MdAccountBalanceWallet, MdCalendarMonth } from 'react-icons/md'
 import { 
     AreaChart, 
     Area, 
@@ -36,6 +36,14 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
                     <Text fontSize="md">
                         <Text fontSize="md" fontWeight="bold" as="span">Age: </Text>
                         {label}
+                    </Text>
+                </Flex>
+
+                <Flex sx={inlineFlexStyle}>
+                    <MdCalendarMonth />
+                    <Text fontSize="md">
+                        <Text fontSize="md" fontWeight="bold" as="span">Year: </Text>
+                        {tooltipData.payload.year}
                     </Text>
                 </Flex>
 

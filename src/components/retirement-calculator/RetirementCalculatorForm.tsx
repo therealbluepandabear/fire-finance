@@ -13,7 +13,9 @@ import {
     AccordionButton,
     AccordionIcon,
     AccordionItem,
-    AccordionPanel
+    AccordionPanel,
+    Switch,
+    FormLabel
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
@@ -67,6 +69,10 @@ function DollarsIcon(): JSX.Element {
     return <MdAttachMoney color="lightgray" />
 }
 
+function AgeIcon(): JSX.Element {
+    return <MdFace color="lightgray" />
+}
+
 function FormSubmitButton(): JSX.Element {
     return (
         <Button 
@@ -103,7 +109,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Age" 
-                    icon={<MdFace color="lightgray" />} 
+                    icon={<AgeIcon />} 
                     isInvalid={!!errors.age}
                     register={register("age", numberRegisterOptions)} 
                     tooltipText="Your current age."
@@ -214,13 +220,32 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                             </Flex>
                         </AccordionButton>
                         <AccordionPanel pb={4}>
-                            <FormInput
-                                placeholder="Income growth rate"
-                                icon={<PercentageIcon />}
-                                isInvalid={!!errors.incomeGrowthRate}
-                                register={register("incomeGrowthRate", { ...percentageRegisterOptions, required: false })}
-                                tooltipText="Expected annual rate of growth for your annual income."
-                            />
+                            <Flex 
+                                flexDirection="column" 
+                                gap="12px" 
+                            >
+                                <FormInput
+                                    placeholder="Income growth rate"
+                                    icon={<PercentageIcon />}
+                                    isInvalid={!!errors.incomeGrowthRate}
+                                    register={register("incomeGrowthRate", { ...percentageRegisterOptions, required: false })}
+                                    tooltipText="Expected annual rate of growth for your annual income."
+                                />
+
+                                <FormControl 
+                                    flexDirection="row"
+                                    display="flex"
+                                    alignItems="center"
+                                >
+                                    <FormLabel htmlFor="visualize-retirement" mb="0">
+                                        Visualize retirement
+                                    </FormLabel>
+                                    <Switch 
+                                        id="visualize-retirement"
+                                        {...register("visualizeRetirement")}
+                                    />
+                                </FormControl>
+                            </Flex>
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>
