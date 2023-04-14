@@ -157,7 +157,10 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <Text>Asset Allocation</Text>
 
-                <Flex flexDirection="row" gap="12px">
+                <Flex 
+                    flexDirection={{ base: "row", md: "column", xl: "row" }}
+                    gap="12px"
+                >
                     <FormInput
                         placeholder="Stocks"
                         icon={<PercentageIcon />}
@@ -185,7 +188,10 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <Text>Expected Rate of Return</Text>
 
-                <Flex flexDirection="row" gap="12px">
+                <Flex 
+                    flexDirection={{ base: "row", md: "column", xl: "row" }}
+                    gap="12px"
+                >
                     <FormInput
                         placeholder="Stocks"
                         icon={<PercentageIcon />}
