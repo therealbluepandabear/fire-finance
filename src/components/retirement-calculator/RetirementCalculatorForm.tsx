@@ -233,7 +233,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                         <AccordionPanel pb={4}>
                             <Flex 
                                 flexDirection="column" 
-                                gap="12px" 
+                                gap="13px" 
                             >
                                 <FormInput
                                     placeholder="Income growth rate"
