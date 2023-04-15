@@ -45,7 +45,7 @@ function FormInput(props: FormInputProps): JSX.Element {
                     type="number"
                     {...props.register}
                 />
-                <FormLabel style={{ marginLeft: "32px" }} color="gray">{props.placeholder}</FormLabel>
+                <FormLabel style={{ marginLeft: "32px" }} color="gray" background="transparent">{props.placeholder}</FormLabel>
                 <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
 
                 <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
@@ -108,7 +108,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <Flex 
                 flexDirection="column" 
-                gap="12px" 
+                gap="13px" 
             >
                 <Text fontSize="3xl">Retirement Calculator</Text>
 
@@ -164,7 +164,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <Flex 
                     flexDirection={{ base: "column", xl: "row" }}
-                    gap="12px"
+                    gap="13px"
                 >
                     <FormInput
                         placeholder="Stocks"
@@ -195,7 +195,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <Flex 
                     flexDirection={{ base: "column", xl: "row" }}
-                    gap="12px"
+                    gap="13px"
                 >
                     <FormInput
                         placeholder="Stocks"
