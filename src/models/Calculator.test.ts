@@ -1,7 +1,7 @@
 import { FillPattern } from 'exceljs'
 import { calculateRetirementAge, getExcelWorkbook } from './Calculator'
 
-test('retirement age, fire number, and data to be correct', () => {
+test('(1) retirement age, fire number, and data to be correct', () => {
     const { retirementAge, data, fireNumber } = calculateRetirementAge({
         age: 20,
         annualIncome: 70_000,
@@ -26,6 +26,35 @@ test('retirement age, fire number, and data to be correct', () => {
     expect(Math.floor(data[4].networth)).toBe(177_597)
     expect(Math.floor(data[13].networth)).toBe(805_625)
     expect(fireNumber).toBe(750_000)
+})
+
+test('(2) retirement age, fire number, and data to be correct', () => {
+    const { retirementAge, data, fireNumber } = calculateRetirementAge({
+        age: 40,
+        annualIncome: 100_000,
+        annualSpending: 85_000,
+        networth: 670_000,
+    
+        safeWithdrawalRate: 0.04,
+        inflationRate: 0.03,
+    
+        stocksAllocationRate: 1,
+        bondsAllocationRate: 0,
+        cashAllocationRate: 0,
+    
+        stocksReturnRate: 0.05,
+        bondsReturnRate: 0,
+        cashReturnRate: 0,
+
+        incomeGrowthRate: 0.03
+    })
+    
+    expect(retirementAge).toBe(67)
+    expect(Math.floor(data[3].networth)).toBe(55_027)
+    expect(Math.floor(data[9].networth)).toBe(267_155)
+    expect(Math.floor(data[16].networth)).toBe(732_380)
+    expect(Math.floor(data[12].networth)).toBe(434_056)
+    expect(fireNumber).toBe(2_125_000)
 })
 
 test('excel workbook to be correct', () => {
