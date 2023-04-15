@@ -3,9 +3,9 @@ import { currency } from '../utils'
 
 function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
     return {
-        adjustedStocksReturnRate: params.stocksReturnRate - params.inflationRate,
-        adjustedBondsReturnRate: params.bondsReturnRate - params.inflationRate,
-        adjustedCashReturnRate: params.cashReturnRate - params.inflationRate
+        adjustedStocksReturnRate: ((1 + params.stocksReturnRate) / (1 + params.inflationRate)) - 1,
+        adjustedBondsReturnRate: ((1 + params.bondsReturnRate) / (1 + params.inflationRate)) - 1,
+        adjustedCashReturnRate: ((1 + params.cashReturnRate) / (1 + params.inflationRate)) - 1
     }
 }
 
