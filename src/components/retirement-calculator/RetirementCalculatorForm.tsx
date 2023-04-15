@@ -158,7 +158,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                 <Text>Asset Allocation</Text>
 
                 <Flex 
-                    flexDirection={{ base: "row", md: "column", xl: "row" }}
+                    flexDirection={{ base: "column", xl: "row" }}
                     gap="12px"
                 >
                     <FormInput
@@ -189,7 +189,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                 <Text>Expected Rate of Return</Text>
 
                 <Flex 
-                    flexDirection={{ base: "row", md: "column", xl: "row" }}
+                    flexDirection={{ base: "column", xl: "row" }}
                     gap="12px"
                 >
                     <FormInput
