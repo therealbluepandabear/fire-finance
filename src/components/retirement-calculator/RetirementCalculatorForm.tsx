@@ -45,6 +45,8 @@ function FormInput(props: FormInputProps): JSX.Element {
                     type="number"
                     {...props.register}
                 />
+                <FormLabel style={{ marginLeft: "32px" }} color="gray">{props.placeholder}</FormLabel>
+                <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
 
                 <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
                     <InputRightElement>
@@ -52,8 +54,6 @@ function FormInput(props: FormInputProps): JSX.Element {
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>
-            <FormLabel style={{ marginLeft: "32px" }} color="gray">{props.placeholder}</FormLabel>
-            <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
         </FormControl>
     )
 }
