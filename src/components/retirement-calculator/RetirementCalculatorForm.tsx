@@ -46,14 +46,13 @@ function FormInput(props: FormInputProps): JSX.Element {
                     {...props.register}
                 />
                 <FormLabel style={{ marginLeft: "32px" }} color="gray" background="transparent">{props.placeholder}</FormLabel>
-                <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
-
                 <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
                     <InputRightElement>
                         <TooltipIcon />
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>
+            <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
         </FormControl>
     )
 }
