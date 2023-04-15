@@ -31,7 +31,7 @@ interface FormInputProps {
 
 function FormInput(props: FormInputProps): JSX.Element {
     return (
-        <FormControl isInvalid={props.isInvalid}>
+        <FormControl isInvalid={props.isInvalid} variant="floating">
             <InputGroup>
                 <InputLeftElement>
                     {props.icon}
@@ -41,17 +41,18 @@ function FormInput(props: FormInputProps): JSX.Element {
                     borderRadius="24px"
                     size="md"
                     errorBorderColor="red.500"
-                    placeholder={props.placeholder} 
+                    placeholder=" "
                     type="number"
                     {...props.register}
                 />
 
                 <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
                     <InputRightElement>
-                        <MdHelp color="lightgray" />
+                        <TooltipIcon />
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>
+            <FormLabel style={{ marginLeft: "32px" }} color="gray">{props.placeholder}</FormLabel>
             <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
         </FormControl>
     )
@@ -59,6 +60,10 @@ function FormInput(props: FormInputProps): JSX.Element {
 
 interface RetirementCalculatorFormProps {
     onSubmit: (params: RetirementCalculatorInputs) => void
+}
+
+function TooltipIcon(): JSX.Element {
+    return <MdHelp color="lightgray" />
 }
 
 function PercentageIcon(): JSX.Element {
@@ -260,7 +265,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                                                 height="100%" 
                                                 alignItems="center"
                                             >
-                                                <MdHelp color="lightgray" />
+                                                <TooltipIcon />
                                             </InputRightElement>
                                         </Tooltip>
                                     </InputGroup>
