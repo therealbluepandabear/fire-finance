@@ -31,43 +31,17 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     let age = params.age
     let year = new Date().getFullYear()
 
-    function calculateTotalStocks(): number {
-        const stocksSavingsContribution = (annualSavings * params.stocksAllocationRate)
+    function calculateTotal(type: "stocks" | "bonds" | "cash", allocationRate: number, returnRate: number) {
+        const savingsContribution = (annualSavings * allocationRate)
 
-        let totalStocks = total.stocks + (total.stocks * adjustedStocksReturnRate) + stocksSavingsContribution
-
-        // Take away the safe withdrawal amount as the user is retired
-        if (hasRetired) {
-            totalStocks = totalStocks * (1 - params.safeWithdrawalRate)
-        }
-
-        return totalStocks
-    }
-
-    function calculateTotalBonds(): number {
-        const bondsSavingsContribution = (annualSavings * params.bondsAllocationRate)
-
-        let totalBonds = total.bonds + (total.bonds * adjustedBondsReturnRate) + bondsSavingsContribution
+        let totalAmount = total[type] + (total[type] * returnRate) + savingsContribution
 
         // Take away the safe withdrawal amount as the user is retired
         if (hasRetired) {
-            totalBonds = totalBonds * (1 - params.safeWithdrawalRate)
+            totalAmount = totalAmount * (1 - params.safeWithdrawalRate)
         }
 
-        return totalBonds
-    }
-
-    function calculateTotalCash(): number {
-        const cashSavingsContribution = (annualSavings * params.cashAllocationRate)
-
-        let totalCash = total.cash + (total.cash * adjustedCashReturnRate) + cashSavingsContribution
-
-        // Take away the safe withdrawal amount as the user is retired
-        if (hasRetired) {
-            totalCash = totalCash * (1 - params.safeWithdrawalRate)
-        }
-
-        return totalCash
+        return totalAmount
     }
 
     function calculateTotalNetworth(): number {
@@ -76,13 +50,13 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     function updateTotal(): void {
         // Update total stocks
-        total.stocks = calculateTotalStocks()
+        total.stocks = calculateTotal("stocks", params.stocksAllocationRate, adjustedStocksReturnRate)
         
         // Update total bonds
-        total.bonds = calculateTotalBonds()
+        total.bonds = calculateTotal("bonds", params.bondsAllocationRate, adjustedBondsReturnRate)
 
         // Update total cash
-        total.cash = calculateTotalCash()
+        total.cash = calculateTotal("cash", params.cashAllocationRate, adjustedCashReturnRate)
 
         // Update total networth
         total.networth = calculateTotalNetworth()
