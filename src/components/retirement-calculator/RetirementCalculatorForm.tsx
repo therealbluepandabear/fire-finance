@@ -15,11 +15,16 @@ import {
     AccordionItem,
     AccordionPanel,
     Switch,
-    FormLabel
+    FormLabel,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
 import { RegisterOptions, useForm, UseFormRegisterReturn } from 'react-hook-form'
+import { useState } from 'react'
 
 interface FormInputProps {
     isInvalid: boolean
@@ -93,6 +98,8 @@ function FormSubmitButton(): JSX.Element {
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
     const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()
 
+    const [invalidAllocation, setInvalidAllocation] = useState(false)
+
     const numberRegisterOptions: RegisterOptions = { 
         required: true, 
         setValueAs: (value: string): number => parseInt(value)
@@ -103,8 +110,19 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
         setValueAs: (value: string): number => parseInt(value) / 100
     }
 
+    function onSubmit(data: RetirementCalculatorInputs) {
+        const { stocksAllocationRate, bondsAllocationRate, cashAllocationRate } = data
+
+        if ((stocksAllocationRate + bondsAllocationRate + cashAllocationRate) !== 1) {
+            setInvalidAllocation(true)
+        } else {
+            setInvalidAllocation(false)
+            props.onSubmit(data)
+        }
+    }
+
     return (
-        <form onSubmit={handleSubmit(props.onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Flex 
                 flexDirection="column" 
                 gap="13px" 
@@ -235,44 +253,40 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                                 gap="13px" 
                             >
                                 <FormInput
-                                    placeholder="Income growth rate"
+                                    placeholder="Income Growth Rate"
                                     icon={<PercentageIcon />}
                                     isInvalid={!!errors.incomeGrowthRate}
                                     register={register("incomeGrowthRate", { ...percentageRegisterOptions, required: false })}
                                     tooltipText="Expected annual rate of growth for your annual income."
                                 />
 
-                                <FormControl 
-                                    flexDirection="row"
-                                    display="flex"
-                                >
-                                    <InputGroup alignItems="center">
-                                        <FormLabel htmlFor="visualize-retirement" mb="0">
-                                            Visualize retirement
-                                        </FormLabel>
-                                        <Switch 
-                                            id="visualize-retirement"
-                                            {...register("visualizeRetirement")}
-                                        />
-                                        <Tooltip 
-                                            label="Check this if you want to visualize your financial situation for the next 30 years after retirement" 
-                                            textAlign="center" 
-                                            fontSize="12px"
-                                        >
-                                            <InputRightElement 
-                                                display="flex" 
-                                                height="100%" 
-                                                alignItems="center"
-                                            >
-                                                <TooltipIcon />
-                                            </InputRightElement>
-                                        </Tooltip>
-                                    </InputGroup>
-                                </FormControl>
+                                <FormInput
+                                    placeholder="Retirement Age"
+                                    icon={<AgeIcon />}
+                                    isInvalid={!!errors.retirementAge}
+                                    register={register("retirementAge", { ...numberRegisterOptions, required: false })}
+                                    tooltipText="Age at which you expect to retire."
+                                />
+
+                                <FormInput
+                                    placeholder="Maximum Age"
+                                    icon={<AgeIcon />}
+                                    isInvalid={!!errors.maximumAge}
+                                    register={register("maximumAge", { ...numberRegisterOptions, required: false })}
+                                    tooltipText="Maximum age for your retirement plan."
+                                />
                             </Flex>
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>
+
+                {invalidAllocation && (
+                    <Alert status="error" border="1px solid red" background="#ffcccb">
+                        <AlertIcon />
+                        <AlertTitle>Invalid asset allocation</AlertTitle>
+                        <AlertDescription>Asset allocation must add to 100%.</AlertDescription>
+                    </Alert>
+                )}
 
                 <FormSubmitButton />
             </Flex>

@@ -121,6 +121,24 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     data.push({ age: age, year: year, networth: total.networth })
 
+    // Calculate for the extra years after financial independence (if the user has specified a maximum age)
+    if (params.retirementAge || params.maximumAge) {
+        let ageToQuery: number = 0
+
+        if (params.maximumAge && !params.retirementAge) {
+            ageToQuery = params.maximumAge
+        } else if (params.maximumAge && params.retirementAge) {
+            ageToQuery = params.retirementAge
+        }
+
+        let extraAge = age
+
+        while (extraAge < ageToQuery) {
+            update()
+            data.push({ age: ++extraAge, year: ++year, networth: total.networth })
+        }
+    }
+
     // At this point the user has retired, so the annual savings will be set to 0 and each year
     // the safe withdrawal percentage will be taken away from their asset allocations etc.
     hasRetired = true
@@ -129,12 +147,10 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     // capable of 'saving' anything as they are not working at a job
     annualSavings = 0
 
-    const retirementAge = age
-
-    if (params.visualizeRetirement) {
-        for (let i = 1; i <= (retirementAge + 30) - retirementAge; ++i) {
+    if (params.maximumAge && params.retirementAge) {
+        for (let i = 1; i <= (params.maximumAge - params.retirementAge); ++i) {
             update()      
-            data.push({ age: age + i, year: ++year, networth: total.networth })
+            data.push({ age: params.retirementAge + i, year: ++year, networth: total.networth })
         }
     }
 
@@ -210,5 +226,6 @@ export interface RetirementCalculatorInputs {
     cashReturnRate: number
 
     incomeGrowthRate?: number
-    visualizeRetirement?: boolean
+    retirementAge?: number
+    maximumAge?: number
 }
