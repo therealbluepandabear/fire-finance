@@ -21,7 +21,7 @@ export default function RetirementCalculatorTable(props: RetirementCalculatorTab
                     {props.outputs.data.map((point, key): JSX.Element => {
                         return (
                             <Tr 
-                                background={point.age === props.outputs.retirementAge ? 'gold' : 'white'}
+                                background={point.age === props.outputs.fireAge ? 'gold' : 'white'}
                                 key={key}
                             >
                                 <Td>{point.age}</Td>

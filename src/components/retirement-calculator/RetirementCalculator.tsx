@@ -51,7 +51,7 @@ export default function RetirementCalculator(): JSX.Element {
                 flexDirection="column"
                 minWidth="0" /* Allow resizing */
             >
-                {outputs && <Text fontSize="3xl">You can retire by age <Text as="span" fontWeight="bold" color="#82ca9d">{outputs.retirementAge}</Text></Text>}
+                {outputs && <Text fontSize="3xl">You can retire by age <Text as="span" fontWeight="bold" color="#82ca9d">{outputs.fireAge}</Text></Text>}
                 {outputs && <RetirementCalculatorChart outputs={outputs} />}
             </Flex>
         </Flex>

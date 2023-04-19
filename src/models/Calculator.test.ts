@@ -2,7 +2,7 @@ import { FillPattern } from 'exceljs'
 import { calculateRetirementAge, getExcelWorkbook } from './Calculator'
 
 test('(1) retirement age, fire number, and data to be correct', () => {
-    const { retirementAge, data, fireNumber } = calculateRetirementAge({
+    const { fireAge: retirementAge, data, fireNumber } = calculateRetirementAge({
         age: 20,
         annualIncome: 70_000,
         annualSpending: 30_000,
@@ -31,7 +31,7 @@ test('(1) retirement age, fire number, and data to be correct', () => {
 })
 
 test('(2) retirement age, fire number, and data to be correct', () => {
-    const { retirementAge, data, fireNumber } = calculateRetirementAge({
+    const { fireAge: retirementAge, data, fireNumber } = calculateRetirementAge({
         age: 40,
         annualIncome: 100_000,
         annualSpending: 85_000,
@@ -105,7 +105,7 @@ test('handles retirement and maximum age correctly', () => {
 })
 
 test('handles only maximum age correctly', () => {
-    const { data, retirementAge } = calculateRetirementAge({
+    const { data, fireAge: retirementAge } = calculateRetirementAge({
         age: 16,
         annualIncome: 20_000,
         annualSpending: 3_000,
@@ -168,7 +168,7 @@ test('excel workbook to be correct', () => {
 
     expect(worksheet).toBeTruthy()
 
-    const rowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
+    const rowIndex = outputs.fireAge - (outputs.data[0].age) + 2
     const row = worksheet.getRow(rowIndex)
     const cells = [row.getCell(1), row.getCell(2), row.getCell(3)]
     

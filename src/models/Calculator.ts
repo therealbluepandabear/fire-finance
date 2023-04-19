@@ -132,9 +132,10 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     const fireNumber = params.annualSpending / params.safeWithdrawalRate
 
     return { 
-        retirementAge: age,
+        fireAge: age,
         fireNumber: fireNumber,
-        data: data
+        data: data,
+        retirementAge: params.retirementAge
     }
 }
 
@@ -154,7 +155,7 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
         worksheet.addRow({ age: value.age, year: value.year, networth: currency(value.networth) })
     })
 
-    const retirementAgeRowIndex = outputs.retirementAge - (outputs.data[0].age) + 2
+    const retirementAgeRowIndex = outputs.fireAge - (outputs.data[0].age) + 2
 
     const row = worksheet.getRow(retirementAgeRowIndex)
     const cellsToHighlight = [row.getCell(1), row.getCell(2), row.getCell(3)]
@@ -177,9 +178,10 @@ interface RetirementProjectionPoint {
 }
 
 export interface RetirementCalculatorOutputs {
-    retirementAge: number,
-    fireNumber: number,
+    fireAge: number
+    fireNumber: number
     data: RetirementProjectionPoint[]
+    retirementAge?: number
 }
 
 export interface RetirementCalculatorInputs {

@@ -1,5 +1,5 @@
 import { Box, Text, Flex } from '@chakra-ui/react'
-import { MdFace, MdAccountBalanceWallet, MdCalendarMonth, MdFlag } from 'react-icons/md'
+import { MdFace, MdAccountBalanceWallet, MdCalendarMonth, MdFlag, MdBeachAccess } from 'react-icons/md'
 import { 
     AreaChart, 
     Area, 
@@ -61,6 +61,33 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     return null
 }
 
+interface RetirementMilestoneIndicatorProps {
+    type: "financial-independence" | "retirement"
+    cx: number
+    cy: number
+}
+
+function RetirementMilestoneIndicator(props: RetirementMilestoneIndicatorProps): JSX.Element {
+    return (
+        <Box 
+            width="20px" 
+            height="20px" 
+            borderRadius="30px" 
+            background={props.type === "financial-independence" ? "lightblue" : "lightgreen"}
+            position="absolute"
+            left={props.cx - 10}
+            top={(props.cy - 10) - 60}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            transform="scale(2)"
+            pointerEvents="none"
+        >
+            {props.type === "financial-independence" ? <MdFlag /> : <MdBeachAccess />}
+        </Box>
+    )
+}
+
 interface RetirementCalculatorProps {
     outputs: RetirementCalculatorOutputs
 }
@@ -68,24 +95,45 @@ interface RetirementCalculatorProps {
 export default function RetirementCalculatorChart(props: RetirementCalculatorProps): JSX.Element {
     const data = props.outputs.data
 
-    const [cx, setCx] = useState(0)
-    const [cy, setCy] = useState(0)
+    const [fiCx, setFiCx] = useState(0)
+    const [fiCy, setFiCy] = useState(0)
+
+    const [retirementCx, setRetirementCx] = useState(0)
+    const [retirementCy, setRetirementCy] = useState(0)
 
     function tickFormatter(value: number): string {
         return currency(value, true)
     }
 
-    const pointOfRetirement = {
-        x: props.outputs.retirementAge!,
-        y: props.outputs.data.filter((value) => value.age === props.outputs.retirementAge)[0].networth
+    const pointOfFinancialIndependence = {
+        x: props.outputs.fireAge,
+        y: props.outputs.data.filter((value) => value.age === props.outputs.fireAge)[0].networth
+    }
+
+    let pointOfRetirement: { x: number, y: number } | null = null
+
+    if (props.outputs.retirementAge) {
+        pointOfRetirement = {
+            x: props.outputs.retirementAge,
+            y: props.outputs.data.filter((value) => value.age === props.outputs.retirementAge)[0].networth
+        }
     }
 
     // We have to use a bad hack to get the cx and cy values, this includes creating a nested component, which isn't a good
     // practice but I don't have much choice in this scenario, it's very (hackish) but it is what is lol
-    function CustomReferenceDot(props: { cx: number, cy: number }) {
+    function FinancialIndependenceRef(props: { cx: number, cy: number }): JSX.Element {
         useEffect(() => {
-            setCx(props.cx)
-            setCy(props.cy)
+            setFiCx(props.cx)
+            setFiCy(props.cy)
+        }, [props.cx, props.cy])
+    
+        return <></>
+    }
+
+    function RetirementAgeRef(props: { cx: number, cy: number }): JSX.Element {
+        useEffect(() => {
+            setRetirementCx(props.cx)
+            setRetirementCy(props.cy)
         }, [props.cx, props.cy])
     
         return <></>
@@ -125,30 +173,28 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                     />
 
                     <ReferenceDot 
-                        shape={CustomReferenceDot}
+                        shape={FinancialIndependenceRef}
                         r={10} 
-                        x={pointOfRetirement.x} 
-                        y={pointOfRetirement.y} 
+                        x={pointOfFinancialIndependence.x} 
+                        y={pointOfFinancialIndependence.y} 
                     />
+
+                    {pointOfRetirement && (
+                        <ReferenceDot 
+                            shape={RetirementAgeRef}
+                            r={10} 
+                            x={pointOfRetirement.x} 
+                            y={pointOfRetirement.y} 
+                        />
+                    )}
                 </AreaChart>
             </ResponsiveContainer>
 
-            <Box 
-                width="20px" 
-                height="20px" 
-                borderRadius="30px" 
-                background="lightblue" 
-                position="absolute"
-                left={cx - 10}
-                top={(cy - 10) - 60}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                transform="scale(2)"
-                pointerEvents="none"
-            >
-                <MdFlag />
-            </Box>
+            <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+
+            {pointOfRetirement && (
+                <RetirementMilestoneIndicator type="retirement" cx={retirementCx} cy={retirementCy} />
+            )}
         </Box>
     )
 }
