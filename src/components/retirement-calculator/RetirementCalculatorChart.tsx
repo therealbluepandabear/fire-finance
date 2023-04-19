@@ -96,7 +96,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                 <XAxis 
                     dataKey="age" 
                     axisLine={false} 
-                    interval={1}
+                    interval={Math.floor(data.length / 26)}
                 />
                 <YAxis 
                     tickCount={12} 

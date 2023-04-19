@@ -21,10 +21,12 @@ test('(1) retirement age, fire number, and data to be correct', () => {
     })
     
     expect(retirementAge).toBe(33)
+
     expect(Math.floor(data[2].networth)).toBe(82_800)
     expect(Math.floor(data[7].networth)).toBe(346_160)
     expect(Math.floor(data[4].networth)).toBe(177_597)
     expect(Math.floor(data[13].networth)).toBe(805_625)
+
     expect(fireNumber).toBe(750_000)
 })
 
@@ -50,10 +52,12 @@ test('(2) retirement age, fire number, and data to be correct', () => {
     })
     
     expect(retirementAge).toBe(67)
+
     expect(Math.floor(data[3].networth)).toBe(55_027)
     expect(Math.floor(data[9].networth)).toBe(267_155)
     expect(Math.floor(data[16].networth)).toBe(732_380)
     expect(Math.floor(data[12].networth)).toBe(434_056)
+
     expect(fireNumber).toBe(2_125_000)
 })
 
@@ -172,6 +176,7 @@ test('excel workbook to be correct', () => {
         expect(cell.fill.type).toBe('pattern')
 
         const fillAsFillPattern = cell.fill as FillPattern
+    
         expect(fillAsFillPattern.pattern).toBe('solid')
         expect(fillAsFillPattern.fgColor?.argb).toBe('ffd700')
     }
