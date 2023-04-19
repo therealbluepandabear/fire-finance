@@ -57,6 +57,47 @@ test('(2) retirement age, fire number, and data to be correct', () => {
     expect(fireNumber).toBe(2_125_000)
 })
 
+test('handles retirement and maximum age correctly', () => {
+    const { data } = calculateRetirementAge({
+        age: 33,
+        annualIncome: 60_000,
+        annualSpending: 45_000,
+        networth: 170_000,
+    
+        safeWithdrawalRate: 0.05,
+        inflationRate: 0.03,
+    
+        stocksAllocationRate: 0.5,
+        bondsAllocationRate: 0.5,
+        cashAllocationRate: 0,
+    
+        stocksReturnRate: 0.08,
+        bondsReturnRate: 0.03,
+        cashReturnRate: 0,
+
+        incomeGrowthRate: 0.02,
+
+        retirementAge: 66,
+        maximumAge: 100
+    })
+
+    expect(Math.floor(data[33].networth)).toBe(1_891_922)
+    expect(Math.floor(data[28].networth)).toBe(1_330_552)
+    expect(Math.floor(data[46].networth)).toBe(1_518_338)
+    expect(Math.floor(data[67].networth)).toBe(1_208_079)
+    expect(Math.floor(data[37].networth)).toBe(1_753_727)
+    expect(Math.floor(data[25].networth)).toBe(1_059_301)
+
+    const maxNetworth = Math.max.apply(null, data.map((value) => value.networth))
+    
+    expect(Math.floor(maxNetworth)).toBe(1_891_922)
+
+    const maxPoint = data[data.findIndex((value) => value.networth === maxNetworth)]
+    
+    expect(maxPoint.age).toBe(66)
+    expect(maxPoint.year).toBe(2056)
+})
+
 test('excel workbook to be correct', () => {
     const outputs = calculateRetirementAge({
         age: 32,

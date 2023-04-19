@@ -49,24 +49,17 @@ function FormInput(props: FormInputProps): JSX.Element {
                     type="number"
                     {...props.register}
                 />
+
                 <FormLabel style={{ marginLeft: "32px" }} color="gray" background="transparent">{props.placeholder}</FormLabel>
                 <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
                     <InputRightElement>
-                        <TooltipIcon />
+                        <MdHelp color="lightgray" />
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>
             <FormErrorMessage>{props.placeholder} is required</FormErrorMessage>
         </FormControl>
     )
-}
-
-interface RetirementCalculatorFormProps {
-    onSubmit: (params: RetirementCalculatorInputs) => void
-}
-
-function TooltipIcon(): JSX.Element {
-    return <MdHelp color="lightgray" />
 }
 
 function PercentageIcon(): JSX.Element {
@@ -92,6 +85,10 @@ function FormSubmitButton(): JSX.Element {
             type="submit"
         >Calculate</Button>
     )
+}
+
+interface RetirementCalculatorFormProps {
+    onSubmit: (params: RetirementCalculatorInputs) => void
 }
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
