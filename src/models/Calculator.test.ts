@@ -88,7 +88,7 @@ test('handles retirement and maximum age correctly', () => {
     expect(Math.floor(data[37].networth)).toBe(1_753_727)
     expect(Math.floor(data[25].networth)).toBe(1_059_301)
 
-    const maxNetworth = Math.max.apply(null, data.map((value) => value.networth))
+    const maxNetworth = Math.max(...data.map((value) => value.networth))
     
     expect(Math.floor(maxNetworth)).toBe(1_891_922)
 
@@ -96,6 +96,48 @@ test('handles retirement and maximum age correctly', () => {
     
     expect(maxPoint.age).toBe(66)
     expect(maxPoint.year).toBe(2056)
+
+    expect(data.length).toBe(68)
+})
+
+test('handles only maximum age correctly', () => {
+    const { data, retirementAge } = calculateRetirementAge({
+        age: 16,
+        annualIncome: 20_000,
+        annualSpending: 3_000,
+        networth: 4_000,
+    
+        safeWithdrawalRate: 0.04,
+        inflationRate: 0.05,
+    
+        stocksAllocationRate: 0.9,
+        bondsAllocationRate: 0.1,
+        cashAllocationRate: 0,
+    
+        stocksReturnRate: 0.04,
+        bondsReturnRate: 0.06,
+        cashReturnRate: 0,
+
+        incomeGrowthRate: 0.02,
+        maximumAge: 50
+    })
+
+    expect(retirementAge).toBe(21)
+    expect(Math.floor(data[14].networth)).toBe(265_106)
+    expect(Math.floor(data[16].networth)).toBe(308_330)
+    expect(Math.floor(data[10].networth)).toBe(182_977)
+    expect(Math.floor(data[27].networth)).toBe(575_325)
+
+    const maxNetworth = Math.max(...data.map((value) => value.networth))
+
+    expect(Math.floor(maxNetworth)).toBe(775_119)
+
+    const maxPoint = data[data.findIndex((value) => value.networth === maxNetworth)]
+    
+    expect(maxPoint.age).toBe(50)
+    expect(maxPoint.year).toBe(2057)
+
+    expect(data.length).toBe(35)
 })
 
 test('excel workbook to be correct', () => {
