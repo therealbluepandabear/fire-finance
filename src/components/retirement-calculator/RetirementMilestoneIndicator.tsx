@@ -50,7 +50,7 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
                     duration: 6,
                     repeat: Infinity,
                     ease: 'easeOut',
-                    repeatDelay: -1.5
+                    repeatDelay: -2
                 }}
                 style={{
                     position: "absolute",
