@@ -1,5 +1,5 @@
 import { Box, Text, Flex } from '@chakra-ui/react'
-import { MdFace, MdAccountBalanceWallet, MdCalendarMonth, MdFlag, MdBeachAccess } from 'react-icons/md'
+import { MdFace, MdAccountBalanceWallet, MdCalendarMonth } from 'react-icons/md'
 import { 
     AreaChart, 
     Area, 
@@ -14,6 +14,7 @@ import {
 import { currency } from '../../utils'
 import { RetirementCalculatorOutputs } from '../../models/Calculator'
 import { useEffect, useState } from 'react'
+import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
 
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
     if (active && payload && payload[0]) {
@@ -59,33 +60,6 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     } 
 
     return null
-}
-
-interface RetirementMilestoneIndicatorProps {
-    type: "financial-independence" | "retirement"
-    cx: number
-    cy: number
-}
-
-function RetirementMilestoneIndicator(props: RetirementMilestoneIndicatorProps): JSX.Element {
-    return (
-        <Box 
-            width="20px" 
-            height="20px" 
-            borderRadius="30px" 
-            background={props.type === "financial-independence" ? "lightblue" : "lightgreen"}
-            position="absolute"
-            left={props.cx - 10}
-            top={(props.cy - 10) - 40}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            transform="scale(2)"
-            pointerEvents="none"
-        >
-            {props.type === "financial-independence" ? <MdFlag /> : <MdBeachAccess />}
-        </Box>
-    )
 }
 
 interface RetirementCalculatorProps {
@@ -190,10 +164,15 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                 </AreaChart>
             </ResponsiveContainer>
 
-            <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+            {!pointOfRetirement && (
+                <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+            )}
 
             {pointOfRetirement && (
-                <RetirementMilestoneIndicator type="retirement" cx={retirementCx} cy={retirementCy} />
+                <>
+                    <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+                    <RetirementMilestoneIndicator type="retirement" cx={retirementCx} cy={retirementCy} />
+                </>
             )}
         </Box>
     )

@@ -17,7 +17,6 @@ import {
     FormLabel,
     Alert,
     AlertIcon,
-    AlertTitle,
     AlertDescription
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
@@ -92,7 +91,23 @@ interface RetirementCalculatorFormProps {
 }
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
-    const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>()
+    const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>({ defaultValues: {
+        age: 20,
+        annualIncome: 70_000,
+        annualSpending: 30_000,
+
+        networth: 0,
+        safeWithdrawalRate: 4,
+        inflationRate: 0,
+
+        stocksAllocationRate: 100,
+        bondsAllocationRate: 0,
+        cashAllocationRate: 0,
+
+        stocksReturnRate: 7,
+        bondsReturnRate: 0,
+        cashReturnRate: 0
+    }})
 
     const [invalidAllocation, setInvalidAllocation] = useState(false)
 
