@@ -6,12 +6,14 @@ import { saveToFile } from '../../utils'
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
 import RetirementCalculatorTable from './RetirementCalculatorTable'
+import CountUp from 'react-countup'
 
 export default function RetirementCalculator(): JSX.Element {
     const [outputs, setOutputs] = useState<RetirementCalculatorOutputs | null>(null)
 
     function submitHandler(inputs: RetirementCalculatorInputs): void {
-        setOutputs(calculateRetirementAge(inputs))
+        const outputs = calculateRetirementAge(inputs)
+        setOutputs(outputs)
     }
 
     async function excelClickHandler() {
@@ -52,11 +54,15 @@ export default function RetirementCalculator(): JSX.Element {
                 minWidth="0" /* Allow resizing */
             >
                 {outputs && (
-                    <Text fontSize="3xl">You can retire by age
-                        <Text as="span" fontWeight="bold" color="#82ca9d"> {outputs.fireAge}</Text>
+                    <Text fontSize="3xl">You can retire by age{' '}
+                        <Text as="span" fontWeight="bold" color="#82ca9d">
+                            <CountUp start={0} end={outputs.fireAge} duration={1.4} />
+                        </Text>
                     </Text>
                 )}
-                {outputs && <RetirementCalculatorChart outputs={outputs} />}
+                {outputs && (
+                    <RetirementCalculatorChart outputs={outputs} />
+                )}
             </Flex>
         </Flex>
     )
