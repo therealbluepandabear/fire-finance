@@ -76,7 +76,7 @@ function RetirementMilestoneIndicator(props: RetirementMilestoneIndicatorProps):
             background={props.type === "financial-independence" ? "lightblue" : "lightgreen"}
             position="absolute"
             left={props.cx - 10}
-            top={(props.cy - 10) - 60}
+            top={(props.cy - 10) - 40}
             display="flex"
             alignItems="center"
             justifyContent="center"

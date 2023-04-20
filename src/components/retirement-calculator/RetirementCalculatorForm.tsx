@@ -279,7 +279,6 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                 {invalidAllocation && (
                     <Alert status="error" border="1px solid red" background="#ffcccb">
                         <AlertIcon />
-                        <AlertTitle>Invalid asset allocation</AlertTitle>
                         <AlertDescription>Asset allocation must add to 100%.</AlertDescription>
                     </Alert>
                 )}
