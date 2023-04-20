@@ -22,7 +22,7 @@ import {
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../models/Calculator'
 import { RegisterOptions, useForm, UseFormRegisterReturn } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface FormInputProps {
     isInvalid: boolean
@@ -91,7 +91,7 @@ interface RetirementCalculatorFormProps {
 }
 
 export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
-    const { register, handleSubmit, formState: { errors } } = useForm<RetirementCalculatorInputs>({ defaultValues: {
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<RetirementCalculatorInputs>({ defaultValues: {
         age: 20,
         annualIncome: 70_000,
         annualSpending: 30_000,
@@ -111,6 +111,18 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
     const [invalidAllocation, setInvalidAllocation] = useState(false)
 
+    const stocksAllocationRate = watch('stocksAllocationRate')
+    const bondsAllocationRate = watch('bondsAllocationRate')
+    const cashAllocationRate = watch('cashAllocationRate')
+
+    useEffect(() => {
+        if ((stocksAllocationRate + bondsAllocationRate + cashAllocationRate) !== 1) {
+            setInvalidAllocation(true);
+        } else {
+            setInvalidAllocation(false);
+        }
+    }, [stocksAllocationRate, bondsAllocationRate, cashAllocationRate]);
+
     const numberRegisterOptions: RegisterOptions = { 
         required: true, 
         setValueAs: (value: string): number => parseInt(value)
@@ -122,11 +134,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
     }
 
     function onSubmit(data: RetirementCalculatorInputs) {
-        const { stocksAllocationRate, bondsAllocationRate, cashAllocationRate } = data
-
-        if ((stocksAllocationRate + bondsAllocationRate + cashAllocationRate) !== 1) {
-            setInvalidAllocation(true)
-        } else {
+        if (!invalidAllocation) {
             setInvalidAllocation(false)
             props.onSubmit(data)
         }

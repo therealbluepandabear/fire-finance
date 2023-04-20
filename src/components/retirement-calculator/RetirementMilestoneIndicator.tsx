@@ -49,7 +49,8 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
                 transition={{
                     duration: 6,
                     repeat: Infinity,
-                    ease: 'easeOut'
+                    ease: 'easeOut',
+                    repeatDelay: -1.5
                 }}
                 style={{
                     position: "absolute",
