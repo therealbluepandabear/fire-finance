@@ -75,10 +75,6 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
     const [retirementCx, setRetirementCx] = useState(0)
     const [retirementCy, setRetirementCy] = useState(0)
 
-    function tickFormatter(value: number): string {
-        return currency(value, true)
-    }
-
     const pointOfFinancialIndependence = {
         x: props.outputs.fireAge,
         y: props.outputs.data.filter((value) => value.age === props.outputs.fireAge)[0].networth
@@ -137,7 +133,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                     />
                     <YAxis 
                         tickCount={12} 
-                        tickFormatter={tickFormatter} 
+                        tickFormatter={(value) => currency(value, true)} 
                         axisLine={false}
                         tickLine={false}
                     />
