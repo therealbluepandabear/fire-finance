@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { MdFlag, MdBeachAccess } from 'react-icons/md'
-import { MutableRefObject, PropsWithChildren, useEffect, useRef } from 'react'
+import {  PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 
 type MilestoneType = "financial-independence" | "retirement"
@@ -49,9 +49,7 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
                 transition={{
                     duration: 6,
                     repeat: Infinity,
-                    ease: 'easeOut',
-                    delay: 0,
-                    repeatDelay: 0
+                    ease: 'easeOut'
                 }}
                 style={{
                     position: "absolute",
