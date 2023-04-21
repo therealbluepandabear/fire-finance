@@ -1,11 +1,16 @@
 import { Workbook } from 'exceljs'
 import { currency } from '../utils'
 
+// Calculates the adjusted return rates by factoring in inflation using a specialized formula
 function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
+    function calculateAdjustedRate(returnRate: number): number {
+        return ((1 + returnRate) / (1 + params.inflationRate)) - 1
+    }
+
     return {
-        adjustedStocksReturnRate: ((1 + params.stocksReturnRate) / (1 + params.inflationRate)) - 1,
-        adjustedBondsReturnRate: ((1 + params.bondsReturnRate) / (1 + params.inflationRate)) - 1,
-        adjustedCashReturnRate: ((1 + params.cashReturnRate) / (1 + params.inflationRate)) - 1
+        adjustedStocksReturnRate: calculateAdjustedRate(params.stocksReturnRate),
+        adjustedBondsReturnRate: calculateAdjustedRate(params.bondsReturnRate),
+        adjustedCashReturnRate: calculateAdjustedRate(params.cashReturnRate)
     }
 }
 
