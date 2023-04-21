@@ -1,5 +1,5 @@
 import { TableContainer, Th, Thead, Tr, Table, Tbody, Td } from '@chakra-ui/table'
-import { RetirementCalculatorOutputs } from '../../models/Calculator'
+import { RetirementCalculatorOutputs } from '../../models/calculator'
 import { currency } from '../../utils'
 
 interface RetirementCalculatorTableProps {

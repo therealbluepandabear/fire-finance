@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Flex, Text } from '@chakra-ui/react'
-import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs, getExcelWorkbook } from '../../models/Calculator'
+import { calculateRetirementAge, RetirementCalculatorInputs, RetirementCalculatorOutputs, getExcelWorkbook } from '../../models/calculator'
 import { saveToFile } from '../../utils'
 
 import RetirementCalculatorForm from './RetirementCalculatorForm'

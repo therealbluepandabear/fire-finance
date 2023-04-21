@@ -12,7 +12,7 @@ import {
     ReferenceDot, 
 } from 'recharts'
 import { currency } from '../../utils'
-import { RetirementCalculatorOutputs } from '../../models/Calculator'
+import { RetirementCalculatorOutputs } from '../../models/calculator'
 import { useEffect, useState } from 'react'
 import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
 
@@ -119,7 +119,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
                         </linearGradient>
                     </defs>
-                    
+
                     <Area 
                         fill="url(#colorPv)" 
                         dataKey="networth" 

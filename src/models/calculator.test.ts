@@ -1,5 +1,5 @@
 import { FillPattern } from 'exceljs'
-import { calculateRetirementAge, getExcelWorkbook } from './Calculator'
+import { calculateRetirementAge, getExcelWorkbook } from './calculator'
 
 test('(1) retirement age, fire number, and data to be correct', () => {
     const { fireAge: retirementAge, data, fireNumber } = calculateRetirementAge({
