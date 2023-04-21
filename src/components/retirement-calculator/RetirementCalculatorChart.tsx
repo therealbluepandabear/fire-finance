@@ -119,24 +119,29 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
                             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3}/>
                         </linearGradient>
                     </defs>
+                    
                     <Area 
                         fill="url(#colorPv)" 
                         dataKey="networth" 
                         stroke="#82ca9d" 
                         strokeWidth={4} 
                     />
+
                     <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+
                     <XAxis 
                         dataKey="age" 
                         axisLine={false} 
                         interval={Math.floor(data.length / 26)}
                     />
+
                     <YAxis 
                         tickCount={12} 
                         tickFormatter={(value) => currency(value, true)} 
                         axisLine={false}
                         tickLine={false}
                     />
+
                     <Tooltip
                         wrapperStyle={{ outline: "none", zIndex: 999 }} 
                         content={ChartTooltip}

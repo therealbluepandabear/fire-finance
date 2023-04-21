@@ -43,14 +43,14 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
         <>
             <motion.div
                 animate={{
-                    opacity: [0.6, 0],
-                    scale: [1, 1.65]
+                    opacity: [1, 0],
+                    scale: [1, 1.8]
                 }}
                 transition={{
                     duration: 6,
                     repeat: Infinity,
                     ease: 'easeOut',
-                    repeatDelay: -2
+                    repeatDelay: -1.3
                 }}
                 style={{
                     position: "absolute",
