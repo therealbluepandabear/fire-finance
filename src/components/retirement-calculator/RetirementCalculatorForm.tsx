@@ -20,7 +20,7 @@ import {
     AlertDescription
 } from '@chakra-ui/react'
 import { MdFace, MdAttachMoney, MdPercent, MdHelp } from 'react-icons/md'
-import { RetirementCalculatorInputs } from '../../models/calculator'
+import { RetirementCalculatorInputs } from '../../models/retirement-calculator'
 import { RegisterOptions, useForm, UseFormRegisterReturn } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 

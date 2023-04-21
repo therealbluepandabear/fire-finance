@@ -12,7 +12,7 @@ import {
     ReferenceDot, 
 } from 'recharts'
 import { currency } from '../../utils'
-import { RetirementCalculatorOutputs } from '../../models/calculator'
+import { RetirementCalculatorOutputs } from '../../models/retirement-calculator'
 import { useEffect, useState } from 'react'
 import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
 
