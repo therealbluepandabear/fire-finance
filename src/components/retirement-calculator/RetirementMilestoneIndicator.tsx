@@ -3,21 +3,19 @@ import { MdFlag, MdBeachAccess } from 'react-icons/md'
 import {  PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 
-type MilestoneType = "financial-independence" | "retirement"
+type MilestoneType = 'financial-independence' | 'retirement'
 
 interface CircleProps extends PropsWithChildren {
     type: MilestoneType
 }
 
 function Circle(props: CircleProps): JSX.Element {
-    const background = props.type === 'financial-independence' ? 'lightblue' : 'lightgreen'
-
     return (
         <Box 
             width="20px" 
             height="20px" 
             borderRadius="30px" 
-            background={background}
+            background={props.type === 'financial-independence' ? 'lightblue' : 'lightgreen'}
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -53,7 +51,7 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
                     repeatDelay: -1.3
                 }}
                 style={{
-                    position: "absolute",
+                    position: 'absolute',
                     left: left,
                     top: top
                 }}
@@ -69,7 +67,7 @@ export default function RetirementMilestoneIndicator(props: RetirementMilestoneI
                 top={top}
             >
                 <Circle type={props.type}>
-                    {props.type === "financial-independence" ? <MdFlag /> : <MdBeachAccess />}
+                    {props.type === 'financial-independence' ? <MdFlag /> : <MdBeachAccess />}
                 </Circle>
             </Box>
         </>

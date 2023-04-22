@@ -8,10 +8,10 @@ export function range(start: number, end: number): number[] {
     return array
 }
 
-export function currency(amount: number, compact: boolean = false): string {
+export function formatCurrency(amount: number, compact: boolean = false): string {
     return new Intl.NumberFormat(
         'en-US',
-        { style: 'currency', currency: 'USD', notation: compact ? "compact" : "standard" }
+        { style: 'currency', currency: 'USD', notation: compact ? 'compact' : 'standard' }
     ).format(amount)
 }
 

@@ -1,12 +1,12 @@
 import { TableContainer, Th, Thead, Tr, Table, Tbody, Td } from '@chakra-ui/table'
 import { RetirementCalculatorOutputs } from '../../models/retirement-calculator'
-import { currency } from '../../utils'
+import { formatCurrency } from '../../utils'
 
 interface RetirementCalculatorTableProps {
     outputs: RetirementCalculatorOutputs
 }
 
-export default function RetirementCalculatorTable(props: RetirementCalculatorTableProps) {
+export default function RetirementCalculatorTable(props: RetirementCalculatorTableProps): JSX.Element {
     return (
         <TableContainer>
             <Table>
@@ -26,7 +26,7 @@ export default function RetirementCalculatorTable(props: RetirementCalculatorTab
                             >
                                 <Td>{point.age}</Td>
                                 <Td>{point.year}</Td>
-                                <Td>{currency(point.networth)}</Td>
+                                <Td>{formatCurrency(point.networth)}</Td>
                             </Tr>
                         )
                     })}

@@ -1,5 +1,5 @@
 import { Workbook } from 'exceljs'
-import { currency } from '../utils'
+import { formatCurrency } from '../utils'
 
 // Calculates the adjusted return rates by factoring in inflation using a specialized formula
 function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
@@ -157,7 +157,7 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
     ]
 
     outputs.data.forEach((value, index) => {
-        worksheet.addRow({ age: value.age, year: value.year, networth: currency(value.networth) })
+        worksheet.addRow({ age: value.age, year: value.year, networth: formatCurrency(value.networth) })
     })
 
     const retirementAgeRowIndex = outputs.fireAge - (outputs.data[0].age) + 2

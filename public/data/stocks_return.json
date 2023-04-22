@@ -1,0 +1,374 @@
+[
+  {
+    "year": 1930,
+    "annualReturnRate": -0.25
+  },
+  {
+    "year": 1931,
+    "annualReturnRate": -0.44
+  },
+  {
+    "year": 1932,
+    "annualReturnRate": -0.09
+  },
+  {
+    "year": 1933,
+    "annualReturnRate": 0.5
+  },
+  {
+    "year": 1934,
+    "annualReturnRate": -0.01
+  },
+  {
+    "year": 1935,
+    "annualReturnRate": 0.47
+  },
+  {
+    "year": 1936,
+    "annualReturnRate": 0.32
+  },
+  {
+    "year": 1937,
+    "annualReturnRate": -0.35
+  },
+  {
+    "year": 1938,
+    "annualReturnRate": 0.29
+  },
+  {
+    "year": 1939,
+    "annualReturnRate": -0.01
+  },
+  {
+    "year": 1940,
+    "annualReturnRate": -0.11
+  },
+  {
+    "year": 1941,
+    "annualReturnRate": -0.13
+  },
+  {
+    "year": 1942,
+    "annualReturnRate": 0.19
+  },
+  {
+    "year": 1943,
+    "annualReturnRate": 0.25
+  },
+  {
+    "year": 1944,
+    "annualReturnRate": 0.19
+  },
+  {
+    "year": 1945,
+    "annualReturnRate": 0.36
+  },
+  {
+    "year": 1946,
+    "annualReturnRate": -0.08
+  },
+  {
+    "year": 1947,
+    "annualReturnRate": 0.05
+  },
+  {
+    "year": 1948,
+    "annualReturnRate": 0.06
+  },
+  {
+    "year": 1949,
+    "annualReturnRate": 0.18
+  },
+  {
+    "year": 1950,
+    "annualReturnRate": 0.31
+  },
+  {
+    "year": 1951,
+    "annualReturnRate": 0.24
+  },
+  {
+    "year": 1952,
+    "annualReturnRate": 0.18
+  },
+  {
+    "year": 1953,
+    "annualReturnRate": -0.01
+  },
+  {
+    "year": 1954,
+    "annualReturnRate": 0.53
+  },
+  {
+    "year": 1955,
+    "annualReturnRate": 0.33
+  },
+  {
+    "year": 1956,
+    "annualReturnRate": 0.07
+  },
+  {
+    "year": 1957,
+    "annualReturnRate": -0.1
+  },
+  {
+    "year": 1958,
+    "annualReturnRate": 0.44
+  },
+  {
+    "year": 1959,
+    "annualReturnRate": 0.12
+  },
+  {
+    "year": 1960,
+    "annualReturnRate": 0
+  },
+  {
+    "year": 1961,
+    "annualReturnRate": 0.27
+  },
+  {
+    "year": 1962,
+    "annualReturnRate": -0.09
+  },
+  {
+    "year": 1963,
+    "annualReturnRate": 0.23
+  },
+  {
+    "year": 1964,
+    "annualReturnRate": 0.16
+  },
+  {
+    "year": 1965,
+    "annualReturnRate": 0.12
+  },
+  {
+    "year": 1966,
+    "annualReturnRate": -0.1
+  },
+  {
+    "year": 1967,
+    "annualReturnRate": 0.24
+  },
+  {
+    "year": 1968,
+    "annualReturnRate": 0.11
+  },
+  {
+    "year": 1969,
+    "annualReturnRate": -0.08
+  },
+  {
+    "year": 1970,
+    "annualReturnRate": 0.04
+  },
+  {
+    "year": 1971,
+    "annualReturnRate": 0.14
+  },
+  {
+    "year": 1972,
+    "annualReturnRate": 0.19
+  },
+  {
+    "year": 1973,
+    "annualReturnRate": -0.14
+  },
+  {
+    "year": 1974,
+    "annualReturnRate": -0.26
+  },
+  {
+    "year": 1975,
+    "annualReturnRate": 0.37
+  },
+  {
+    "year": 1976,
+    "annualReturnRate": 0.24
+  },
+  {
+    "year": 1977,
+    "annualReturnRate": -0.07
+  },
+  {
+    "year": 1978,
+    "annualReturnRate": 0.07
+  },
+  {
+    "year": 1979,
+    "annualReturnRate": 0.19
+  },
+  {
+    "year": 1980,
+    "annualReturnRate": 0.32
+  },
+  {
+    "year": 1981,
+    "annualReturnRate": -0.05
+  },
+  {
+    "year": 1982,
+    "annualReturnRate": 0.2
+  },
+  {
+    "year": 1983,
+    "annualReturnRate": 0.22
+  },
+  {
+    "year": 1984,
+    "annualReturnRate": 0.06
+  },
+  {
+    "year": 1985,
+    "annualReturnRate": 0.31
+  },
+  {
+    "year": 1986,
+    "annualReturnRate": 0.18
+  },
+  {
+    "year": 1987,
+    "annualReturnRate": 0.06
+  },
+  {
+    "year": 1988,
+    "annualReturnRate": 0.17
+  },
+  {
+    "year": 1989,
+    "annualReturnRate": 0.31
+  },
+  {
+    "year": 1990,
+    "annualReturnRate": -0.03
+  },
+  {
+    "year": 1991,
+    "annualReturnRate": 0.3
+  },
+  {
+    "year": 1992,
+    "annualReturnRate": 0.07
+  },
+  {
+    "year": 1993,
+    "annualReturnRate": 0.1
+  },
+  {
+    "year": 1994,
+    "annualReturnRate": 0.01
+  },
+  {
+    "year": 1995,
+    "annualReturnRate": 0.37
+  },
+  {
+    "year": 1996,
+    "annualReturnRate": 0.23
+  },
+  {
+    "year": 1997,
+    "annualReturnRate": 0.33
+  },
+  {
+    "year": 1998,
+    "annualReturnRate": 0.28
+  },
+  {
+    "year": 1999,
+    "annualReturnRate": 0.21
+  },
+  {
+    "year": 2000,
+    "annualReturnRate": -0.09
+  },
+  {
+    "year": 2001,
+    "annualReturnRate": -0.12
+  },
+  {
+    "year": 2002,
+    "annualReturnRate": -0.22
+  },
+  {
+    "year": 2003,
+    "annualReturnRate": 0.28
+  },
+  {
+    "year": 2004,
+    "annualReturnRate": 0.11
+  },
+  {
+    "year": 2005,
+    "annualReturnRate": 0.05
+  },
+  {
+    "year": 2006,
+    "annualReturnRate": 0.16
+  },
+  {
+    "year": 2007,
+    "annualReturnRate": 0.05
+  },
+  {
+    "year": 2008,
+    "annualReturnRate": -0.37
+  },
+  {
+    "year": 2009,
+    "annualReturnRate": 0.26
+  },
+  {
+    "year": 2010,
+    "annualReturnRate": 0.15
+  },
+  {
+    "year": 2011,
+    "annualReturnRate": 0.02
+  },
+  {
+    "year": 2012,
+    "annualReturnRate": 0.16
+  },
+  {
+    "year": 2013,
+    "annualReturnRate": 0.32
+  },
+  {
+    "year": 2014,
+    "annualReturnRate": 0.14
+  },
+  {
+    "year": 2015,
+    "annualReturnRate": 0.01
+  },
+  {
+    "year": 2016,
+    "annualReturnRate": 0.12
+  },
+  {
+    "year": 2017,
+    "annualReturnRate": 0.22
+  },
+  {
+    "year": 2018,
+    "annualReturnRate": -0.04
+  },
+  {
+    "year": 2019,
+    "annualReturnRate": 0.31
+  },
+  {
+    "year": 2020,
+    "annualReturnRate": 0.18
+  },
+  {
+    "year": 2021,
+    "annualReturnRate": 0.28
+  },
+  {
+    "year": 2022,
+    "annualReturnRate": -0.18
+  }
+]

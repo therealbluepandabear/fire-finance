@@ -1,9 +1,9 @@
-import RetirementCalculator from './components/retirement-calculator/RetirementCalculator';
+import SWRCalculator from './components/swr-calculator/SWRCalculator';
 
 function App() {
   return (
-    <RetirementCalculator />
-  );
+    <SWRCalculator />
+  )
 }
 
 export default App;

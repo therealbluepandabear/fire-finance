@@ -11,7 +11,7 @@ import {
     Tooltip, 
     ReferenceDot, 
 } from 'recharts'
-import { currency } from '../../utils'
+import { formatCurrency } from '../../utils'
 import { RetirementCalculatorOutputs } from '../../models/retirement-calculator'
 import { useEffect, useState } from 'react'
 import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
@@ -52,7 +52,7 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
                     <MdAccountBalanceWallet />
                     <Text fontSize="md">
                         <Text fontSize="md" fontWeight="bold" as="span">Networth: </Text>
-                        {currency(tooltipData.value ?? 0)}
+                        {formatCurrency(tooltipData.value ?? 0)}
                     </Text>
                 </Flex>
             </Box> 
@@ -137,7 +137,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
 
                     <YAxis 
                         tickCount={12} 
-                        tickFormatter={(value) => currency(value, true)} 
+                        tickFormatter={(value) => formatCurrency(value, true)} 
                         axisLine={false}
                         tickLine={false}
                     />
