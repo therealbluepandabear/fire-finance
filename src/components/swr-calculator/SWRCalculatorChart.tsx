@@ -1,26 +1,58 @@
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis } from 'recharts'
-import { SWRCalculatorOutputs } from '../../models/swr-calculator'
+import { useState } from 'react'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { StartingYearResult, SWRCalculatorOutputs } from '../../models/swr-calculator'
 
 interface SWRCalculatorProps {
     outputs: SWRCalculatorOutputs
 }
 
 export default function SWRCalculatorChart(props: SWRCalculatorProps): JSX.Element {
-    console.log(props.outputs)
+    const [activeResult, setActiveResult] = useState<StartingYearResult | null>(null)
+
+    function mouseEnterHandler(result: StartingYearResult): void {
+        setActiveResult(result)
+    }
+
+    function mouseLeaveHandler(): void {
+        setActiveResult(null)
+    }
 
     return (
         <ResponsiveContainer width="100%" height="100%">
             <LineChart>
                 {props.outputs.results
-                    .map((result) => result.timelineData).map((item, index) => (
-                    <Line
-                        data={item}
-                        dataKey="networth"
-                        stroke="#82ca9d"
-                        dot={false}
-                        key={index}
-                    />
-                ))}
+                    .map((result) => { 
+                        const baseColor = result.isRetirementPossible ? 'lightgreen' : 'red'
+
+                        let color = baseColor
+                        let strokeWidth = 1.3
+
+                        if (activeResult && result !== activeResult) {
+                            color = 'transparent'
+                        } else if (activeResult && result === activeResult) {
+                            strokeWidth = 5
+                        }
+
+                        return {
+                            data: result.timelineData, 
+                            color: color,
+                            strokeWidth: strokeWidth,
+                            result: result
+                        }
+                    })
+                    .map(({ data, color, result, strokeWidth }, index) => (
+                        <Line
+                            data={data}
+                            dataKey="networth"
+                            stroke={color}
+                            strokeWidth={strokeWidth}
+                            key={index}
+                            dot={false}
+                            onMouseEnter={mouseEnterHandler.bind(null, result)}
+                            onMouseLeave={mouseLeaveHandler.bind(null)}
+                        />
+                    )
+                )}
 
                 <XAxis dataKey="investmentYear" allowDuplicatedCategory={false} />
 

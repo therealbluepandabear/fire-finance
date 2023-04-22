@@ -13,6 +13,26 @@ async function fetchHistoricalReturnData(): Promise<StandardsAndPoorsHistoricalP
     return await result.json()
 }
 
+export interface CycleInfo {
+    failures: number
+    total: number
+    successRate: number
+}
+
+// Gets the information in a cycle-based format based on the outputs the calculator has given.
+export function getCycleInfo(params: SWRCalculatorOutputs): CycleInfo {
+    let failures = params.results.filter((result) => result.isRetirementPossible === false).length
+
+    let total = params.results.length
+    let successRate = (100 - ((failures / total) * 100)) / 100
+
+    return {
+        failures: failures,
+        total: total,
+        successRate: successRate
+    }
+}
+
 // This function calculates whether or not retirement is possible given the current networth
 // and the input data. First it calculates the annual spending as being the starting networth times the
 // safe withdrawal rate. It then checks whether or not multiply the safe withdrawal rate by the current
@@ -38,11 +58,14 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs): Pro
 
     // This year is the earliest year for which historical data for the S&P 500 index is available
     // ...as of now this is 1930
-    let year = data[0].year
+    let yearItr = data[0].year
+    let firstYear = data[0].year
+    let maxYear = data.at(-1)!.year - params.duration + 1
+
     let sliceIndex = 0
     let sliceLength = params.duration
 
-    while (sliceIndex < 40) {
+    while (sliceIndex < maxYear - firstYear) {
         let totalNetworth = params.networth
         let slicedData = data.slice(sliceIndex, (sliceIndex + sliceLength) + 1)
 
@@ -62,14 +85,14 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs): Pro
         })
 
         outputs.results.push({ 
-            year: year, 
+            year: yearItr, 
             finalNetworth: totalNetworth, 
             isRetirementPossible: isRetirementPossible(params, totalNetworth), 
             timelineData: timelineData 
         })
 
         ++sliceIndex
-        ++year
+        ++yearItr
     }
 
     return outputs

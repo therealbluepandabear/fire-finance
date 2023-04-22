@@ -1,16 +1,20 @@
 import SWRCalculatorForm from './SWRCalculatorForm'
-import { Flex } from '@chakra-ui/react'
-import { calculateChanceOfSuccess, SWRCalculatorInputs, SWRCalculatorOutputs } from '../../models/swr-calculator'
+import { Flex, Text } from '@chakra-ui/react'
+import { calculateChanceOfSuccess, CycleInfo, getCycleInfo, SWRCalculatorInputs, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { useState } from 'react'
 import SWRCalculatorChart from './SWRCalculatorChart'
-import SWRCalculatorTable from './SWRCalculatorTable'
+import SWRCalculatorResultPanel from './SWRCalculatorResultPanel'
 
 export default function SWRCalculator(): JSX.Element {
     const [outputs, setOutputs] = useState<SWRCalculatorOutputs | null>(null)
+    const [cycleInfo, setCycleInfo] = useState<CycleInfo | null>(null)   
 
     async function submitHandler(inputs: SWRCalculatorInputs): Promise<void> {
         const outputs = await calculateChanceOfSuccess(inputs)
         setOutputs(outputs)
+
+        const cycleInfo = getCycleInfo(outputs)
+        setCycleInfo(cycleInfo)
     }
 
     return (  
@@ -19,7 +23,7 @@ export default function SWRCalculator(): JSX.Element {
                 <SWRCalculatorForm onSubmit={submitHandler} />
 
                 {outputs && (
-                    <SWRCalculatorTable outputs={outputs} />
+                    <SWRCalculatorResultPanel outputs={outputs} />
                 )}
             </Flex>
 
@@ -32,6 +36,12 @@ export default function SWRCalculator(): JSX.Element {
                 flexDirection="column"
                 minWidth="0" /* Allow resizing */
             >
+                 {cycleInfo && (
+                    <Flex flexDirection="column">
+                        <Text fontSize="xl">Failures: {cycleInfo.failures} / {cycleInfo.total}</Text>
+                        <Text fontSize="xl">Success rate: {(cycleInfo.successRate * 100).toFixed(2)}%</Text>
+                    </Flex>
+                )}
                 {outputs && (
                     <SWRCalculatorChart outputs={outputs} />
                 )}

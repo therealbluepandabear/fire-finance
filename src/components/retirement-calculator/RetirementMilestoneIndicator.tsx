@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 
 type MilestoneType = 'financial-independence' | 'retirement'
 
+
 interface CircleProps extends PropsWithChildren {
     type: MilestoneType
 }
@@ -26,6 +27,7 @@ function Circle(props: CircleProps): JSX.Element {
         </Box>
     )
 }
+
 
 interface RetirementMilestoneIndicatorProps {
     type: MilestoneType
