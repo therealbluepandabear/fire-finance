@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis } from 'recharts'
 import { StartingYearResult, SWRCalculatorOutputs } from '../../models/swr-calculator'
 
 interface SWRCalculatorProps {

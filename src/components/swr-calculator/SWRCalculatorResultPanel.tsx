@@ -1,11 +1,11 @@
 import { TabList, Tabs, Tab, TabPanels, TabPanel, Flex, Text, Box } from '@chakra-ui/react'
-import { StartingYearResult, SWRCalculatorOutputs } from '../../models/swr-calculator'
+import { InvestmentTimelinePoint, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { TableContainer, Th, Thead, Tr, Table, Tbody, Td } from '@chakra-ui/table'
 import { formatCurrency } from '../../utils'
 
 
 interface SWRCalculatorTableProps {
-    result: StartingYearResult
+    timelineData: InvestmentTimelinePoint[]
 }
 
 function SWRCalculatorTable(props: SWRCalculatorTableProps): JSX.Element {
@@ -20,9 +20,9 @@ function SWRCalculatorTable(props: SWRCalculatorTableProps): JSX.Element {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {props.result.timelineData.map((point, key) => (
-                        <Tr key={key} background={props.result.timelineData[0].networth <= point.networth ? '#57E964' : 'red'}>
-                            <Td>{props.result.year + point.investmentYear}</Td>                                               
+                    {props.timelineData.map((point, key) => (
+                        <Tr key={key} background={props.timelineData[0].networth <= point.networth ? '#57E964' : 'red'}>
+                            <Td>{point.year}</Td>                                               
                             <Td>{point.investmentYear}</Td>
                             <Td>{formatCurrency(point.networth)}</Td>
                         </Tr>
@@ -64,7 +64,7 @@ export default function SWRCalculatorResultPanel(props: SWRCalculatorResultPanel
 
                             <Text fontSize="md">Average networth: {formatCurrency(result.averageNetworth)}</Text>
 
-                            <SWRCalculatorTable result={result} />
+                            <SWRCalculatorTable timelineData={result.timelineData} />
                         </Flex>
                     </TabPanel>
                 ))}
