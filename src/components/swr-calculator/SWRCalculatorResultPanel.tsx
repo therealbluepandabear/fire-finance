@@ -21,7 +21,7 @@ function SWRCalculatorTable(props: SWRCalculatorTableProps): JSX.Element {
                 </Thead>
                 <Tbody>
                     {props.result.timelineData.map((point, key) => (
-                        <Tr key={key}>
+                        <Tr key={key} background={props.result.timelineData[0].networth <= point.networth ? '#57E964' : 'red'}>
                             <Td>{props.result.year + point.investmentYear}</Td>                                               
                             <Td>{point.investmentYear}</Td>
                             <Td>{formatCurrency(point.networth)}</Td>
@@ -48,7 +48,7 @@ export default function SWRCalculatorResultPanel(props: SWRCalculatorResultPanel
                         justifyContent="center" 
                         alignItems="center"
                     >
-                        <Box width="20px" height="20px" background={result.isRetirementPossible ? 'lightgreen' : 'red'}></Box>
+                        <Box width="20px" height="20px" background={result.isRetirementPossible ? '#57E964' : 'red'}></Box>
                         <Tab key={index} flexShrink={0}>{result.year}</Tab>
                     </Flex>
                 ))}
@@ -58,9 +58,11 @@ export default function SWRCalculatorResultPanel(props: SWRCalculatorResultPanel
                 {props.outputs.results.map((result, index) => (
                     <TabPanel>
                         <Flex flexDirection="column" key={index}>
-                            <Text fontSize="xl" color={result.isRetirementPossible ? 'lightgreen' : 'red'}>
+                            <Text fontSize="xl" fontWeight="bold" color={result.isRetirementPossible ? '#57E964' : 'red'}>
                                 {result.isRetirementPossible ? 'Retirement is possible' : 'Retirement is not possible'}
                             </Text>
+
+                            <Text fontSize="md">Average networth: {formatCurrency(result.averageNetworth)}</Text>
 
                             <SWRCalculatorTable result={result} />
                         </Flex>

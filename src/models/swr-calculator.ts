@@ -87,6 +87,7 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs): Pro
         outputs.results.push({ 
             year: yearItr, 
             finalNetworth: totalNetworth, 
+            averageNetworth: (timelineData.map((obj) => obj.networth).reduce((acc, cur) => acc + cur)) / timelineData.length,
             isRetirementPossible: isRetirementPossible(params, totalNetworth), 
             timelineData: timelineData 
         })
@@ -108,7 +109,10 @@ export interface InvestmentTimelinePoint {
 // given it could theoretically begin at a certain point in time
 export interface StartingYearResult {
     year: number
+
     finalNetworth: number
+    averageNetworth: number
+
     isRetirementPossible: boolean
 
     timelineData: InvestmentTimelinePoint[]

@@ -22,10 +22,10 @@ export default function SWRCalculatorChart(props: SWRCalculatorProps): JSX.Eleme
             <LineChart>
                 {props.outputs.results
                     .map((result) => { 
-                        const baseColor = result.isRetirementPossible ? 'lightgreen' : 'red'
+                        const baseColor = result.isRetirementPossible ? '#57E964' : 'red'
 
                         let color = baseColor
-                        let strokeWidth = 1.3
+                        let strokeWidth = 1.5
 
                         if (activeResult && result !== activeResult) {
                             color = 'transparent'
