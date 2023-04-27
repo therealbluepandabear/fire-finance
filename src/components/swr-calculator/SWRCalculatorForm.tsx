@@ -1,4 +1,4 @@
-import { Flex, FormLabel, Select, Switch, Text } from '@chakra-ui/react'
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Flex, FormLabel, Select, Switch, Text } from '@chakra-ui/react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdAttachMoney, MdPercent, MdSchedule } from 'react-icons/md'
 import { SWRCalculatorInputs } from '../../models/swr-calculator'
@@ -39,6 +39,22 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.El
                     tooltipText="Your current networth."
                 />
 
+                <FormInput 
+                    placeholder="Duration (years)" 
+                    inputLeftElement={<MdSchedule color="lightgray" />} 
+                    isInvalid={!!errors.duration}
+                    register={register("duration", numberRegisterOptions)} 
+                    tooltipText="Duration (years)."
+                />
+
+                <FormInput 
+                    placeholder="Safe Withdrawal Rate" 
+                    inputLeftElement={<MdPercent color="lightgray" />} 
+                    isInvalid={!!errors.safeWithdrawalRate}
+                    register={register("safeWithdrawalRate", percentageRegisterOptions)} 
+                    tooltipText="Percentage of retirement savings to withdraw yearly."
+                />
+
                 <Text>Asset Allocation</Text>
 
                 <Flex 
@@ -70,31 +86,32 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.El
                     />
                 </Flex>
 
-                <FormInput 
-                    placeholder="Duration (years)" 
-                    inputLeftElement={<MdSchedule color="lightgray" />} 
-                    isInvalid={!!errors.duration}
-                    register={register("duration", numberRegisterOptions)} 
-                    tooltipText="Duration (years)."
-                />
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <AccordionButton>
+                            <Flex width="100%">
+                                Advanced
+                                <AccordionIcon marginLeft="auto" />
+                            </Flex>
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                            <Flex 
+                                flexDirection="column" 
+                                gap="13px" 
+                            >
+                                <Flex flexDirection="row">
+                                    <FormLabel htmlFor="loopSwitch">Loop</FormLabel>
+                                    <Switch id="loopSwitch" {...register("shouldLoop")}  />
+                                </Flex>
 
-                <FormInput 
-                    placeholder="Safe Withdrawal Rate" 
-                    inputLeftElement={<MdPercent color="lightgray" />} 
-                    isInvalid={!!errors.safeWithdrawalRate}
-                    register={register("safeWithdrawalRate", percentageRegisterOptions)} 
-                    tooltipText="Percentage of retirement savings to withdraw yearly."
-                />
-
-                <Flex flexDirection="row">
-                    <FormLabel htmlFor="loopSwitch">Loop</FormLabel>
-                    <Switch id="loopSwitch" {...register("shouldLoop")}  />
-                </Flex>
-
-                <Select placeholder='Withdrawal strategy' {...register("strategy")}>
-                    <option value='fixed-percentage'>Fixed percentage</option>
-                    <option value='initial-percentage'>Initial percentage</option>
-                </Select>
+                                <Select placeholder='Withdrawal strategy' {...register("strategy")}>
+                                    <option value='fixed-percentage'>Fixed percentage</option>
+                                    <option value='initial-percentage'>Initial percentage</option>
+                                </Select>
+                            </Flex>
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
 
                 <FormSubmitButton>Calculate</FormSubmitButton>
             </Flex>
