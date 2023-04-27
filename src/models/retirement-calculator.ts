@@ -176,7 +176,7 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
     return workbook
 }
 
-interface RetirementProjectionPoint {
+export interface RetirementProjectionPoint {
     age: number
     year: number
     networth: number

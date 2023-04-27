@@ -1,5 +1,4 @@
 import { extendTheme } from '@chakra-ui/react'
-import { mode } from "@chakra-ui/theme-tools"
 
 const activeLabelStyles = {
     transform: 'scale(0.85) translateY(-24px) translateX(-16px)'

@@ -1,18 +1,10 @@
 import { TabList, Tabs, Tab, TabPanels, TabPanel, Flex, Text, Box, Button } from '@chakra-ui/react'
 import { InvestmentTimelinePoint, SWRCalculatorOutputs } from '../../models/swr-calculator'
-import { TableContainer, Th, Thead, Tr, Table, Tbody, Td } from '@chakra-ui/table'
 import { formatCurrency } from '../../utils'
 import { useEffect, useState } from 'react'
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    SortingState,
-    getSortedRowModel
-} from '@tanstack/react-table'
-import { MdExpandLess, MdExpandMore } from 'react-icons/md'
+import { createColumnHelper } from '@tanstack/react-table'
 import SWRCalculatorChart from './SWRCalculatorChart'
+import DataTable from '../ui/DataTable'
 
 
 interface ResultTableProps {
@@ -39,56 +31,8 @@ function ResultTable(props: ResultTableProps): JSX.Element {
         })
     ]
 
-    const [sortingState, setSortingState] = useState<SortingState>([])
-
-    const table = useReactTable({
-        data: props.timelineData,
-        columns: columns,
-        state: {
-            sorting: sortingState
-        },
-        onSortingChange: setSortingState,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel()
-    })
-
     return (
-        <TableContainer>
-            <Table>
-                <Thead>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <Tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <Th key={header.id}>
-                                    <Flex onClick={header.column.getToggleSortingHandler()}>
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                        {header.column.getIsSorted() === 'desc' && <MdExpandLess />}
-                                        {header.column.getIsSorted() === 'asc' && <MdExpandMore />}
-                                    </Flex>
-                                </Th>
-                            ))}
-                        </Tr>
-                    ))}
-                </Thead>
-                <Tbody>
-                    {table.getRowModel().rows.map((row) => (
-                        <Tr key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <Td key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </Td>
-                            ))}
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
-        </TableContainer>
+        <DataTable columns={columns} data={props.timelineData} />
     )
 }
 
