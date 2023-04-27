@@ -17,17 +17,6 @@ import { useEffect, useState } from 'react'
 import FormInput from '../ui/FormInput'
 import FormSubmitButton from '../ui/FormSubmitButton'
 
-function PercentageIcon(): JSX.Element {
-    return <MdPercent color="lightgray" />
-}
-
-function DollarsIcon(): JSX.Element {
-    return <MdAttachMoney color="lightgray" />
-}
-
-function AgeIcon(): JSX.Element {
-    return <MdFace color="lightgray" />
-}
 
 interface RetirementCalculatorFormProps {
     onSubmit: (params: RetirementCalculatorInputs) => void
@@ -95,7 +84,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Age" 
-                    inputLeftElement={<AgeIcon />} 
+                    inputLeftElement={<MdFace color="lightgray" />} 
                     isInvalid={!!errors.age}
                     register={register("age", numberRegisterOptions)} 
                     tooltipText="Your current age."
@@ -103,7 +92,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Annual Income" 
-                    inputLeftElement={<DollarsIcon />} 
+                    inputLeftElement={<MdAttachMoney color="lightgray" />} 
                     isInvalid={!!errors.annualIncome}
                     register={register("annualIncome", numberRegisterOptions)} 
                     tooltipText="Total income earned yearly after tax."
@@ -111,7 +100,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Annual Spending" 
-                    inputLeftElement={<DollarsIcon />} 
+                    inputLeftElement={<MdAttachMoney color="lightgray" />} 
                     isInvalid={!!errors.annualSpending}
                     register={register("annualSpending", numberRegisterOptions)} 
                     tooltipText="Total money spent yearly."
@@ -119,7 +108,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Networth" 
-                    inputLeftElement={<DollarsIcon />} 
+                    inputLeftElement={<MdAttachMoney color="lightgray" />} 
                     isInvalid={!!errors.networth}
                     register={register("networth", numberRegisterOptions)} 
                     tooltipText="Total value of assets minus liabilities."
@@ -127,7 +116,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Safe Withdrawal Rate" 
-                    inputLeftElement={<PercentageIcon />} 
+                    inputLeftElement={<MdPercent color="lightgray" />} 
                     isInvalid={!!errors.safeWithdrawalRate}
                     register={register("safeWithdrawalRate", percentageRegisterOptions)} 
                     tooltipText="Percentage of retirement savings to withdraw yearly."
@@ -135,7 +124,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                 <FormInput 
                     placeholder="Inflation Rate" 
-                    inputLeftElement={<PercentageIcon />} 
+                    inputLeftElement={<MdPercent color="lightgray" />} 
                     isInvalid={!!errors.inflationRate}
                     register={register("inflationRate", percentageRegisterOptions)} 
                     tooltipText="Annual inflation rate."
@@ -149,7 +138,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                 >
                     <FormInput
                         placeholder="Stocks"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.stocksAllocationRate}
                         register={register("stocksAllocationRate", percentageRegisterOptions)}
                         tooltipText="Percentage of annual income to invest in stocks."
@@ -157,7 +146,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                     <FormInput
                         placeholder="Bonds"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.bondsAllocationRate}
                         register={register("bondsAllocationRate", percentageRegisterOptions)}
                         tooltipText="Percentage of annual income to invest in bonds."
@@ -165,7 +154,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                     <FormInput 
                         placeholder="Cash"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.cashAllocationRate}
                         register={register("cashAllocationRate", percentageRegisterOptions)}
                         tooltipText="Percentage of annual income to invest in cash."
@@ -180,7 +169,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                 >
                     <FormInput
                         placeholder="Stocks"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.stocksReturnRate}
                         register={register("stocksReturnRate", percentageRegisterOptions)}
                         tooltipText="Expected annual rate of return for your money invested in stocks."
@@ -188,7 +177,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                     <FormInput
                         placeholder="Bonds"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.bondsReturnRate}
                         register={register("bondsReturnRate", percentageRegisterOptions)}
                         tooltipText="Expected annual rate of return for your money invested in bonds."
@@ -196,7 +185,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                     <FormInput
                         placeholder="Cash"
-                        inputLeftElement={<PercentageIcon />}
+                        inputLeftElement={<MdPercent color="lightgray" />}
                         isInvalid={!!errors.cashReturnRate}
                         register={register("cashReturnRate", percentageRegisterOptions)}
                         tooltipText="Expected annual rate of return for your money invested in cash."
@@ -218,7 +207,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
                             >
                                 <FormInput
                                     placeholder="Income Growth Rate"
-                                    inputLeftElement={<PercentageIcon />}
+                                    inputLeftElement={<MdPercent color="lightgray" />}
                                     isInvalid={!!errors.incomeGrowthRate}
                                     register={register("incomeGrowthRate", { ...percentageRegisterOptions, required: false })}
                                     tooltipText="Expected annual rate of growth for your annual income."
@@ -226,7 +215,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                                 <FormInput
                                     placeholder="Retirement Age"
-                                    inputLeftElement={<AgeIcon />}
+                                    inputLeftElement={<MdFace color="lightgray" />}
                                     isInvalid={!!errors.retirementAge}
                                     register={register("retirementAge", { ...numberRegisterOptions, required: false })}
                                     tooltipText="Age at which you expect to retire."
@@ -234,7 +223,7 @@ export default function RetirementCalculatorForm(props: RetirementCalculatorForm
 
                                 <FormInput
                                     placeholder="Maximum Age"
-                                    inputLeftElement={<AgeIcon />}
+                                    inputLeftElement={<MdFace color="lightgray" />}
                                     isInvalid={!!errors.maximumAge}
                                     register={register("maximumAge", { ...numberRegisterOptions, required: false })}
                                     tooltipText="Maximum age for your retirement plan."

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import SWRCalculatorChart from './SWRCalculatorChart'
 import SWRCalculatorResultPanel from './SWRCalculatorResultPanel'
 
+
 export default function SWRCalculator(): JSX.Element {
     const [outputs, setOutputs] = useState<SWRCalculatorOutputs | null>(null)
     const [cycleInfo, setCycleInfo] = useState<CycleInfo | null>(null)   
@@ -37,13 +38,17 @@ export default function SWRCalculator(): JSX.Element {
                 minWidth="0" /* Allow resizing */
             >
                  {cycleInfo && (
-                    <Flex flexDirection="column">
-                        <Text fontSize="xl">Failures: {cycleInfo.failures} / {cycleInfo.total}</Text>
-                        <Text fontSize="xl">Success rate: {(cycleInfo.successRate * 100).toFixed(2)}%</Text>
+                    <Flex flexDirection="row" gap="16px">
+                        <Text fontSize="md">Best performing start year: {cycleInfo.bestPerformingStartYear}</Text>
+                        <Text fontSize="md">Worst performing start year: {cycleInfo.worstPerformingStartYear}</Text>
+                        <Text fontSize="md">Successes: {cycleInfo.successes} / {cycleInfo.total}</Text>
+                        <Text fontSize="md">Failures: {cycleInfo.failures} / {cycleInfo.total}</Text>
+                        <Text fontSize="md">Success rate: {(cycleInfo.successRate * 100).toFixed(2)}%</Text>
+                        <Text fontSize="md">Failure rate: {(cycleInfo.failureRate * 100).toFixed(2)}%</Text>
                     </Flex>
                 )}
                 {outputs && (
-                    <SWRCalculatorChart outputs={outputs} />
+                    <SWRCalculatorChart outputs={outputs} showTooltip={false} />
                 )}
             </Flex>
         </Flex>

@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from '@chakra-ui/react'
+import { Box, Text, Flex, useColorModeValue } from '@chakra-ui/react'
 import { MdFace, MdAccountBalanceWallet, MdCalendarMonth } from 'react-icons/md'
 import { 
     AreaChart, 
@@ -16,7 +16,10 @@ import { RetirementCalculatorOutputs } from '../../models/retirement-calculator'
 import { useEffect, useState } from 'react'
 import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
 
+
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
+    const color = useColorModeValue('white', 'gray.800')
+
     if (active && payload && payload[0]) {
         const inlineFlexStyle = {
             flexDirection: 'row',
@@ -24,13 +27,13 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
             gap: '6px'
         }
 
-        const tooltipData = payload[0];
+        const tooltipData = payload[0]
 
         return (
             <Box 
                 padding="8px" 
                 border="2px solid gray" 
-                background="white"
+                backgroundColor={color}
             >
                 <Flex sx={inlineFlexStyle}>
                     <MdFace /> 
@@ -61,6 +64,7 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
 
     return null
 }
+
 
 interface RetirementCalculatorProps {
     outputs: RetirementCalculatorOutputs
@@ -110,7 +114,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
     }
 
     return (  
-        <Box width="100%" height="100%" position="relative">
+        <Box width="100%" height="100%" position="relative"                     backgroundColor={useColorModeValue('white', 'gray.800')}        > 
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data}>
                     <defs>

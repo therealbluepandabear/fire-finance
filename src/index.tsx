@@ -4,17 +4,18 @@ import './index.css'
 import App from './App'
 import theme from './theme'
 
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 )
 
 root.render(
-  <ChakraProvider theme={theme}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ChakraProvider>
+    <ChakraProvider theme={theme}>
+        <React.StrictMode>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+            <App />
+        </React.StrictMode>
+    </ChakraProvider>
 )

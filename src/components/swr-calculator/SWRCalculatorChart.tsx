@@ -1,9 +1,53 @@
 import { useState } from 'react'
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis } from 'recharts'
+import { MdCalendarMonth, MdAccountBalanceWallet } from 'react-icons/md'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, Tooltip, TooltipProps } from 'recharts'
 import { StartingYearResult, SWRCalculatorOutputs } from '../../models/swr-calculator'
+import { formatCurrency } from '../../utils'
+import { Flex, Box, Text } from '@chakra-ui/react'
+
+
+function ChartTooltip({ active, payload, label }: TooltipProps<number, number>) {
+    if (active && payload && payload[0]) {
+        const inlineFlexStyle = {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '6px'
+        }
+
+        const tooltipData = payload[0];
+
+        return (
+            <Box 
+                padding="8px" 
+                border="2px solid gray" 
+                opacity={1}
+            >
+                <Flex sx={inlineFlexStyle}>
+                    <MdCalendarMonth />
+                    <Text fontSize="md">
+                        <Text fontSize="md" fontWeight="bold" as="span">Year: </Text>
+                        {tooltipData.payload.year}
+                    </Text>
+                </Flex>
+
+                <Flex sx={inlineFlexStyle}>
+                    <MdAccountBalanceWallet />
+                    <Text fontSize="md">
+                        <Text fontSize="md" fontWeight="bold" as="span">Networth: </Text>
+                        {formatCurrency(tooltipData.value ?? 0)}
+                    </Text>
+                </Flex>
+            </Box> 
+        )
+    } 
+
+    return null
+}
+
 
 interface SWRCalculatorProps {
     outputs: SWRCalculatorOutputs
+    showTooltip: boolean
 }
 
 export default function SWRCalculatorChart(props: SWRCalculatorProps): JSX.Element {
@@ -57,6 +101,10 @@ export default function SWRCalculatorChart(props: SWRCalculatorProps): JSX.Eleme
                 <XAxis dataKey="investmentYear" allowDuplicatedCategory={false} />
 
                 <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+
+                {props.showTooltip && (
+                    <Tooltip content={ChartTooltip} />
+                )}
             </LineChart>
         </ResponsiveContainer>
     )

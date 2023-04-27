@@ -1,9 +1,10 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, FormLabel, Select, Switch, Text } from '@chakra-ui/react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdAttachMoney, MdPercent, MdSchedule } from 'react-icons/md'
 import { SWRCalculatorInputs } from '../../models/swr-calculator'
 import FormInput from '../ui/FormInput'
 import FormSubmitButton from '../ui/FormSubmitButton'
+
 
 interface SWRCalculatorFormProps {
     onSubmit: (params: SWRCalculatorInputs) => void
@@ -38,6 +39,37 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.El
                     tooltipText="Your current networth."
                 />
 
+                <Text>Asset Allocation</Text>
+
+                <Flex 
+                    flexDirection={{ base: "column", xl: "row" }}
+                    gap="13px"
+                >
+                    <FormInput
+                        placeholder="Stocks"
+                        inputLeftElement={<MdPercent color="lightgray" />}
+                        isInvalid={!!errors.stocksAllocationRate}
+                        register={register("stocksAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of starting networth to invest in stocks."
+                    />
+
+                    <FormInput
+                        placeholder="Gold"
+                        inputLeftElement={<MdPercent color="lightgray" />}
+                        isInvalid={!!errors.goldAllocationRate}
+                        register={register("goldAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of starting networth to invest in gold."
+                    />
+
+                    <FormInput
+                        placeholder="Bonds"
+                        inputLeftElement={<MdPercent color="lightgray" />}
+                        isInvalid={!!errors.bondsAllocationRate}
+                        register={register("bondsAllocationRate", percentageRegisterOptions)}
+                        tooltipText="Percentage of starting networth to invest in bonds."
+                    />
+                </Flex>
+
                 <FormInput 
                     placeholder="Duration (years)" 
                     inputLeftElement={<MdSchedule color="lightgray" />} 
@@ -53,6 +85,16 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.El
                     register={register("safeWithdrawalRate", percentageRegisterOptions)} 
                     tooltipText="Percentage of retirement savings to withdraw yearly."
                 />
+
+                <Flex flexDirection="row">
+                    <FormLabel htmlFor="loopSwitch">Loop</FormLabel>
+                    <Switch id="loopSwitch" {...register("shouldLoop")}  />
+                </Flex>
+
+                <Select placeholder='Withdrawal strategy' {...register("strategy")}>
+                    <option value='fixed-percentage'>Fixed percentage</option>
+                    <option value='initial-percentage'>Initial percentage</option>
+                </Select>
 
                 <FormSubmitButton>Calculate</FormSubmitButton>
             </Flex>
