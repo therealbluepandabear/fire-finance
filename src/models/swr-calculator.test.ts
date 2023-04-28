@@ -81,6 +81,20 @@ test('outputs are correct (2)', async () => {
     const totalV1 = stocksAmountV2 + goldAmountV2 + bondsAmountV2
 
     expect(queriableData[1].networth).toBe(totalV1)
+
+
+
+    const stocksAmountV3 = stocksAmountV2 + (stocksAmountV2 * data[1].stocksReturnRate)
+    const goldAmountV3 = goldAmountV2 + (goldAmountV2 * data[1].goldReturnRate)
+    const bondsAmountV3 = bondsAmountV2 + (bondsAmountV2 * data[1].bondsReturnRate)
+
+    const stocksAmountV4 = stocksAmountV3 * (1 - safeWithdrawalRate)
+    const goldAmountV4 = goldAmountV3 * (1 - safeWithdrawalRate)
+    const bondsAmountV4 = bondsAmountV3 * (1 - safeWithdrawalRate)
+
+    const totalV2 = stocksAmountV4 + goldAmountV4 + bondsAmountV4
+
+    expect(queriableData[2].networth).toBe(totalV2)
 })
 
 export {}
