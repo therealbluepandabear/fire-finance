@@ -71,14 +71,16 @@ test('outputs are correct (2)', async () => {
     const bondsAmount = startingNetworth * bondsAllocationRate
 
     const stocksAmountV1 = stocksAmount + (stocksAmount * data[0].stocksReturnRate)
-    const goldAmountV1 = stocksAmount + (goldAmount * data[0].goldReturnRate)
+    const goldAmountV1 = goldAmount + (goldAmount * data[0].goldReturnRate)
     const bondsAmountV1 = bondsAmount + (bondsAmount * data[0].bondsReturnRate)
 
     const stocksAmountV2 = stocksAmountV1 * (1 - safeWithdrawalRate)
     const goldAmountV2 = goldAmountV1 * (1 - safeWithdrawalRate)
     const bondsAmountV2 = bondsAmountV1 * (1 - safeWithdrawalRate)
 
-    expect(queriableData[1].networth).toBe(stocksAmountV2 + goldAmountV2 + bondsAmountV2)
+    const totalV1 = stocksAmountV2 + goldAmountV2 + bondsAmountV2
+
+    expect(queriableData[1].networth).toBe(totalV1)
 })
 
 export {}
