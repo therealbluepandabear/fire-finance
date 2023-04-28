@@ -3,7 +3,7 @@
 // point in time -- this considers the historical, annual return rate of the stock market for each year throughout history.
 
 // This interface represents a historical, yearly data point for the S&P 500 index
-interface HistoricalPoint {
+export interface HistoricalPoint {
     year: number
     stocksReturnRate: number
     goldReturnRate: number
@@ -118,9 +118,16 @@ function generateSimulationData(params: SWRCalculatorInputs, data: HistoricalPoi
 }
 
 
-export async function calculateChanceOfSuccess(params: SWRCalculatorInputs): Promise<SWRCalculatorOutputs> {
+// mockData is only used in unit test
+export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mockData?: HistoricalPoint[]): Promise<SWRCalculatorOutputs> {
     // Represents the historical S&P data from 1930-2022 as an array (loaded from JSON)
-    let data: HistoricalPoint[] = await fetchHistoricalReturnData()
+    let data: HistoricalPoint[] = []
+    
+    if (!mockData) {
+        data = await fetchHistoricalReturnData()
+    } else {
+        data = mockData
+    }
 
     const outputs: SWRCalculatorOutputs = { results: [] }
 
