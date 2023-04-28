@@ -175,7 +175,8 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mock
             timelineData.push({ 
                 year: point.year,
                 investmentYear: index, 
-                networth: total.networth
+                networth: total.networth,
+                assetGrowthRate: 0 // stub
             })
             
             if (index < slice.length - 1) {
@@ -185,6 +186,8 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mock
 
                 total.networth = total.stocks + total.gold + total.bonds
             }
+
+            timelineData[timelineData.length - 1].assetGrowthRate = (((total.networth - timelineData[timelineData.length - 1].networth) / timelineData[timelineData.length - 1].networth) * 100) / 100
         })
 
         outputs.results.push({ 
@@ -206,6 +209,8 @@ export interface InvestmentTimelinePoint {
     // NOTE: Might seem useless but it is important as looped years exist
     year: number                                
     networth: number
+
+    assetGrowthRate: number
 }
 
 

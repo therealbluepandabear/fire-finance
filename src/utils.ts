@@ -15,6 +15,10 @@ export function formatCurrency(amount: number, compact: boolean = false): string
     ).format(amount)
 }
 
+export function formatPercentage(percent: number): string {
+    return `${(percent * 100).toFixed(2)}%`
+}
+
 export function saveToFile(fileName: string, url: string): void {
     let a = document.createElement('a')
     a.setAttribute('display', 'none')

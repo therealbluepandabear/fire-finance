@@ -1,6 +1,6 @@
 import { TabList, Tabs, Tab, TabPanels, TabPanel, Flex, Text, Box, Button } from '@chakra-ui/react'
 import { InvestmentTimelinePoint, SWRCalculatorOutputs } from '../../models/swr-calculator'
-import { formatCurrency } from '../../utils'
+import { formatCurrency, formatPercentage } from '../../utils'
 import { useEffect, useState } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import SWRCalculatorChart from './SWRCalculatorChart'
@@ -27,7 +27,12 @@ function ResultTable(props: ResultTableProps): JSX.Element {
 
         columnHelper.accessor('networth', {
             header: 'Networth',
-            cell: (info) => formatCurrency(info.getValue()),
+            cell: (info) => formatCurrency(info.getValue())
+        }),
+
+        columnHelper.accessor('assetGrowthRate', {
+            header: 'Asset Growth Rate',
+            cell: (info) => formatPercentage(info.getValue())
         })
     ]
 
