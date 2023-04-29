@@ -1,7 +1,7 @@
 import { Flex, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { ColumnDef, flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
-import { MdExpandLess, MdExpandMore } from 'react-icons/md'
+import { MdArrowDownward, MdArrowUpward, MdExpandLess, MdExpandMore } from 'react-icons/md'
 
 
 interface DataTableProps<Data extends object> {
@@ -38,11 +38,11 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                                         )}
 
                                         {header.column.getIsSorted() === 'desc' && (
-                                            <MdExpandLess />
+                                            <MdArrowUpward />
                                         )}
 
                                         {header.column.getIsSorted() === 'asc' && (
-                                            <MdExpandMore />
+                                            <MdArrowDownward />
                                         )}
                                     </Flex>
                                 </Th>
