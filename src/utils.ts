@@ -19,6 +19,10 @@ export function formatPercentage(percent: number): string {
     return `${(percent * 100).toFixed(2)}%`
 }
 
+export function average(array: number[]) {
+    return array.reduce((a, b) => a + b) / array.length
+}
+
 export function saveToFile(fileName: string, url: string): void {
     let a = document.createElement('a')
     a.setAttribute('display', 'none')

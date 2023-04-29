@@ -2,6 +2,8 @@
 // by simulating how the plan would play out given the user had (theoretically) begun their retirement plan at a particular
 // point in time -- this considers the historical, annual return rate of the stock market for each year throughout history.
 
+import { average } from '../utils'
+
 // This interface represents a historical, yearly data point for the S&P 500 index
 export interface HistoricalPoint {
     year: number
@@ -50,13 +52,13 @@ export function getCycleInfo(params: SWRCalculatorOutputs): CycleInfo {
     let worstPerformingResult = params.results[0]
 
     for (const result of params.results) {
-        const finalYearNetworth = result.timelineData.at(-1)!.networth
+        const averageNetworth = average(result.timelineData.map((point) => point.networth))
 
-        if (finalYearNetworth > bestPerformingResult.timelineData.at(-1)!.networth) {
+        if (averageNetworth > average(bestPerformingResult.timelineData.map((point) => point.networth))) {
             bestPerformingResult = result
         }
 
-        if (finalYearNetworth < worstPerformingResult.timelineData.at(-1)!.networth) {
+        if (averageNetworth < average(worstPerformingResult.timelineData.map((point) => point.networth))) {
             worstPerformingResult = result
         }
     }
@@ -77,10 +79,18 @@ export function getCycleInfo(params: SWRCalculatorOutputs): CycleInfo {
 // and the input data. First it calculates the annual spending as being the starting networth times the
 // safe withdrawal rate. It then checks whether or not multiply the safe withdrawal rate by the current
 // networth yields a value that is equal to or bigger than annual spending.
-function isRetirementPossible(params: SWRCalculatorInputs, currentNetworth: number): boolean {
-    const annualSpending = params.networth * params.safeWithdrawalRate
+function isRetirementPossible(params: SWRCalculatorInputs, currentNetworth: number, initialNetworth?: number): boolean {
+    if (params.strategy === 'fixed-percentage') {
+        const annualSpending = params.networth * params.safeWithdrawalRate
 
-    return (currentNetworth * params.safeWithdrawalRate) >= annualSpending
+        return (currentNetworth * params.safeWithdrawalRate) >= annualSpending
+    } 
+
+    if (!initialNetworth) {
+        throw new Error('`initialNetworth` must be defined if strategy is not fixed-percentage')
+    }
+
+    return currentNetworth >= (initialNetworth * params.safeWithdrawalRate)
 }
 
 
@@ -193,7 +203,7 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mock
         outputs.results.push({ 
             year: slice[0].year, 
             finalNetworth: total.networth, 
-            isRetirementPossible: isRetirementPossible(params, total.networth), 
+            isRetirementPossible: isRetirementPossible(params, total.networth, timelineData[0].networth), 
             timelineData: timelineData 
         })
     }
