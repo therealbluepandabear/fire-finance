@@ -17,7 +17,8 @@ test('outputs are correct (1)', async () => {
         strategy: 'fixed-percentage',
 
         safeWithdrawalRate: safeWithdrawalRate,
-        shouldLoop: false
+        shouldLoop: false,
+        adjustForInflation: false
     }, data)
 
     const queriableData = outputs.results[0].timelineData
@@ -57,7 +58,8 @@ test('outputs are correct (2)', async () => {
         strategy: 'fixed-percentage',
 
         safeWithdrawalRate: safeWithdrawalRate,
-        shouldLoop: false
+        shouldLoop: false,
+        adjustForInflation: false
     }, data)
 
     const queriableData = outputs.results[0].timelineData

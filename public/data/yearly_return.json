@@ -3,558 +3,651 @@
     "year": 1930,
     "stocksReturnRate": -0.25,
     "goldReturnRate": 0.001,
-    "bondsReturnRate": 0.0454
+    "bondsReturnRate": 0.0454,
+    "inflationRate": -0.023
   },
   {
     "year": 1931,
     "stocksReturnRate": -0.44,
     "goldReturnRate": -0.1738,
-    "bondsReturnRate": -0.0256
+    "bondsReturnRate": -0.0256,
+    "inflationRate": -0.09
   },
   {
     "year": 1932,
     "stocksReturnRate": -0.09,
     "goldReturnRate": 0.2128,
-    "bondsReturnRate": 0.0879
+    "bondsReturnRate": 0.0879,
+    "inflationRate": -0.099
   },
   {
     "year": 1933,
     "stocksReturnRate": 0.5,
     "goldReturnRate": 0.2726,
-    "bondsReturnRate": 0.0186
+    "bondsReturnRate": 0.0186,
+    "inflationRate": -0.051
   },
   {
     "year": 1934,
     "stocksReturnRate": -0.01,
     "goldReturnRate": 0.3175,
-    "bondsReturnRate": 0.0796
+    "bondsReturnRate": 0.0796,
+    "inflationRate": 0.031
   },
   {
     "year": 1935,
     "stocksReturnRate": 0.47,
     "goldReturnRate": 0.0043,
-    "bondsReturnRate": 0.0447	 
+    "bondsReturnRate": 0.0447,
+    "inflationRate": 0.022
   },
   {
     "year": 1936,
     "stocksReturnRate": 0.32,
     "goldReturnRate": 0.0009,
-    "bondsReturnRate": 0.0502
+    "bondsReturnRate": 0.0502,
+    "inflationRate": 0.015
   },
   {
     "year": 1937,
     "stocksReturnRate": -0.35,
     "goldReturnRate": -0.0023,
-    "bondsReturnRate": 0.0138
+    "bondsReturnRate": 0.0138,
+    "inflationRate": 0.036
   },
   {
     "year": 1938,
     "stocksReturnRate": 0.29,
     "goldReturnRate": 0.0017,
-    "bondsReturnRate": 0.0421
+    "bondsReturnRate": 0.0421,
+    "inflationRate": -0.021
   },
   {
     "year": 1939,
     "stocksReturnRate": -0.01,
     "goldReturnRate": -0.0123,
-    "bondsReturnRate": 0.0441
+    "bondsReturnRate": 0.0441,
+    "inflationRate": -0.014
   },
   {
     "year": 1940,
     "stocksReturnRate": -0.11,
     "goldReturnRate": -0.0166,
-    "bondsReturnRate": 0.054
+    "bondsReturnRate": 0.054,
+    "inflationRate": 0.007
   },
   {
     "year": 1941,
     "stocksReturnRate": -0.13,
     "goldReturnRate": 0,
-    "bondsReturnRate": -0.0202
+    "bondsReturnRate": -0.0202,
+    "inflationRate": 0.05
   },
   {
     "year": 1942,
     "stocksReturnRate": 0.19,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0229
+    "bondsReturnRate": 0.0229,
+    "inflationRate": 0.109
   },
   {
     "year": 1943,
     "stocksReturnRate": 0.25,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0249
+    "bondsReturnRate": 0.0249,
+    "inflationRate": 0.061
   },
   {
     "year": 1944,
     "stocksReturnRate": 0.19,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0258	
+    "bondsReturnRate": 0.0258,
+    "inflationRate": 0.017
   },
   {
     "year": 1945,
     "stocksReturnRate": 0.36,
     "goldReturnRate": 0.0254,
-    "bondsReturnRate": 0.038	
+    "bondsReturnRate": 0.038,
+    "inflationRate": 0.023
   },
   {
     "year": 1946,
     "stocksReturnRate": -0.08,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0313
+    "bondsReturnRate": 0.0313,
+    "inflationRate": 0.083
   },
   {
     "year": 1947,
     "stocksReturnRate": 0.05,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0092
+    "bondsReturnRate": 0.0092,
+    "inflationRate": 0.144
   },
   {
     "year": 1948,
     "stocksReturnRate": 0.06,
     "goldReturnRate": 0,
-    "bondsReturnRate": 0.0195
+    "bondsReturnRate": 0.0195,
+    "inflationRate": 0.081
   },
   {
     "year": 1949,
     "stocksReturnRate": 0.18,
     "goldReturnRate": -0.087,
-    "bondsReturnRate": 0.0466	
+    "bondsReturnRate": 0.0466,
+    "inflationRate": -0.012
   },
   {
     "year": 1950,
     "stocksReturnRate": 0.31,
     "goldReturnRate": 0.0956,
-    "bondsReturnRate": 0.0043
+    "bondsReturnRate": 0.0043,
+    "inflationRate": 0.013
   },
   {
     "year": 1951,
     "stocksReturnRate": 0.24,
     "goldReturnRate": 0,
-    "bondsReturnRate": -0.0030
+    "bondsReturnRate": -0.0030,
+    "inflationRate": 0.079
   },
   {
     "year": 1952,
     "stocksReturnRate": 0.18,
     "goldReturnRate": -0.0035,
-    "bondsReturnRate": 0.0227
+    "bondsReturnRate": 0.0227,
+    "inflationRate": 0.019
   },
   {
     "year": 1953,
     "stocksReturnRate": -0.01,
     "goldReturnRate": 0.0069,
-    "bondsReturnRate": 0.0414	
+    "bondsReturnRate": 0.0414,
+    "inflationRate": 0.008
   },
   {
     "year": 1954,
     "stocksReturnRate": 0.53,
     "goldReturnRate": 0.0057,
-    "bondsReturnRate": 0.0329
+    "bondsReturnRate": 0.0329,
+    "inflationRate": 0.007
   },
   {
     "year": 1955,
     "stocksReturnRate": 0.33,
     "goldReturnRate": -0.0003,
-    "bondsReturnRate": -0.0134
+    "bondsReturnRate": -0.0134,
+    "inflationRate": -0.004
   },
   {
     "year": 1956,
     "stocksReturnRate": 0.07,
     "goldReturnRate": -0.0011,
-    "bondsReturnRate": -0.0226
+    "bondsReturnRate": -0.0226,
+    "inflationRate": 0.015
   },
   {
     "year": 1957,
     "stocksReturnRate": -0.1,
     "goldReturnRate": -0.0011,
-    "bondsReturnRate": 0.068
+    "bondsReturnRate": 0.068,
+    "inflationRate": 0.033
   },
   {
     "year": 1958,
     "stocksReturnRate": 0.44,
     "goldReturnRate": 0.0043,
-    "bondsReturnRate": -0.021
+    "bondsReturnRate": -0.021,
+    "inflationRate": 0.028
   },
   {
     "year": 1959,
     "stocksReturnRate": 0.12,
     "goldReturnRate": 0,
-    "bondsReturnRate": -0.0265
+    "bondsReturnRate": -0.0265,
+    "inflationRate": 0.007
   },
   {
     "year": 1960,
     "stocksReturnRate": 0,
     "goldReturnRate": 0.0048,
-    "bondsReturnRate": 0.1164
+    "bondsReturnRate": 0.1164,
+    "inflationRate": 0.017
   },
   {
     "year": 1961,
     "stocksReturnRate": 0.27,
     "goldReturnRate": -0.0006,
-    "bondsReturnRate": 0.0206
+    "bondsReturnRate": 0.0206,
+    "inflationRate": 0.01
   },
   {
     "year": 1962,
     "stocksReturnRate": -0.09,
     "goldReturnRate": -0.0006,
-    "bondsReturnRate": 0.0569
+    "bondsReturnRate": 0.0569,
+    "inflationRate": 0.01
   },
   {
     "year": 1963,
     "stocksReturnRate": 0.23,
     "goldReturnRate": -0.004,
-    "bondsReturnRate": 0.0168	
+    "bondsReturnRate": 0.0168,
+    "inflationRate": 0.013
   },
   {
     "year": 1964,
     "stocksReturnRate": 0.16,
     "goldReturnRate": 0.0003,
-    "bondsReturnRate": 0.0373	
+    "bondsReturnRate": 0.0373,
+    "inflationRate": 0.013
   },
   {
     "year": 1965,
     "stocksReturnRate": 0.12,
     "goldReturnRate": 0.0006,
-    "bondsReturnRate": 0.0072
+    "bondsReturnRate": 0.0072,
+    "inflationRate": 0.016
   },
   {
     "year": 1966,
     "stocksReturnRate": -0.1,
     "goldReturnRate": 0.0003,
-    "bondsReturnRate": 0.0291
+    "bondsReturnRate": 0.0291,
+    "inflationRate": 0.029
   },
   {
     "year": 1967,
     "stocksReturnRate": 0.24,
     "goldReturnRate": -0.0051,
-    "bondsReturnRate": -0.0158
+    "bondsReturnRate": -0.0158,
+    "inflationRate": 0.031
   },
   {
     "year": 1968,
     "stocksReturnRate": 0.11,
     "goldReturnRate": 0.1247,
-    "bondsReturnRate": 0.0327
+    "bondsReturnRate": 0.0327,
+    "inflationRate": 0.042
   },
   {
     "year": 1969,
     "stocksReturnRate": -0.08,
     "goldReturnRate": 0.0501,
-    "bondsReturnRate": -0.0501
+    "bondsReturnRate": -0.0501,
+    "inflationRate": 0.055
   },
   {
     "year": 1970,
     "stocksReturnRate": 0.04,
     "goldReturnRate": -0.0945,
-    "bondsReturnRate": 0.1675
+    "bondsReturnRate": 0.1675,
+    "inflationRate": 0.057
   },
   {
     "year": 1971,
     "stocksReturnRate": 0.14,
     "goldReturnRate": 0.1669,
-    "bondsReturnRate": 0.0979
+    "bondsReturnRate": 0.0979,
+    "inflationRate": 0.044
   },
   {
     "year": 1972,
     "stocksReturnRate": 0.19,
     "goldReturnRate": 0.4878,
-    "bondsReturnRate": 0.0979
+    "bondsReturnRate": 0.0979,
+    "inflationRate": 0.032
   },
   {
     "year": 1973,
     "stocksReturnRate": -0.14,
     "goldReturnRate": 0.7296,
-    "bondsReturnRate": 0.0366
+    "bondsReturnRate": 0.0366,
+    "inflationRate": 0.062
   },
   {
     "year": 1974,
     "stocksReturnRate": -0.26,
     "goldReturnRate": 0.6615,
-    "bondsReturnRate": 0.0199
+    "bondsReturnRate": 0.0199,
+    "inflationRate": 0.11
   },
   {
     "year": 1975,
     "stocksReturnRate": 0.37,
     "goldReturnRate": -0.248,
-    "bondsReturnRate": 0.0361	
+    "bondsReturnRate": 0.0361,
+    "inflationRate": 0.091	
   },
   {
     "year": 1976,
     "stocksReturnRate": 0.24,
     "goldReturnRate": -0.041,
-    "bondsReturnRate": 0.1598
+    "bondsReturnRate": 0.1598,
+    "inflationRate": 0.058
   },
   {
     "year": 1977,
     "stocksReturnRate": -0.07,
     "goldReturnRate": 0.2264,
-    "bondsReturnRate": 0.0129
+    "bondsReturnRate": 0.0129,
+    "inflationRate": 0.065
   },
   {
     "year": 1978,
     "stocksReturnRate": 0.07,
     "goldReturnRate": 0.3701,
-    "bondsReturnRate": -0.0078
+    "bondsReturnRate": -0.0078,
+    "inflationRate": 0.076
   },
   {
     "year": 1979,
     "stocksReturnRate": 0.19,
     "goldReturnRate": 1.2655,
-    "bondsReturnRate": 0.0067	
+    "bondsReturnRate": 0.0067,
+    "inflationRate": 0.113
   },
   {
     "year": 1980,
     "stocksReturnRate": 0.32,
     "goldReturnRate": 0.1519,
-    "bondsReturnRate": -0.0299
+    "bondsReturnRate": -0.0299,
+    "inflationRate": 0.135
   },
   {
     "year": 1981,
     "stocksReturnRate": -0.05,
     "goldReturnRate": -0.326,
-    "bondsReturnRate": 0.082
+    "bondsReturnRate": 0.082,
+    "inflationRate": 0.103
   },
   {
     "year": 1982,
     "stocksReturnRate": 0.2,
     "goldReturnRate": 0.1562,
-    "bondsReturnRate": 0.3281
+    "bondsReturnRate": 0.3281,
+    "inflationRate": 0.062
   },
   {
     "year": 1983,
     "stocksReturnRate": 0.22,
     "goldReturnRate": -0.168,
-    "bondsReturnRate": 0.032
+    "bondsReturnRate": 0.032,
+    "inflationRate": 0.032
   },
   {
     "year": 1984,
     "stocksReturnRate": 0.06,
     "goldReturnRate": -0.1938,
-    "bondsReturnRate": 0.1373
+    "bondsReturnRate": 0.1373,
+    "inflationRate": 0.043
   },
   {
     "year": 1985,
     "stocksReturnRate": 0.31,
     "goldReturnRate": 0.06,
-    "bondsReturnRate": 0.2571
+    "bondsReturnRate": 0.2571,
+    "inflationRate": 0.036
   },
   {
     "year": 1986,
     "stocksReturnRate": 0.18,
     "goldReturnRate": 0.1896,
-    "bondsReturnRate": 0.2428
+    "bondsReturnRate": 0.2428,
+    "inflationRate": 1.9
   },
   {
     "year": 1987,
     "stocksReturnRate": 0.06,
     "goldReturnRate": 0.2453,
-    "bondsReturnRate": -0.0496	
+    "bondsReturnRate": -0.0496,
+    "inflationRate": 0.036
   },
   {
     "year": 1988,
     "stocksReturnRate": 0.17,
     "goldReturnRate": -0.1526,
-    "bondsReturnRate": 0.0822
+    "bondsReturnRate": 0.0822,
+    "inflationRate": 0.041
   },
   {
     "year": 1989,
     "stocksReturnRate": 0.31,
     "goldReturnRate": -0.0284,
-    "bondsReturnRate": 0.1769
+    "bondsReturnRate": 0.1769,
+    "inflationRate": 0.048
   },
   {
     "year": 1990,
     "stocksReturnRate": -0.03,
     "goldReturnRate": -0.0311,
-    "bondsReturnRate": 0.0624	
+    "bondsReturnRate": 0.0624,
+    "inflationRate": 0.054
   },
   {
     "year": 1991,
     "stocksReturnRate": 0.3,
     "goldReturnRate": -0.0856,
-    "bondsReturnRate": 0.15
+    "bondsReturnRate": 0.15,
+    "inflationRate": 0.042
   },
   {
     "year": 1992,
     "stocksReturnRate": 0.07,
     "goldReturnRate": -0.0573,
-    "bondsReturnRate": 0.0936
+    "bondsReturnRate": 0.0936,
+    "inflationRate": 0.03
   },
   {
     "year": 1993,
     "stocksReturnRate": 0.1,
     "goldReturnRate": 0.1768,
-    "bondsReturnRate": 0.1421
+    "bondsReturnRate": 0.1421,
+    "inflationRate": 0.03
   },
   {
     "year": 1994,
     "stocksReturnRate": 0.01,
     "goldReturnRate": -0.0217,
-    "bondsReturnRate": -0.0804
+    "bondsReturnRate": -0.0804,
+    "inflationRate": 0.026
   },
   {
     "year": 1995,
     "stocksReturnRate": 0.37,
     "goldReturnRate": 0.0098,
-    "bondsReturnRate": 0.2348
+    "bondsReturnRate": 0.2348,
+    "inflationRate": 0.028
   },
   {
     "year": 1996,
     "stocksReturnRate": 0.23,
     "goldReturnRate": -0.0459,
-    "bondsReturnRate": 0.0143	
+    "bondsReturnRate": 0.0143,
+    "inflationRate": 0.03
   },
   {
     "year": 1997,
     "stocksReturnRate": 0.33,
     "goldReturnRate": -0.2141,
-    "bondsReturnRate": 0.0994
+    "bondsReturnRate": 0.0994,
+    "inflationRate": 0.023
   },
   {
     "year": 1998,
     "stocksReturnRate": 0.28,
     "goldReturnRate": -0.0083,
-    "bondsReturnRate": 0.1492
+    "bondsReturnRate": 0.1492,
+    "inflationRate": 0.016
   },
   {
     "year": 1999,
     "stocksReturnRate": 0.21,
     "goldReturnRate": 0.0085,
-    "bondsReturnRate": -0.0825
+    "bondsReturnRate": -0.0825,
+    "inflationRate": 0.022
   },
   {
     "year": 2000,
     "stocksReturnRate": -0.09,
     "goldReturnRate": -0.0544,
-    "bondsReturnRate": 0.1666
+    "bondsReturnRate": 0.1666,
+    "inflationRate": 0.034
   },
   {
     "year": 2001,
     "stocksReturnRate": -0.12,
     "goldReturnRate": 0.0075,
-    "bondsReturnRate": 0.0557
+    "bondsReturnRate": 0.0557,
+    "inflationRate": 0.028
   },
   {
     "year": 2002,
     "stocksReturnRate": -0.22,
     "goldReturnRate": 0.2557,
-    "bondsReturnRate": 0.1512
+    "bondsReturnRate": 0.1512,
+    "inflationRate": 0.016
   },
   {
     "year": 2003,
     "stocksReturnRate": 0.28,
     "goldReturnRate": 0.1989,
-    "bondsReturnRate": 0.0038
+    "bondsReturnRate": 0.0038,
+    "inflationRate": 0.023
   },
   {
     "year": 2004,
     "stocksReturnRate": 0.11,
     "goldReturnRate": 0.0465,
-    "bondsReturnRate": 0.0449
+    "bondsReturnRate": 0.0449,
+    "inflationRate": 0.027
   },
   {
     "year": 2005,
     "stocksReturnRate": 0.05,
     "goldReturnRate": 0.1777,
-    "bondsReturnRate": 0.0287
+    "bondsReturnRate": 0.0287,
+    "inflationRate": 0.034
   },
   {
     "year": 2006,
     "stocksReturnRate": 0.16,
     "goldReturnRate": 0.232,
-    "bondsReturnRate": 0.0196
+    "bondsReturnRate": 0.0196,
+    "inflationRate": 0.032
   },
   {
     "year": 2007,
     "stocksReturnRate": 0.05,
     "goldReturnRate": 0.3192,
-    "bondsReturnRate": 0.1021
+    "bondsReturnRate": 0.1021,
+    "inflationRate": 0.028
   },
   {
     "year": 2008,
     "stocksReturnRate": -0.37,
     "goldReturnRate": 0.0432,
-    "bondsReturnRate": 0.201
+    "bondsReturnRate": 0.201,
+    "inflationRate": 0.038
   },
   {
     "year": 2009,
     "stocksReturnRate": 0.26,
     "goldReturnRate": 0.2504,
-    "bondsReturnRate": -0.1112
+    "bondsReturnRate": -0.1112,
+    "inflationRate": -0.004
   },
   {
     "year": 2010,
     "stocksReturnRate": 0.15,
     "goldReturnRate": 0.2924,
-    "bondsReturnRate": 0.0846	
+    "bondsReturnRate": 0.0846,
+    "inflationRate": 0.016	
   },
   {
     "year": 2011,
     "stocksReturnRate": 0.02,
     "goldReturnRate": 0.1202,
-    "bondsReturnRate": 0.1604
+    "bondsReturnRate": 0.1604,
+    "inflationRate": 0.032
   },
   {
     "year": 2012,
     "stocksReturnRate": 0.16,
     "goldReturnRate": 0.0568,
-    "bondsReturnRate": 0.0297
+    "bondsReturnRate": 0.0297,
+    "inflationRate": 0.021
   },
   {
     "year": 2013,
     "stocksReturnRate": 0.32,
     "goldReturnRate": -0.2761,
-    "bondsReturnRate": -0.091	
+    "bondsReturnRate": -0.091,
+    "inflationRate": 0.015
   },
   {
     "year": 2014,
     "stocksReturnRate": 0.14,
     "goldReturnRate": 0.0012,
-    "bondsReturnRate": 0.1075
+    "bondsReturnRate": 0.1075,
+    "inflationRate": 0.016
   },
   {
     "year": 2015,
     "stocksReturnRate": 0.01,
     "goldReturnRate": -0.1211,
-    "bondsReturnRate": 0.0128
+    "bondsReturnRate": 0.0128,
+    "inflationRate": 0.001
   },
   {
     "year": 2016,
     "stocksReturnRate": 0.12,
     "goldReturnRate": 0.081,
-    "bondsReturnRate": 0.0069
+    "bondsReturnRate": 0.0069,
+    "inflationRate": 0.013
   },
   {
     "year": 2017,
     "stocksReturnRate": 0.22,
     "goldReturnRate": 0.1266,
-    "bondsReturnRate": 0.028
+    "bondsReturnRate": 0.028,
+    "inflationRate": 0.021
   },
   {
     "year": 2018,
     "stocksReturnRate": -0.04,
     "goldReturnRate": -0.0093,
-    "bondsReturnRate": -0.0002
+    "bondsReturnRate": -0.0002,
+    "inflationRate": 0.024
   },
   {
     "year": 2019,
     "stocksReturnRate": 0.31,
     "goldReturnRate": 0.1908,
-    "bondsReturnRate": 0.0964
+    "bondsReturnRate": 0.0964,
+    "inflationRate": 0.018
   },
   {
     "year": 2020,
     "stocksReturnRate": 0.18,
     "goldReturnRate": 0.2417,
-    "bondsReturnRate": 0.1133
+    "bondsReturnRate": 0.1133,
+    "inflationRate": 0.012
   },
   {
     "year": 2021,
     "stocksReturnRate": 0.28,
     "goldReturnRate": -0.0375,
-    "bondsReturnRate": -0.0442
+    "bondsReturnRate": -0.0442,
+    "inflationRate": 0.047
   },
   {
     "year": 2022,
     "stocksReturnRate": -0.18,
     "goldReturnRate": 0.0055,
-    "bondsReturnRate": -0.1783
+    "bondsReturnRate": -0.1783,
+    "inflationRate": 0.08
   }
 ]

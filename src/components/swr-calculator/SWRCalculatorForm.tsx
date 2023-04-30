@@ -104,6 +104,11 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.El
                                     <Switch id="loopSwitch" {...register("shouldLoop")}  />
                                 </Flex>
 
+                                <Flex flexDirection="row">
+                                    <FormLabel htmlFor="adjustForInflation">Adjust for Inflation</FormLabel>
+                                    <Switch id="adjustForInflation" {...register("adjustForInflation")}  />
+                                </Flex>
+
                                 <Select placeholder='Withdrawal strategy' {...register("strategy")}>
                                     <option value='fixed-percentage'>Fixed percentage</option>
                                     <option value='initial-percentage'>Initial percentage</option>

@@ -3,13 +3,16 @@
 // point in time -- this considers the historical, annual return rate of the stock market for each year throughout history.
 
 import { average } from '../utils'
+import { adjustForInflation } from './calculator-utils'
 
 // This interface represents a historical, yearly data point for the S&P 500 index
 export interface HistoricalPoint {
     year: number
+
     stocksReturnRate: number
     goldReturnRate: number
     bondsReturnRate: number
+    inflationRate: number
 }
 
 
@@ -127,6 +130,21 @@ function generateSimulationData(params: SWRCalculatorInputs, data: HistoricalPoi
     return toReturn
 }
 
+function calculateAdjustedReturnRate(params: SWRCalculatorInputs, point: HistoricalPoint) {
+    if (params.adjustForInflation) {
+        return {
+            adjustedStocksReturnRate: adjustForInflation(point.stocksReturnRate, point.inflationRate),
+            adjustedGoldReturnRate: adjustForInflation(point.goldReturnRate, point.inflationRate),
+            adjustedBondsReturnRate: adjustForInflation(point.bondsReturnRate, point.inflationRate)
+        }
+    }
+
+    return {
+        adjustedStocksReturnRate: point.stocksReturnRate,
+        adjustedGoldReturnRate: point.goldReturnRate,
+        adjustedBondsReturnRate: point.bondsReturnRate
+    }
+}
 
 // mockData is only used in unit test
 export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mockData?: HistoricalPoint[]): Promise<SWRCalculatorOutputs> {
@@ -190,9 +208,11 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mock
             })
             
             if (index < slice.length - 1) {
-                total.stocks = calculateTotal(total, 'stocks', point.stocksReturnRate, timelineData[0].networth)
-                total.gold = calculateTotal(total, 'gold', point.goldReturnRate, timelineData[0].networth)
-                total.bonds = calculateTotal(total, 'bonds', point.bondsReturnRate, timelineData[0].networth)
+                let { adjustedStocksReturnRate, adjustedGoldReturnRate, adjustedBondsReturnRate } = calculateAdjustedReturnRate(params, point)
+
+                total.stocks = calculateTotal(total, 'stocks', adjustedStocksReturnRate, timelineData[0].networth)
+                total.gold = calculateTotal(total, 'gold', adjustedGoldReturnRate, timelineData[0].networth)
+                total.bonds = calculateTotal(total, 'bonds', adjustedBondsReturnRate, timelineData[0].networth)
 
                 total.networth = total.stocks + total.gold + total.bonds
             }
@@ -249,6 +269,7 @@ export interface SWRCalculatorInputs {
 
     safeWithdrawalRate: number
     shouldLoop: boolean
+    adjustForInflation: boolean
 }
 
 
