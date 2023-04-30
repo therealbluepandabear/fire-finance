@@ -57,7 +57,7 @@ export default function RetirementCalculator(): JSX.Element {
                 {outputs && (
                     <Text fontSize="3xl">You can achieve financial independence by age{' '}
                         <Text as="span" fontWeight="bold" color="#82ca9d">
-                            <CountUp start={0} end={outputs.fireAge} duration={1.4} />
+                            {outputs.fireAge}
                         </Text>
                     </Text>
                 )}
