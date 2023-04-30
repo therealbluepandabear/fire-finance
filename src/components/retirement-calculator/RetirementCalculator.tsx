@@ -6,8 +6,6 @@ import { saveToFile } from '../../utils'
 import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
 import RetirementCalculatorTable from './RetirementCalculatorTable'
-import CountUp from 'react-countup'
-
 
 export default function RetirementCalculator(): JSX.Element {
     const [outputs, setOutputs] = useState<RetirementCalculatorOutputs | null>(null)
