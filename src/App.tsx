@@ -12,7 +12,7 @@ function App() {
     }
 
     return (
-        <Flex flexDirection="column">
+        <Flex flexDirection="column" height="100vh">
             <AppBar selectedItemIndex={selectedItemIndex} onItemClick={itemClickHandler} />
 
             {selectedItemIndex === 0 && (

@@ -14,7 +14,7 @@ import {
 import { formatCurrency } from '../../utils'
 import { RetirementCalculatorOutputs } from '../../models/retirement-calculator'
 import { useEffect, useState } from 'react'
-import RetirementMilestoneIndicator from './RetirementMilestoneIndicator'
+import RetirementCalculatorMilestoneIndicator from './RetirementCalculatorMilestoneIndicator'
 
 
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
@@ -170,13 +170,13 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
             </ResponsiveContainer>
 
             {!pointOfRetirement && (
-                <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+                <RetirementCalculatorMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
             )}
 
             {pointOfRetirement && (
                 <>
-                    <RetirementMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
-                    <RetirementMilestoneIndicator type="retirement" cx={retirementCx} cy={retirementCy} />
+                    <RetirementCalculatorMilestoneIndicator type="financial-independence" cx={fiCx} cy={fiCy} />
+                    <RetirementCalculatorMilestoneIndicator type="retirement" cx={retirementCx} cy={retirementCy} />
                 </>
             )}
         </Box>

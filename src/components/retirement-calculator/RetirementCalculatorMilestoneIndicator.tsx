@@ -3,6 +3,7 @@ import { MdFlag, MdBeachAccess } from 'react-icons/md'
 import {  PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 
+
 type MilestoneType = 'financial-independence' | 'retirement'
 
 
@@ -29,13 +30,13 @@ function Circle(props: CircleProps): JSX.Element {
 }
 
 
-interface RetirementMilestoneIndicatorProps {
+interface RetirementCalculatorMilestoneIndicatorProps {
     type: MilestoneType
     cx: number
     cy: number
 }
 
-export default function RetirementMilestoneIndicator(props: RetirementMilestoneIndicatorProps): JSX.Element {
+export default function RetirementCalculatorMilestoneIndicator(props: RetirementCalculatorMilestoneIndicatorProps): JSX.Element {
     const left = props.cx - 10
     const top = (props.cy - 10) - 40
 
