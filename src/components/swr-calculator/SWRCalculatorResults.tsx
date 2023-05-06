@@ -17,7 +17,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
     return (
         <Flex flexDirection={{ base: "column", xl: "row" }} flexGrow={1}>
             <Flex flexDirection="column" width={{ base: "100%", xl: "50%" }} height="100%">
-                <Flex flexDirection="row" height={{ base: "100%", xl: "50%" }}>
+                <Flex flexDirection={{ base: "column", md: "row" }} height={{ base: "100%", xl: "50%" }}>
                     <Flex alignItems="center" justifyContent="center" minWidth="0" minHeight="0">
                         <SWRCalculatorPieChart {...props} />
                     </Flex>
