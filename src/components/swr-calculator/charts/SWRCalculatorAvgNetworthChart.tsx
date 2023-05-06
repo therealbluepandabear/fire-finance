@@ -22,10 +22,10 @@ export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNet
                     fill="url(#colorPv)"
                     dataKey="averageNetworth"
                     stroke="#82ca9d"
-                    strokeWidth={4}
+                    strokeWidth={3}
                 />
 
-                <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+                <CartesianGrid stroke="lightgray" opacity={0.4} strokeDasharray="5 5" vertical={false} />
 
                 <XAxis axisLine={false} tickFormatter={(value) => 1930 + value} />
 
