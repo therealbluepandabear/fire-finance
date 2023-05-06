@@ -2,7 +2,7 @@ import SWRCalculatorForm from './SWRCalculatorForm'
 import { Flex } from '@chakra-ui/react'
 import { calculateChanceOfSuccess, CycleInfo, getCycleInfo, SWRCalculatorInputs, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { useState } from 'react'
-import SWRCalculatorChart from './SWRCalculatorChart'
+import SWRCalculatorChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorResults from './SWRCalculatorResults'
 
 

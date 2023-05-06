@@ -114,7 +114,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
     }
 
     return (  
-        <Box width="100%" height="100%" position="relative"                     backgroundColor={useColorModeValue('white', 'gray.800')}        > 
+        <Box width="100%" height="100%" position="relative" backgroundColor={useColorModeValue('white', 'gray.800')}> 
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data}>
                     <defs>

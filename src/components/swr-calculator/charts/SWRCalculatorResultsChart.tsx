@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { MdCalendarMonth, MdAccountBalanceWallet } from 'react-icons/md'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, Tooltip, TooltipProps } from 'recharts'
-import { StartingYearResult, SWRCalculatorOutputs } from '../../models/swr-calculator'
-import { formatCurrency } from '../../utils'
+import { StartingYearResult, SWRCalculatorOutputs } from '../../../models/swr-calculator'
+import { formatCurrency } from '../../../utils'
 import { Flex, Box, Text } from '@chakra-ui/react'
 
 
-function ChartTooltip({ active, payload, label }: TooltipProps<number, number>) {
+function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
     if (active && payload && payload[0]) {
         const inlineFlexStyle = {
             flexDirection: 'row',
@@ -45,12 +45,12 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>) 
 }
 
 
-interface SWRCalculatorProps {
+interface SWRCalculatorResultsChartProps {
     outputs: SWRCalculatorOutputs
     showTooltip: boolean
 }
 
-export default function SWRCalculatorChart(props: SWRCalculatorProps): JSX.Element {
+export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsChartProps): JSX.Element {
     const [activeResult, setActiveResult] = useState<StartingYearResult | null>(null)
 
     function mouseEnterHandler(result: StartingYearResult): void {

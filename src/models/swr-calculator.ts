@@ -55,13 +55,11 @@ export function getCycleInfo(params: SWRCalculatorOutputs): CycleInfo {
     let worstPerformingResult = params.results[0]
 
     for (const result of params.results) {
-        const averageNetworth = average(result.timelineData.map((point) => point.networth))
-
-        if (averageNetworth > average(bestPerformingResult.timelineData.map((point) => point.networth))) {
+        if (result.averageNetworth > bestPerformingResult.averageNetworth) {
             bestPerformingResult = result
         }
 
-        if (averageNetworth < average(worstPerformingResult.timelineData.map((point) => point.networth))) {
+        if (result.averageNetworth < worstPerformingResult.averageNetworth) {
             worstPerformingResult = result
         }
     }
@@ -223,6 +221,7 @@ export async function calculateChanceOfSuccess(params: SWRCalculatorInputs, mock
         outputs.results.push({ 
             year: slice[0].year, 
             finalNetworth: total.networth, 
+            averageNetworth: average(timelineData.map((value) => value.networth)),
             isRetirementPossible: isRetirementPossible(params, total.networth, timelineData[0].networth), 
             timelineData: timelineData 
         })
@@ -250,6 +249,7 @@ export interface StartingYearResult {
     year: number
 
     finalNetworth: number
+    averageNetworth: number
     isRetirementPossible: boolean
     timelineData: InvestmentTimelinePoint[]
 }

@@ -1,48 +1,11 @@
-import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react'
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Label } from 'recharts'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
-import SWRCalculatorChart from './SWRCalculatorChart'
+import SWRCalculatorResultsChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
-
-
-function ResultPieChart(props: SWRCalculatorResultsProps): JSX.Element {
-    const data = [
-        { name: 'Successes', value: props.cycleInfo.successes },
-        { name: 'Failures', value: props.cycleInfo.failures }
-    ]
-
-    const textColor = useColorModeValue('black', 'white')
-
-    return (
-        <Box minWidth="0" width="400px" height="400px">
-            <ResponsiveContainer>
-                <PieChart>
-                    <Pie
-                        dataKey="value"
-                        data={data}
-                        innerRadius="70%"
-                        outerRadius="90%"
-                        stroke=""
-                    >
-                        <Label
-                            value={formatPercentage(props.cycleInfo.successRate)}
-                            fontWeight="bold"
-                            fontSize="58px"
-                            position="center"
-                            fill={textColor}
-                        />
-                        <Label value="Success Rate" fontSize="17px" position="center" dy={45} fill={textColor} />
-                        <Cell fill="#57E964" name="Successes" />
-                        <Cell fill="red" name="Failures" />
-                    </Pie>
-                    <Tooltip />
-                </PieChart>
-            </ResponsiveContainer>
-        </Box>
-    )
-}
+import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
 
 
 interface SWRCalculatorResultsProps {
@@ -56,7 +19,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
             <Flex flexDirection="column" width={{ base: "100%", xl: "50%" }} height="100%">
                 <Flex flexDirection="row" height={{ base: "100%", xl: "50%" }}>
                     <Flex alignItems="center" justifyContent="center" minWidth="0" minHeight="0">
-                        <ResultPieChart {...props} />
+                        <SWRCalculatorPieChart {...props} />
                     </Flex>
 
                     <Flex padding="16px" flexGrow={1}>
@@ -76,16 +39,18 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                     </Flex>
                 </Flex>
 
-                <Flex flexDirection="column" padding="16px">
+                <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
                     <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
 
-
+                    <Flex flexGrow={1}>
+                        <SWRCalculatorAvgNetworthChart data={props.outputs.results} />
+                    </Flex>
                 </Flex>
             </Flex>
 
             <Flex flexDirection="column" minWidth="0" padding="16px" flexGrow={1}>
                 <Flex flexGrow={1}>
-                    <SWRCalculatorChart showTooltip={false} outputs={props.outputs} />
+                    <SWRCalculatorResultsChart showTooltip={false} outputs={props.outputs} />
                 </Flex>
 
                 <Flex flexGrow={1}>
