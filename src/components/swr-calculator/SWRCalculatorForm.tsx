@@ -11,7 +11,16 @@ interface SWRCalculatorFormProps {
 }
 
 export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.Element {
-    const { register, handleSubmit, formState: { errors } } = useForm<SWRCalculatorInputs>()
+    const { register, handleSubmit, formState: { errors } } = useForm<SWRCalculatorInputs>({
+        defaultValues: {
+            networth: 1_000,
+            duration: 12,
+            safeWithdrawalRate: 4,
+            stocksAllocationRate: 100,
+            bondsAllocationRate: 0,
+            goldAllocationRate: 0
+        }
+    })
     
     const numberRegisterOptions: RegisterOptions = { 
         required: true, 

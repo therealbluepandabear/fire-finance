@@ -1,7 +1,7 @@
 import { Box, Flex, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react'
 import { ColumnDef, flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
-import { MdArrowDownward, MdArrowUpward, MdExpandLess, MdExpandMore } from 'react-icons/md'
+import { MdArrowDownward, MdArrowUpward } from 'react-icons/md'
 
 
 interface DataTableProps<Data extends object> {
@@ -25,6 +25,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
 
     const color = useColorModeValue('#f7f7f7', 'gray.900')
     const headerColor = useColorModeValue('', '#1f2836')
+    const scrollbarColor = useColorModeValue('gray.400', 'gray.600')
 
     const [hoveredHeaderIndex, setHoveredHeaderIndex] = useState<number | null>(null)
 
@@ -37,7 +38,20 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
     }
 
     return (
-        <TableContainer width="100%" height="100%">
+        <TableContainer 
+            width="100%"
+            overflowY="scroll"
+            sx={
+                {"::-webkit-scrollbar": {
+                    width: "8px",
+                    height: "12px",
+                },
+                "::-webkit-scrollbar-thumb": {
+                    background: scrollbarColor,
+                    borderRadius: "999px"
+                }}
+            }
+        >
             <Box borderRadius="md" overflow="hidden">
                 <Table>
                     <Thead>

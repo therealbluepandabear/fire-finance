@@ -30,6 +30,7 @@ export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNet
                 <XAxis axisLine={false} tickFormatter={(value) => 1930 + value} />
 
                 <YAxis
+                    tickFormatter={(value) => formatCurrency(value, true)} 
                     tickCount={12}
                     axisLine={false}
                     tickLine={false}
