@@ -6,6 +6,70 @@ import SWRCalculatorResultsChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
+import { useRef, useState } from 'react'
+
+
+interface EzTabProps {
+    headers: string[]
+    content: JSX.Element[]
+}
+
+function EzTab(props: EzTabProps): JSX.Element {
+    const [isDragging, setIsDragging] = useState(false)
+    const [startX, setStartX] = useState<number | null>(null)
+    const [scrollLeft, setScrollLeft] = useState(0)
+
+    const tabListRef = useRef<HTMLDivElement>(null);
+
+    function mouseDownHandler(e: React.MouseEvent<HTMLDivElement>) {
+        setIsDragging(true)
+        setStartX(e.pageX)
+        setScrollLeft(tabListRef.current!.scrollLeft)
+    }
+
+    function mouseMoveHandler(e: React.MouseEvent<HTMLDivElement>) {
+        if (!isDragging) {
+            return
+        }
+
+        const delta = e.pageX - (startX ?? 0)
+        tabListRef.current!.scrollLeft = scrollLeft - delta
+    }
+
+    function mouseUpHandler() {
+        setIsDragging(false)
+    }
+
+    return (
+        <Tabs isLazy>
+            <TabList
+                ref={tabListRef}
+                onMouseDown={mouseDownHandler}
+                onMouseMove={mouseMoveHandler}
+                onMouseUp={mouseUpHandler}
+                onMouseLeave={mouseUpHandler}
+                overflowY="scroll"
+                sx={{
+                    "::-webkit-scrollbar": {
+                        display: "none"
+                    }
+                }}
+            >
+                {props.headers.map((header) => (
+                    <Tab height="40px" width="55px" alignItems="center" justifyContent="center">
+                        {header}
+                    </Tab>
+                ))}
+            </TabList>
+
+            <TabPanels>
+                {props.content.map((jsx) => (
+                    jsx
+                ))}
+            </TabPanels>
+        </Tabs>
+    )
+}
 
 
 interface SWRCalculatorResultsProps {
@@ -54,32 +118,16 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                         <SWRCalculatorResultsChart showTooltip={false} outputs={props.outputs} />
                     </Flex>
 
-                    <Tabs isLazy>
-                        <TabList 
-                            overflow="auto" 
-                            sx={{
-                                "::-webkit-scrollbar": {
-                                    display: "none"
-                                }
-                            }}
-                        >
-                            {props.outputs.results.map((result) => result.year).map((year) => (
-                                <Tab height="40px" width="55px" alignItems="center" justifyContent="center">
-                                    {year}
-                                </Tab>
-                            ))}
-                        </TabList>
-
-                        <TabPanels>
-                            {props.outputs.results.map((result) => (
-                                <TabPanel padding="0px">
-                                    <Flex height="350px">
-                                        <SWRCalculatorResultTable timelineData={result.timelineData} />
-                                    </Flex>
-                                </TabPanel>
-                            ))}
-                        </TabPanels>
-                    </Tabs>
+                    <EzTab 
+                        headers={props.outputs.results.map((result) => result.year.toString())}
+                        content={props.outputs.results.map((result) => (
+                            <TabPanel padding="0px">
+                                <Flex height="350px">
+                                    <SWRCalculatorResultTable timelineData={result.timelineData} />
+                                </Flex>
+                            </TabPanel>
+                        ))}
+                    />
                 </Flex>
             </Flex>
         </Flex>
