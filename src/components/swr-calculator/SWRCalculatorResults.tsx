@@ -1,4 +1,4 @@
-import { Flex, Tab, TabList, Tabs, Text } from '@chakra-ui/react'
+import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
@@ -54,7 +54,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                         <SWRCalculatorResultsChart showTooltip={false} outputs={props.outputs} />
                     </Flex>
 
-                    <Tabs>
+                    <Tabs isLazy>
                         <TabList 
                             overflow="auto" 
                             sx={{
@@ -69,11 +69,17 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                                 </Tab>
                             ))}
                         </TabList>
-                    </Tabs>
 
-                    <Flex height="350px">
-                        <SWRCalculatorResultTable timelineData={props.outputs.results[0].timelineData} />
-                    </Flex>
+                        <TabPanels>
+                            {props.outputs.results.map((result) => (
+                                <TabPanel padding="0px">
+                                    <Flex height="350px">
+                                        <SWRCalculatorResultTable timelineData={result.timelineData} />
+                                    </Flex>
+                                </TabPanel>
+                            ))}
+                        </TabPanels>
+                    </Tabs>
                 </Flex>
             </Flex>
         </Flex>
