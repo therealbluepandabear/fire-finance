@@ -6,7 +6,7 @@ import SWRCalculatorResultsChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 
 interface EzTabProps {
@@ -19,7 +19,14 @@ function EzTab(props: EzTabProps): JSX.Element {
     const [startX, setStartX] = useState<number | null>(null)
     const [scrollLeft, setScrollLeft] = useState(0)
 
-    const tabListRef = useRef<HTMLDivElement>(null);
+    const tabListRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (isDragging) {
+            document.addEventListener('mousemove', mouseMoveHandler)
+            document.addEventListener('mouseup', mouseUpHandler)
+        }
+    }, [isDragging])
 
     function mouseDownHandler(e: React.MouseEvent<HTMLDivElement>) {
         setIsDragging(true)
@@ -27,7 +34,7 @@ function EzTab(props: EzTabProps): JSX.Element {
         setScrollLeft(tabListRef.current!.scrollLeft)
     }
 
-    function mouseMoveHandler(e: React.MouseEvent<HTMLDivElement>) {
+    function mouseMoveHandler(e: MouseEvent) {
         if (!isDragging) {
             return
         }
@@ -37,7 +44,11 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     function mouseUpHandler() {
+        console.log(isDragging)
         setIsDragging(false)
+
+        document.removeEventListener('mousemove', mouseMoveHandler)
+        document.removeEventListener('mouseup', mouseUpHandler)
     }
 
     return (
@@ -45,9 +56,6 @@ function EzTab(props: EzTabProps): JSX.Element {
             <TabList
                 ref={tabListRef}
                 onMouseDown={mouseDownHandler}
-                onMouseMove={mouseMoveHandler}
-                onMouseUp={mouseUpHandler}
-                onMouseLeave={mouseUpHandler}
                 overflowY="scroll"
                 sx={{
                     "::-webkit-scrollbar": {
