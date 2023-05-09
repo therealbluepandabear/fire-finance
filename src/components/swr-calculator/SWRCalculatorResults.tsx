@@ -5,10 +5,9 @@ import { formatPercentage } from '../../utils'
 import SWRCalculatorResultsChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
-import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorNetworthChart'
+import SWRCalculatorNetworthChart, { ChartFocus, ChartType } from './charts/SWRCalculatorNetworthChart'
 import { useEffect, useRef, useState } from 'react'
 import { MdAreaChart, MdBarChart } from 'react-icons/md'
-import SWRCalculatorNetworthChart from './charts/SWRCalculatorNetworthChart'
 
 
 interface EzTabProps {
@@ -81,9 +80,6 @@ function EzTab(props: EzTabProps): JSX.Element {
     )
 }
 
-
-type ChartType = 'area' | 'bar'
-type ChartFocus = 'averageNetworth' | 'finalNetworth'
 
 interface EzChipsProps extends HTMLChakraProps<'div'> {
     chipContent: JSX.Element[]
@@ -182,7 +178,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
 
                     <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
                         <Flex flexDirection="row">
-                            <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
+                            <Text fontSize="sm" fontWeight="bold">Start Year Statistics</Text>
 
                             <Flex marginLeft="auto" gap="8px">
                                 <EzChips

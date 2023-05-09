@@ -3,10 +3,13 @@ import { StartingYearResult } from '../../../models/swr-calculator'
 import { formatCurrency } from '../../../utils'
 
 
+export type ChartType = 'area' | 'bar'
+export type ChartFocus = 'averageNetworth' | 'finalNetworth'
+
 interface SWRCalculatorNetworthChartProps {
     data: StartingYearResult[]
-    type: 'area' | 'bar'
-    focus: 'averageNetworth' | 'finalNetworth'
+    type: ChartType
+    focus: ChartFocus
 }
 
 export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthChartProps): JSX.Element {
