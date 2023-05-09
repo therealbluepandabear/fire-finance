@@ -32,7 +32,11 @@ function EzTab(props: EzTabProps): JSX.Element {
     }, [isDragging])
 
     function tabChangeHandler(index: number) {
-        setTabIndex(index)
+        const scrollOffset = scrollLeft - tabListRef.current!.scrollLeft
+
+        if (Math.abs(scrollOffset) <= 15 && Math.abs(scrollOffset) >= 0) {
+            setTabIndex(index)
+        }
     }
 
     function mouseDownHandler(e: React.MouseEvent<HTMLDivElement>) {
@@ -51,7 +55,6 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     function mouseUpHandler() {
-        console.log(isDragging)
         setIsDragging(false)
 
         document.removeEventListener('mousemove', mouseMoveHandler)
@@ -59,7 +62,7 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     return (
-        <Tabs isManual={true} isLazy={true} variant="unstyled" onChange={tabChangeHandler}>
+        <Tabs isManual={true} isLazy={true} variant="unstyled" onChange={tabChangeHandler} index={tabIndex}>
             <TabList
                 ref={tabListRef}
                 onMouseDown={mouseDownHandler}
