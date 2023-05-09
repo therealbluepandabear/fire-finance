@@ -90,20 +90,21 @@ interface EzChipsProps extends HTMLChakraProps<'div'> {
 function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
     const [chartType, setChartType] = useState<ChartType>('area')
 
+    useEffect(() => {
+        onChartTypeChange(chartType)
+    }, [chartType])
+
     function barChartClickHandler() {
         setChartType('bar')
-        onChartTypeChange(chartType)
     }
 
-    function lineChartClickHandler() {
+    function areaChartClickHandler() {
         setChartType('area')
-        onChartTypeChange(chartType)
     }
 
     return (
         <Flex 
             {...props}
-            height="100%" 
             borderRadius="999px" 
             outline="2px solid"
             outlineOffset="-2px"
@@ -125,7 +126,7 @@ function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
                 borderRadius="0"
                 color={chartType === "area" ? "gray.800" : ""}
                 background={chartType === "area" ? "gray.600" : ""}
-                onClick={lineChartClickHandler}
+                onClick={areaChartClickHandler}
             >
                 <MdShowChart size={15} />
             </Button>
@@ -175,7 +176,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                     <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
                         <Flex flexDirection="row">
                             <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
-                            <EzChips marginLeft="auto" onChartTypeChange={chartTypeChangeHandler} />
+                            <EzChips marginLeft="auto" height="100%" onChartTypeChange={chartTypeChangeHandler} />
                         </Flex>
 
                         <Flex flexGrow={1}>
