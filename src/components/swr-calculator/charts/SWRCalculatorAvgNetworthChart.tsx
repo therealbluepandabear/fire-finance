@@ -32,8 +32,8 @@ export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNet
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={props.data}>
                         <Bar dataKey="averageNetworth">
-                            {props.data.map((result) => (
-                                <Cell fill={result.isRetirementPossible ? '#57E964' : 'red'} />
+                            {props.data.map((result, index) => (
+                                <Cell key={index} fill={result.isRetirementPossible ? '#57E964' : 'red'} />
                             ))}
                         </Bar>
 

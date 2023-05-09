@@ -7,7 +7,7 @@ import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
 import { useEffect, useRef, useState } from 'react'
-import { MdBarChart, MdShowChart } from 'react-icons/md'
+import { MdAreaChart, MdBarChart } from 'react-icons/md'
 
 
 interface EzTabProps {
@@ -64,8 +64,8 @@ function EzTab(props: EzTabProps): JSX.Element {
                     }
                 }}
             >
-                {props.headers.map((header) => (
-                    <Tab height="40px" width="55px" alignItems="center" justifyContent="center">
+                {props.headers.map((header, index) => (
+                    <Tab key={index} height="40px" width="55px" alignItems="center" justifyContent="center">
                         {header}
                     </Tab>
                 ))}
@@ -128,7 +128,7 @@ function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
                 background={chartType === "area" ? "gray.600" : ""}
                 onClick={areaChartClickHandler}
             >
-                <MdShowChart size={15} />
+                <MdAreaChart size={15} />
             </Button>
         </Flex>
     )
@@ -192,8 +192,8 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
 
                     <EzTab 
                         headers={props.outputs.results.map((result) => result.year.toString())}
-                        content={props.outputs.results.map((result) => (
-                            <TabPanel padding="0px">
+                        content={props.outputs.results.map((result, index) => (
+                            <TabPanel key={index} padding="0px">
                                 <Flex height="350px">
                                     <SWRCalculatorResultTable timelineData={result.timelineData} />
                                 </Flex>

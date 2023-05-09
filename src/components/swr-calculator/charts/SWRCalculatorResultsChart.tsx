@@ -86,11 +86,11 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                     })
                     .map(({ data, color, result, strokeWidth }, index) => (
                         <Line
+                            key={index}
                             data={data}
                             dataKey="networth"
                             stroke={color}
                             strokeWidth={strokeWidth}
-                            key={index}
                             dot={false}
                             onMouseEnter={mouseEnterHandler.bind(null, result)}
                             onMouseLeave={mouseLeaveHandler.bind(null)}

@@ -21,6 +21,7 @@ export default function AppBar(props: AppBarProps) {
         >
             {['Retirement Calculator', 'Safe Withdrawal Rate Calculator'].map((text, index) => (
                 <Text 
+                    key={index}
                     fontSize="md" 
                     cursor="pointer" 
                     onClick={props.onItemClick.bind(null, index)}
