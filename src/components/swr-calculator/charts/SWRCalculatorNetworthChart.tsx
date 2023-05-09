@@ -3,12 +3,13 @@ import { StartingYearResult } from '../../../models/swr-calculator'
 import { formatCurrency } from '../../../utils'
 
 
-interface SWRCalculatorAvgNetworthChartProps {
+interface SWRCalculatorNetworthChartProps {
     data: StartingYearResult[]
     type: 'area' | 'bar'
+    focus: 'averageNetworth' | 'finalNetworth'
 }
 
-export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNetworthChartProps): JSX.Element {
+export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthChartProps): JSX.Element {
     const xAxis = (
         <XAxis axisLine={false} tickFormatter={(value) => 1930 + value} />
     )
@@ -31,7 +32,7 @@ export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNet
             {props.type === 'bar' ? (
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={props.data}>
-                        <Bar dataKey="averageNetworth">
+                        <Bar dataKey={props.focus}>
                             {props.data.map((result, index) => (
                                 <Cell key={index} fill={result.isRetirementPossible ? '#57E964' : 'red'} />
                             ))}
@@ -56,7 +57,7 @@ export default function SWRCalculatorAvgNetworthChart(props: SWRCalculatorAvgNet
 
                         <Area
                             fill="url(#colorPv)"
-                            dataKey="averageNetworth"
+                            dataKey={props.focus}
                             stroke="#82ca9d"
                             strokeWidth={3}
                         />

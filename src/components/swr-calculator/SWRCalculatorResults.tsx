@@ -5,9 +5,10 @@ import { formatPercentage } from '../../utils'
 import SWRCalculatorResultsChart from './charts/SWRCalculatorResultsChart'
 import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
-import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
+import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorNetworthChart'
 import { useEffect, useRef, useState } from 'react'
 import { MdAreaChart, MdBarChart } from 'react-icons/md'
+import SWRCalculatorNetworthChart from './charts/SWRCalculatorNetworthChart'
 
 
 interface EzTabProps {
@@ -82,24 +83,24 @@ function EzTab(props: EzTabProps): JSX.Element {
 
 
 type ChartType = 'area' | 'bar'
+type ChartFocus = 'averageNetworth' | 'finalNetworth'
 
 interface EzChipsProps extends HTMLChakraProps<'div'> {
-    onChartTypeChange: (chartType: ChartType) => void
+    chipContent: JSX.Element[]
+    onIndexChange: (index: number) => void
 }
 
-function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
-    const [chartType, setChartType] = useState<ChartType>('area')
+function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.Element {
+    const [index, setIndex] = useState(0)
+
+    console.log(chipContent)
 
     useEffect(() => {
-        onChartTypeChange(chartType)
-    }, [chartType])
+        onIndexChange(index)
+    }, [index])
 
-    function barChartClickHandler() {
-        setChartType('bar')
-    }
-
-    function areaChartClickHandler() {
-        setChartType('area')
+    function chipClickHandler(index: number) {
+        setIndex(index)
     }
 
     return (
@@ -111,25 +112,18 @@ function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
             outlineColor="gray.600"
             overflow="hidden"
         >
-            <Button
-                height="100%"
-                borderRadius="0"
-                color={chartType === "bar" ? "gray.800" : ""}
-                background={chartType === "bar" ? "gray.600" : ""}
-                onClick={barChartClickHandler}
-            >
-                <MdBarChart size={15} />
-            </Button>
-
-            <Button
-                height="100%"
-                borderRadius="0"
-                color={chartType === "area" ? "gray.800" : ""}
-                background={chartType === "area" ? "gray.600" : ""}
-                onClick={areaChartClickHandler}
-            >
-                <MdAreaChart size={15} />
-            </Button>
+            {chipContent.map((jsx, itrIndex) => (
+                <Button
+                    key={itrIndex}
+                    height="100%"
+                    borderRadius="0"
+                    color={itrIndex === index ? "gray.800" : ""}
+                    background={itrIndex === index ? "gray.600" : ""}
+                    onClick={chipClickHandler.bind(null, itrIndex)}
+                >
+                    {jsx}
+                </Button>
+            ))}
         </Flex>
     )
 }
@@ -142,9 +136,22 @@ interface SWRCalculatorResultsProps {
 
 export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): JSX.Element {
     const [chartType, setChartType] = useState<ChartType>('area')
+    const [chartFocus, setChartFocus] = useState<ChartFocus>('averageNetworth')
 
-    function chartTypeChangeHandler(chartType: ChartType) {
-        setChartType(chartType)
+    function chartTypeChangeHandler(index: number) {
+        if (index === 0) {
+            setChartType('bar')
+        } else {
+            setChartType('area')
+        }
+    }
+
+    function chartFocusChangeHandler(index: number) {
+        if (index === 0) {
+            setChartFocus('averageNetworth')
+        } else {
+            setChartFocus('finalNetworth')
+        }
     }
 
     return (
@@ -176,11 +183,30 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                     <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
                         <Flex flexDirection="row">
                             <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
-                            <EzChips marginLeft="auto" height="100%" onChartTypeChange={chartTypeChangeHandler} />
+
+                            <Flex marginLeft="auto" gap="8px">
+                                <EzChips
+                                    chipContent={[
+                                        <Text fontSize="12px">Avg</Text>,
+                                        <Text fontSize="12px">Final</Text>
+                                    ]}
+                                    height="100%"
+                                    onIndexChange={chartFocusChangeHandler}
+                                />
+
+                                <EzChips
+                                    chipContent={[
+                                        <MdBarChart />,
+                                        <MdAreaChart />
+                                    ]}
+                                    height="100%"
+                                    onIndexChange={chartTypeChangeHandler}
+                                />
+                            </Flex>
                         </Flex>
 
                         <Flex flexGrow={1}>
-                            <SWRCalculatorAvgNetworthChart type={chartType} data={props.outputs.results} />
+                            <SWRCalculatorNetworthChart type={chartType} data={props.outputs.results} focus={chartFocus} />
                         </Flex>
                     </Flex>
                 </Flex>
