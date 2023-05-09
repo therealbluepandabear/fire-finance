@@ -53,7 +53,7 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     return (
-        <Tabs isLazy>
+        <Tabs isManual isLazy>
             <TabList
                 ref={tabListRef}
                 onMouseDown={mouseDownHandler}
