@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HTMLChakraProps, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HTMLChakraProps, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
@@ -72,10 +72,19 @@ function EzTab(props: EzTabProps): JSX.Element {
             >
                 {props.headers.map((header, index) => (
                     <Flex flexDirection="column">
-                        <Tab key={index} height="40px" width="55px" alignItems="center" justifyContent="center">
+                        <Tab 
+                            key={index} 
+                            height="40px" 
+                            width="55px" 
+                            alignItems="center"
+                            justifyContent="center"
+                            textColor={tabIndex === index ? "blue.500" : ""}
+                        >
                             {header}
                         </Tab>
-                        <Box width="100%" height="3px" background={tabIndex === index ? "lightblue" : ""} />
+                        {tabIndex === index && (
+                            <Box width="100%" height="3px" background={tabIndex === index ? "blue.500" : ""} />
+                        )}
                     </Flex>
                 ))}
             </TabList>
