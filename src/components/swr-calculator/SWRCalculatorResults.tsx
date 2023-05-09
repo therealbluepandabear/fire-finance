@@ -1,4 +1,4 @@
-import { Button, Flex, HTMLChakraProps, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HTMLChakraProps, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
@@ -20,6 +20,8 @@ function EzTab(props: EzTabProps): JSX.Element {
     const [startX, setStartX] = useState<number | null>(null)
     const [scrollLeft, setScrollLeft] = useState(0)
 
+    const [tabIndex, setTabIndex] = useState(0)
+
     const tabListRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -28,6 +30,10 @@ function EzTab(props: EzTabProps): JSX.Element {
             document.addEventListener('mouseup', mouseUpHandler)
         }
     }, [isDragging])
+
+    function tabChangeHandler(index: number) {
+        setTabIndex(index)
+    }
 
     function mouseDownHandler(e: React.MouseEvent<HTMLDivElement>) {
         setIsDragging(true)
@@ -53,7 +59,7 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     return (
-        <Tabs isManual isLazy>
+        <Tabs isManual={true} isLazy={true} variant="unstyled" onChange={tabChangeHandler}>
             <TabList
                 ref={tabListRef}
                 onMouseDown={mouseDownHandler}
@@ -65,12 +71,15 @@ function EzTab(props: EzTabProps): JSX.Element {
                 }}
             >
                 {props.headers.map((header, index) => (
-                    <Tab key={index} height="40px" width="55px" alignItems="center" justifyContent="center">
-                        {header}
-                    </Tab>
+                    <Flex flexDirection="column">
+                        <Tab key={index} height="40px" width="55px" alignItems="center" justifyContent="center">
+                            {header}
+                        </Tab>
+                        <Box width="100%" height="3px" background={tabIndex === index ? "lightblue" : ""} />
+                    </Flex>
                 ))}
             </TabList>
-
+            
             <TabPanels>
                 {props.content.map((jsx) => (
                     jsx
