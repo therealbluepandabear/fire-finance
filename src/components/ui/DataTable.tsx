@@ -43,8 +43,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
             overflowY="scroll"
             sx={
                 {"::-webkit-scrollbar": {
-                    width: "8px",
-                    height: "12px",
+                    width: "8px"
                 },
                 "::-webkit-scrollbar-thumb": {
                     background: scrollbarColor,

@@ -1,4 +1,4 @@
-import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Button, Flex, HTMLChakraProps, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
@@ -7,6 +7,7 @@ import SWRCalculatorStatsBox from './SWRCalculatorStatsBox'
 import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorAvgNetworthChart from './charts/SWRCalculatorAvgNetworthChart'
 import { useEffect, useRef, useState } from 'react'
+import { MdBarChart, MdShowChart } from 'react-icons/md'
 
 
 interface EzTabProps {
@@ -80,12 +81,71 @@ function EzTab(props: EzTabProps): JSX.Element {
 }
 
 
+type ChartType = 'area' | 'bar'
+
+interface EzChipsProps extends HTMLChakraProps<'div'> {
+    onChartTypeChange: (chartType: ChartType) => void
+}
+
+function EzChips({ onChartTypeChange, ...props }: EzChipsProps): JSX.Element {
+    const [chartType, setChartType] = useState<ChartType>('area')
+
+    function barChartClickHandler() {
+        setChartType('bar')
+        onChartTypeChange(chartType)
+    }
+
+    function lineChartClickHandler() {
+        setChartType('area')
+        onChartTypeChange(chartType)
+    }
+
+    return (
+        <Flex 
+            {...props}
+            height="100%" 
+            borderRadius="999px" 
+            outline="2px solid"
+            outlineOffset="-2px"
+            outlineColor="gray.600"
+            overflow="hidden"
+        >
+            <Button
+                height="100%"
+                borderRadius="0"
+                color={chartType === "bar" ? "gray.800" : ""}
+                background={chartType === "bar" ? "gray.600" : ""}
+                onClick={barChartClickHandler}
+            >
+                <MdBarChart size={15} />
+            </Button>
+
+            <Button
+                height="100%"
+                borderRadius="0"
+                color={chartType === "area" ? "gray.800" : ""}
+                background={chartType === "area" ? "gray.600" : ""}
+                onClick={lineChartClickHandler}
+            >
+                <MdShowChart size={15} />
+            </Button>
+        </Flex>
+    )
+}
+
+
 interface SWRCalculatorResultsProps {
     outputs: SWRCalculatorOutputs
     cycleInfo: CycleInfo
 }
 
 export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): JSX.Element {
+    const [chartType, setChartType] = useState<ChartType>('area')
+
+    function chartTypeChangeHandler(chartType: ChartType) {
+        setChartType(chartType)
+    }
+
     return (
         <Flex flexDirection="column" flexGrow={1}>
             <Flex flexDirection={{ base: "column", xl: "row" }} height="100%">
@@ -113,10 +173,13 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                     </Flex>
 
                     <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
-                        <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
+                        <Flex flexDirection="row">
+                            <Text fontSize="sm" fontWeight="bold">Average Networth by Start Year</Text>
+                            <EzChips marginLeft="auto" onChartTypeChange={chartTypeChangeHandler} />
+                        </Flex>
 
                         <Flex flexGrow={1}>
-                            <SWRCalculatorAvgNetworthChart data={props.outputs.results} />
+                            <SWRCalculatorAvgNetworthChart type={chartType} data={props.outputs.results} />
                         </Flex>
                     </Flex>
                 </Flex>
