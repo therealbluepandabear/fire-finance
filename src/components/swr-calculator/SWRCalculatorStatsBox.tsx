@@ -1,4 +1,5 @@
-import { Flex, Text, useColorModeValue } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
+import Card from '../ui/Card'
 
 
 interface StatsBoxProps {
@@ -7,19 +8,10 @@ interface StatsBoxProps {
 }
 
 export default function SWRCalculatorStatsBox(props: StatsBoxProps): JSX.Element {
-    const color = useColorModeValue('', '#1f2836')
-
     return (
-        <Flex
-            flexDirection="column"
-            padding="16px"
-            shadow="md"
-            borderRadius="md"
-            height="100%"
-            background={color}
-        >
+        <Card padding="16px" height="100%">
             <Text fontSize="sm" fontWeight="bold">{props.header}</Text>
             <Text fontSize="4xl" fontWeight="light">{props.statistic}</Text>
-        </Flex>
+        </Card>
     )
 }

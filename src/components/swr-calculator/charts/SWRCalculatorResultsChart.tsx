@@ -4,6 +4,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, Tooltip, To
 import { StartingYearResult, SWRCalculatorOutputs } from '../../../models/swr-calculator'
 import { formatCurrency } from '../../../utils'
 import { Flex, Box, Text } from '@chakra-ui/react'
+import Card from '../../ui/Card'
 
 
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
@@ -62,50 +63,71 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
     }
 
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <LineChart>
-                {props.outputs.results
-                    .map((result) => { 
-                        const baseColor = result.isRetirementPossible ? '#57E964' : 'red'
+        <Box width="100%" height="100%" position="relative">
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart>
+                    {props.outputs.results
+                        .map((result) => { 
+                            const baseColor = result.isRetirementPossible ? 'rgb(87, 233, 100)' : 'rgb(255, 0, 0)'
 
-                        let color = baseColor
-                        let strokeWidth = 1.5
+                            let color = baseColor
+                            let strokeWidth = 1.5
 
-                        if (activeResult && result !== activeResult) {
-                            color = 'transparent'
-                        } else if (activeResult && result === activeResult) {
-                            strokeWidth = 5
-                        }
+                            if (activeResult && result !== activeResult) {
+                                const alpha = 0.15
 
-                        return {
-                            data: result.timelineData, 
-                            color: color,
-                            strokeWidth: strokeWidth,
-                            result: result
-                        }
-                    })
-                    .map(({ data, color, result, strokeWidth }, index) => (
-                        <Line
-                            key={index}
-                            data={data}
-                            dataKey="networth"
-                            stroke={color}
-                            strokeWidth={strokeWidth}
-                            dot={false}
-                            onMouseEnter={mouseEnterHandler.bind(null, result)}
-                            onMouseLeave={mouseLeaveHandler.bind(null)}
-                        />
-                    )
-                )}
+                                if (color === 'rgb(87, 233, 100)') {
+                                    color = `rgba(87, 255, 100, ${alpha})`
+                                } else {
+                                    color = `rgba(255, 0, 0, ${alpha})`
+                                }
+                            } else if (activeResult && result === activeResult) {
+                                strokeWidth = 5
+                            }
 
-                <XAxis dataKey="investmentYear" allowDuplicatedCategory={false} />
+                            return {
+                                data: result.timelineData, 
+                                color: color,
+                                strokeWidth: strokeWidth,
+                                result: result
+                            }
+                        })
+                        .map(({ data, color, result, strokeWidth }, index) => (
+                            <Line
+                                key={index}
+                                data={data}
+                                dataKey="networth"
+                                stroke={color}
+                                strokeWidth={strokeWidth}
+                                dot={false}
+                                onMouseEnter={mouseEnterHandler.bind(null, result)}
+                                onMouseLeave={mouseLeaveHandler.bind(null)}
+                            />
+                        )
+                    )}
 
-                <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+                    <XAxis dataKey="investmentYear" allowDuplicatedCategory={false} />
 
-                {props.showTooltip && (
-                    <Tooltip content={ChartTooltip} />
-                )}
-            </LineChart>
-        </ResponsiveContainer>
+                    <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
+
+                    {props.showTooltip && (
+                        <Tooltip content={ChartTooltip} />
+                    )}
+                </LineChart>
+            </ResponsiveContainer>
+
+            {activeResult && (
+                <Card 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    position="absolute" 
+                    left="0"
+                    top="0"
+                    padding="8px"
+                >
+                    {activeResult.year}
+                </Card>
+            )}
+        </Box>
     )
 }
