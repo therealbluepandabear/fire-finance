@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HTMLChakraProps, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HTMLChakraProps, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue } from '@chakra-ui/react'
 import SWRCalculatorPieChart from './charts/SWRCalculatorPieChart'
 import { CycleInfo, SWRCalculatorOutputs } from '../../models/swr-calculator'
 import { formatPercentage } from '../../utils'
@@ -108,9 +108,10 @@ interface EzChipsProps extends HTMLChakraProps<'div'> {
 }
 
 function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.Element {
-    const [index, setIndex] = useState(0)
+    const primaryChipColor = useColorModeValue('blue.200', 'blue.500') 
+    const secondaryChipColor = useColorModeValue('gray.100', 'gray.700') 
 
-    console.log(chipContent)
+    const [index, setIndex] = useState(0)
 
     useEffect(() => {
         onIndexChange(index)
@@ -129,10 +130,12 @@ function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.El
         >
             {chipContent.map((jsx, itrIndex) => (
                 <Button
+                    _hover={{ filter: "brightness(108%)" }}
+                    _active={{ filter: "brightness(92%)" }}
                     key={itrIndex}
                     height="100%"
                     borderRadius="0"
-                    background={itrIndex === index ? "blue.500" : "gray.700"}
+                    background={itrIndex === index ? primaryChipColor : secondaryChipColor}
                     onClick={chipClickHandler.bind(null, itrIndex)}
                     fontWeight="normal"
                 >
