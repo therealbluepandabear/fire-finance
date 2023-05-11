@@ -126,7 +126,7 @@ function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.El
             borderRadius="999px" 
             outline="2px solid"
             outlineOffset="-2px"
-            outlineColor="gray.600"
+            outlineColor="blue.500"
             overflow="hidden"
         >
             {chipContent.map((jsx, itrIndex) => (
@@ -134,9 +134,9 @@ function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.El
                     key={itrIndex}
                     height="100%"
                     borderRadius="0"
-                    color={itrIndex === index ? "gray.800" : ""}
-                    background={itrIndex === index ? "gray.600" : ""}
+                    background={itrIndex === index ? "blue.500" : ""}
                     onClick={chipClickHandler.bind(null, itrIndex)}
+                    fontWeight="normal"
                 >
                     {jsx}
                 </Button>
@@ -199,7 +199,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
 
                     <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
                         <Flex flexDirection="row">
-                            <Text fontSize="sm" fontWeight="bold">Start Year Statistics</Text>
+                            <Text fontSize="sm" fontWeight="bold" padding="3px">Start Year Statistics</Text>
 
                             <Flex marginLeft="auto" gap="8px">
                                 <EzChips
