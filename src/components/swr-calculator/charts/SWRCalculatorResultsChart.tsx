@@ -51,6 +51,10 @@ interface SWRCalculatorResultsChartProps {
     showTooltip: boolean
 }
 
+function getBaseColor(result: StartingYearResult) {
+    return result.isRetirementPossible ? 'rgb(87, 233, 100)' : 'rgb(255, 0, 0)'
+}
+
 export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsChartProps): JSX.Element {
     const [activeResult, setActiveResult] = useState<StartingYearResult | null>(null)
 
@@ -68,12 +72,10 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                 <LineChart>
                     {props.outputs.results
                         .map((result) => { 
-                            const baseColor = result.isRetirementPossible ? 'rgb(87, 233, 100)' : 'rgb(255, 0, 0)'
-
-                            let color = baseColor
+                            let color = getBaseColor(result)
                             let strokeWidth = 1.5
 
-                            if (activeResult && result !== activeResult) {
+                            if (activeResult) {
                                 const alpha = 0.15
 
                                 if (color === 'rgb(87, 233, 100)') {
@@ -81,9 +83,7 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                                 } else {
                                     color = `rgba(255, 0, 0, ${alpha})`
                                 }
-                            } else if (activeResult && result === activeResult) {
-                                strokeWidth = 5
-                            }
+                            } 
 
                             return {
                                 data: result.timelineData, 
@@ -93,19 +93,33 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                             }
                         })
                         .map(({ data, color, result, strokeWidth }, index) => (
-                            <Line
-                                key={index}
-                                data={data}
-                                dataKey="networth"
-                                stroke={color}
-                                strokeWidth={strokeWidth}
-                                dot={false}
-                                onMouseEnter={mouseEnterHandler.bind(null, result)}
-                                onMouseLeave={mouseLeaveHandler.bind(null)}
-                            />
+                            <>
+                                {result.year !== 2000 && (
+                                    <Line
+                                        key={index}
+                                        data={data}
+                                        dataKey="networth"
+                                        stroke={color}
+                                        strokeWidth={strokeWidth}
+                                        dot={false}
+                                        onMouseEnter={mouseEnterHandler.bind(null, result)}
+                                        onMouseLeave={mouseLeaveHandler.bind(null)}
+                                    />
+                                )}
+                            </>
                         )
                     )}
 
+                    {activeResult && (
+                        <Line
+                            data={activeResult.timelineData}
+                            dataKey="networth"
+                            stroke={getBaseColor(activeResult)}
+                            strokeWidth={5}
+                            dot={false}
+                        />
+                    )}
+         
                     <XAxis dataKey="investmentYear" allowDuplicatedCategory={false} />
 
                     <CartesianGrid stroke="lightgray" strokeDasharray="5 5" vertical={false} />
