@@ -123,10 +123,8 @@ function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.El
     return (
         <Flex 
             {...props}
-            borderRadius="999px" 
-            outline="2px solid"
-            outlineOffset="-2px"
-            outlineColor="blue.500"
+            borderRadius="md" 
+      
             overflow="hidden"
         >
             {chipContent.map((jsx, itrIndex) => (
@@ -134,7 +132,7 @@ function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.El
                     key={itrIndex}
                     height="100%"
                     borderRadius="0"
-                    background={itrIndex === index ? "blue.500" : ""}
+                    background={itrIndex === index ? "blue.500" : "gray.700"}
                     onClick={chipClickHandler.bind(null, itrIndex)}
                     fontWeight="normal"
                 >
