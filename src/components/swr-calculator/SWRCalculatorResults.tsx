@@ -8,6 +8,8 @@ import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorNetworthChart, { ChartFocus, ChartType } from './charts/SWRCalculatorNetworthChart'
 import { useEffect, useRef, useState } from 'react'
 import { MdAreaChart, MdBarChart } from 'react-icons/md'
+import Chips from '../ui/Chips'
+import Chip from '../ui/Chip'
 
 
 interface EzTabProps {
@@ -102,51 +104,6 @@ function EzTab(props: EzTabProps): JSX.Element {
 }
 
 
-interface EzChipsProps extends HTMLChakraProps<'div'> {
-    chipContent: JSX.Element[]
-    onIndexChange: (index: number) => void
-}
-
-function EzChips({ onIndexChange, chipContent, ...props }: EzChipsProps): JSX.Element {
-    const primaryChipColor = useColorModeValue('blue.200', 'blue.500') 
-    const secondaryChipColor = useColorModeValue('gray.100', 'gray.700') 
-
-    const [index, setIndex] = useState(0)
-
-    useEffect(() => {
-        onIndexChange(index)
-    }, [index])
-
-    function chipClickHandler(index: number) {
-        setIndex(index)
-    }
-
-    return (
-        <Flex 
-            {...props}
-            borderRadius="md" 
-      
-            overflow="hidden"
-        >
-            {chipContent.map((jsx, itrIndex) => (
-                <Button
-                    _hover={{ filter: "brightness(108%)" }}
-                    _active={{ filter: "brightness(92%)" }}
-                    key={itrIndex}
-                    height="100%"
-                    borderRadius="0"
-                    background={itrIndex === index ? primaryChipColor : secondaryChipColor}
-                    onClick={chipClickHandler.bind(null, itrIndex)}
-                    fontWeight="normal"
-                >
-                    {jsx}
-                </Button>
-            ))}
-        </Flex>
-    )
-}
-
-
 interface SWRCalculatorResultsProps {
     outputs: SWRCalculatorOutputs
     cycleInfo: CycleInfo
@@ -156,19 +113,19 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
     const [chartType, setChartType] = useState<ChartType>('area')
     const [chartFocus, setChartFocus] = useState<ChartFocus>('averageNetworth')
 
-    function chartTypeChangeHandler(index: number) {
-        if (index === 0) {
-            setChartType('bar')
-        } else {
-            setChartType('area')
-        }
-    }
-
     function chartFocusChangeHandler(index: number) {
         if (index === 0) {
             setChartFocus('averageNetworth')
         } else {
             setChartFocus('finalNetworth')
+        }
+    }
+
+    function chartTypeChangeHandler(index: number) {
+        if (index === 0) {
+            setChartType('bar')
+        } else {
+            setChartType('area')
         }
     }
 
@@ -203,23 +160,31 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                             <Text fontSize="sm" fontWeight="bold" padding="3px">Start Year Statistics</Text>
 
                             <Flex marginLeft="auto" gap="8px">
-                                <EzChips
-                                    chipContent={[
-                                        <Text fontSize="12px">Avg</Text>,
-                                        <Text fontSize="12px">Final</Text>
-                                    ]}
+                                <Chips 
                                     height="100%"
                                     onIndexChange={chartFocusChangeHandler}
-                                />
+                                >
+                                    <Chip>
+                                        <Text fontSize="12px">Avg</Text>
+                                    </Chip>
 
-                                <EzChips
-                                    chipContent={[
-                                        <MdBarChart />,
-                                        <MdAreaChart />
-                                    ]}
+                                    <Chip>
+                                        <Text fontSize="12px">Final</Text>
+                                    </Chip>
+                                </Chips>
+
+                                <Chips
                                     height="100%"
                                     onIndexChange={chartTypeChangeHandler}
-                                />
+                                >
+                                    <Chip>
+                                        <MdBarChart />
+                                    </Chip>
+
+                                    <Chip>
+                                        <MdAreaChart />
+                                    </Chip>
+                                </Chips>
                             </Flex>
                         </Flex>
 

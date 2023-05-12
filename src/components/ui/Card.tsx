@@ -6,11 +6,11 @@ export default function Card({ children, ...props }: PropsWithChildren<HTMLChakr
 
     return (
         <Flex
-            {...props}
             flexDirection="column"
             shadow="md"
             borderRadius="md"
             background={color}
+            {...props}
         >
             {children}
         </Flex>
