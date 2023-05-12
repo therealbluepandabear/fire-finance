@@ -103,7 +103,6 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                                         strokeWidth={strokeWidth}
                                         dot={false}
                                         onMouseEnter={mouseEnterHandler.bind(null, result)}
-                                        onMouseLeave={mouseLeaveHandler.bind(null)}
                                     />
                                 )}
                             </>
@@ -117,6 +116,8 @@ export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsCha
                             stroke={getBaseColor(activeResult)}
                             strokeWidth={5}
                             dot={false}
+                            isAnimationActive={false}
+                            onMouseLeave={mouseLeaveHandler.bind(null)}
                         />
                     )}
          

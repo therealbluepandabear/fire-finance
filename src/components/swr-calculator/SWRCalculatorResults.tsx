@@ -176,6 +176,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                                 <Chips
                                     height="100%"
                                     onIndexChange={chartTypeChangeHandler}
+                                    defaultIndex={1}
                                 >
                                     <Chip>
                                         <MdBarChart />
