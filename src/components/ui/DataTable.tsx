@@ -77,30 +77,19 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                                                 header.getContext()
                                             )}
 
-                                            {header.column.getIsSorted() === 'desc' && (
-                                                <Box marginLeft="8px">
+                                            <Box marginLeft="8px">
+                                                {header.column.getIsSorted() === 'desc' && (
                                                     <MdArrowUpward size={18} />
-                                                </Box>
-                                            )}
+                                                )}
 
-                                            {header.column.getIsSorted() === 'asc' && (
-                                                <Box marginLeft="8px">
+                                                {header.column.getIsSorted() === 'asc' && (
                                                     <MdArrowDownward size={18} />
-                                                </Box>
-                                            )}
+                                                )}
 
-                                            {(header.column.getIsSorted() !== 'asc' && header.column.getIsSorted() !== 'desc' && hoveredHeaderIndex === index) && (
-                                                <Box marginLeft="8px" opacity={0.3}>
-                                                    <MdArrowUpward size={18} />
-                                                </Box>
-                                            )}
-                                            
-                                            {/* Just a hack */}
-                                            {(header.column.getIsSorted() !== 'asc' && header.column.getIsSorted() !== 'desc' && hoveredHeaderIndex !== index) && (
-                                                <Box marginLeft="8px" opacity={0}>
-                                                    <MdArrowUpward size={18} />
-                                                </Box>
-                                            )}
+                                                {header.column.getIsSorted() !== 'asc' && header.column.getIsSorted() !== 'desc' && (
+                                                    <MdArrowUpward size={18} opacity={hoveredHeaderIndex === index ? 0.3 : 0} />
+                                                )}
+                                            </Box>
                                         </Flex>
                                     </Th>
                                 ))}
