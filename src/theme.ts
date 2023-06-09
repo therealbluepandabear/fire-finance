@@ -12,6 +12,11 @@ const theme = extendTheme({
     // Floating label integration (officially from the official ChakraUI documentation)
     // which can be found here: https://chakra-ui.com/community/recipes/floating-labels
     components: {
+        Button: {
+            baseStyle: {
+                fontWeight: 'normal'
+            }
+        },
         Form: {
             variants: {
                 floating: {

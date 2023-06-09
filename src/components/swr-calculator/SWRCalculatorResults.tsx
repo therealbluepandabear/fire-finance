@@ -64,31 +64,31 @@ function EzTab(props: EzTabProps): JSX.Element {
     }
 
     return (
-        <Tabs isManual={true} isLazy={true} variant="unstyled" onChange={tabChangeHandler} index={tabIndex}>
+        <Tabs isManual={true} isLazy={true} variant='unstyled' onChange={tabChangeHandler} index={tabIndex}>
             <TabList
                 ref={tabListRef}
                 onMouseDown={mouseDownHandler}
-                overflowY="scroll"
+                overflowY='scroll'
                 sx={{
-                    "::-webkit-scrollbar": {
-                        display: "none"
+                    '::-webkit-scrollbar': {
+                        display: 'none'
                     }
                 }}
             >
                 {props.headers.map((header, index) => (
-                    <Flex flexDirection="column">
+                    <Flex flexDirection='column'>
                         <Tab 
                             key={index} 
-                            height="40px" 
-                            width="55px" 
-                            alignItems="center"
-                            justifyContent="center"
-                            textColor={tabIndex === index ? "blue.500" : ""}
+                            height='40px' 
+                            width='55px' 
+                            alignItems='center'
+                            justifyContent='center'
+                            textColor={tabIndex === index ? 'blue.500' : ''}
                         >
                             {header}
                         </Tab>
                         {tabIndex === index && (
-                            <Box width="100%" height="3px" background={tabIndex === index ? "blue.500" : ""} />
+                            <Box width='100%' height='3px' background={tabIndex === index ? 'blue.500' : ''} />
                         )}
                     </Flex>
                 ))}
@@ -130,51 +130,51 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
     }
 
     return (
-        <Flex flexDirection="column" flexGrow={1}>
-            <Flex flexDirection={{ base: "column", xl: "row" }} height="100%">
-                <Flex flexDirection="column" width={{ base: "100%", xl: "50%" }} height="100%">
-                    <Flex flexDirection={{ base: "column", md: "row" }} height={{ base: "100%", xl: "50%" }}>
-                        <Flex alignItems="center" justifyContent="center" minWidth="0" minHeight="0">
+        <Flex flexDirection='column' width='100%'>
+            <Flex flexDirection={{ base: 'column', xl: 'row' }} height='100%'>
+                <Flex flexDirection='column' width={{ base: '100%', xl: '50%' }} height='100%'>
+                    <Flex flexDirection={{ base: 'column', md: 'row' }} height={{ base: '100%', xl: '50%' }}>
+                        <Flex alignItems='center' justifyContent='center' minWidth='0' minHeight='0'>
                             <SWRCalculatorPieChart {...props} />
                         </Flex>
 
-                        <Flex padding="16px" flexGrow={1}>
-                            <Flex flexDirection="row" width="100%" gap="8px">
-                                <Flex flexDirection="column" gap="8px" width="100%">
-                                    <SWRCalculatorStatsBox header="Successes" statistic={props.cycleInfo.successes.toString()} />
-                                    <SWRCalculatorStatsBox header="Success Rate" statistic={formatPercentage(props.cycleInfo.successRate)} />
-                                    <SWRCalculatorStatsBox header="Best Start Year" statistic={props.cycleInfo.bestPerformingStartYear.toString()} />
+                        <Flex padding='16px' flexGrow={1}>
+                            <Flex width='100%' gap='8px'>
+                                <Flex flexDirection='column' gap='8px' width='100%'>
+                                    <SWRCalculatorStatsBox header='Successes' statistic={props.cycleInfo.successes.toString()} />
+                                    <SWRCalculatorStatsBox header='Success Rate' statistic={formatPercentage(props.cycleInfo.successRate)} />
+                                    <SWRCalculatorStatsBox header='Best Start Year' statistic={props.cycleInfo.bestPerformingStartYear.toString()} />
                                 </Flex>
 
-                                <Flex flexDirection="column" gap="8px" width="100%">
-                                    <SWRCalculatorStatsBox header="Failures" statistic={props.cycleInfo.failures.toString()} />
-                                    <SWRCalculatorStatsBox header="Failure Rate" statistic={formatPercentage(props.cycleInfo.failureRate)} />
-                                    <SWRCalculatorStatsBox header="Worst Start Year" statistic={props.cycleInfo.worstPerformingStartYear.toString()} />
+                                <Flex flexDirection='column' gap='8px' width='100%'>
+                                    <SWRCalculatorStatsBox header='Failures' statistic={props.cycleInfo.failures.toString()} />
+                                    <SWRCalculatorStatsBox header='Failure Rate' statistic={formatPercentage(props.cycleInfo.failureRate)} />
+                                    <SWRCalculatorStatsBox header='Worst Start Year' statistic={props.cycleInfo.worstPerformingStartYear.toString()} />
                                 </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
 
-                    <Flex flexDirection="column" padding="16px" flexGrow={1} gap="8px">
-                        <Flex flexDirection="row">
-                            <Text fontSize="sm" fontWeight="bold" padding="3px">Start Year Statistics</Text>
+                    <Flex flexDirection='column' padding='16px' flexGrow={1} gap='8px'>
+                        <Flex>
+                            <Text fontSize='sm' fontWeight='bold' padding='3px'>Start Year Statistics</Text>
 
-                            <Flex marginLeft="auto" gap="8px">
+                            <Flex marginLeft='auto' gap='8px'>
                                 <Chips 
-                                    height="100%"
+                                    height='100%'
                                     onIndexChange={chartFocusChangeHandler}
                                 >
                                     <Chip>
-                                        <Text fontSize="12px">Avg</Text>
+                                        <Text fontSize='12px'>Avg</Text>
                                     </Chip>
 
                                     <Chip>
-                                        <Text fontSize="12px">Final</Text>
+                                        <Text fontSize='12px'>Final</Text>
                                     </Chip>
                                 </Chips>
 
                                 <Chips
-                                    height="100%"
+                                    height='100%'
                                     onIndexChange={chartTypeChangeHandler}
                                     defaultIndex={1}
                                 >
@@ -189,22 +189,27 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                             </Flex>
                         </Flex>
 
-                        <Flex flexGrow={1}>
+                        {/* <Flex flexGrow={1} minWidth='0'>
                             <SWRCalculatorNetworthChart type={chartType} data={props.outputs.results} focus={chartFocus} />
-                        </Flex>
+                        </Flex> */}
                     </Flex>
                 </Flex>
 
-                <Flex flexDirection="column" minWidth="0" padding="16px" width={{ base: "100%", xl: "50%" }}>
-                    <Flex flexGrow={1}>
+                <Flex 
+                    flexDirection='column' 
+                    minWidth='0' 
+                    padding='16px' 
+                    width={{ base: '100%', xl: '50%' }}
+                >
+                    {/* <Flex flexGrow={1}>
                         <SWRCalculatorResultsChart showTooltip={false} outputs={props.outputs} />
-                    </Flex>
+                    </Flex> */}
 
                     <EzTab 
                         headers={props.outputs.results.map((result) => result.year.toString())}
                         content={props.outputs.results.map((result, index) => (
-                            <TabPanel key={index} padding="0px">
-                                <Flex height="350px">
+                            <TabPanel key={index} padding='0px'>
+                                <Flex height='350px'>
                                     <SWRCalculatorResultTable timelineData={result.timelineData} />
                                 </Flex>
                             </TabPanel>

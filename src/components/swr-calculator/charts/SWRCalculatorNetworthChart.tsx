@@ -27,13 +27,13 @@ export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthC
     )
 
     const cartesianGrid = (
-        <CartesianGrid stroke="lightgray" opacity={0.4} strokeDasharray="5 5" vertical={false} />
+        <CartesianGrid stroke='lightgray' opacity={0.4} strokeDasharray='5 5' vertical={false} />
     )
 
     return (
         <>
             {props.type === 'bar' ? (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width='100%' height='100%'>
                     <BarChart data={props.data}>
                         <Bar dataKey={props.focus}>
                             {props.data.map((result, index) => (
@@ -49,19 +49,19 @@ export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthC
                     </BarChart>
                 </ResponsiveContainer>
             ) : (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width='100%' height='100%'>
                     <AreaChart data={props.data}>
                         <defs>
-                            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#00d450" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.3} />
+                            <linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='1'>
+                                <stop offset='5%' stopColor='#00d450' stopOpacity={0.8} />
+                                <stop offset='95%' stopColor='#82ca9d' stopOpacity={0.3} />
                             </linearGradient>
                         </defs>
 
                         <Area
-                            fill="url(#colorPv)"
+                            fill='url(#colorPv)'
                             dataKey={props.focus}
-                            stroke="#82ca9d"
+                            stroke='#82ca9d'
                             strokeWidth={3}
                         />
 

@@ -14,7 +14,7 @@ export default function SWRCalculatorPieChart(props: SWRCalculatorPieChartProps)
         { name: 'Failures', value: props.cycleInfo.failures }
     ]
 
-    const textColor = useColorModeValue('black', 'white')
+    const innerLabelColor = useColorModeValue('black', 'white')
 
     return (
         <Box minWidth="0" width="400px" height="400px">
@@ -32,9 +32,9 @@ export default function SWRCalculatorPieChart(props: SWRCalculatorPieChartProps)
                             fontWeight="bold"
                             fontSize="58px"
                             position="center"
-                            fill={textColor}
+                            fill={innerLabelColor}
                         />
-                        <Label value="Success Rate" fontSize="17px" position="center" dy={45} fill={textColor} />
+                        <Label value="Success Rate" fontSize="17px" position="center" dy={45} fill={innerLabelColor} />
                         <Cell fill="#57E964" name="Successes" />
                         <Cell fill="red" name="Failures" />
                     </Pie>

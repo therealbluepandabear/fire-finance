@@ -23,7 +23,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
         getSortedRowModel: getSortedRowModel()
     })
 
-    const color = useColorModeValue('#f7f7f7', 'gray.900')
+    const rowColor = useColorModeValue('#f7f7f7', 'gray.900')
     const headerColor = useColorModeValue('', '#1f2836')
     const scrollbarColor = useColorModeValue('gray.400', 'gray.600')
 
@@ -39,19 +39,19 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
 
     return (
         <TableContainer 
-            width="100%"
-            overflowY="scroll"
+            width='100%'
+            overflowY='scroll'
             sx={
-                {"::-webkit-scrollbar": {
-                    width: "8px"
+                {'::-webkit-scrollbar': {
+                    width: '8px'
                 },
-                "::-webkit-scrollbar-thumb": {
+                '::-webkit-scrollbar-thumb': {
                     background: scrollbarColor,
-                    borderRadius: "999px"
+                    borderRadius: '999px'
                 }}
             }
         >
-            <Box borderRadius="md" overflow="hidden">
+            <Box borderRadius='md' overflow='hidden'>
                 <Table>
                     <Thead>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -59,25 +59,25 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                                 {headerGroup.headers.map((header, index) => (
                                     <Th 
                                         key={header.id} 
-                                        textTransform="none" 
-                                        fontSize="sm" 
-                                        height="60px" 
+                                        textTransform='none' 
+                                        fontSize='sm' 
+                                        height='60px' 
                                         onMouseOver={mouseOverHandler.bind(null, index)}
                                         onMouseOut={mouseOutHandler}
-                                        padding="0"
+                                        padding='0'
                                     >
                                         <Flex 
                                             onClick={header.column.getToggleSortingHandler()} 
-                                            alignItems="center"
-                                            height="100%" 
-                                            paddingLeft="18px"
+                                            alignItems='center'
+                                            height='100%' 
+                                            paddingLeft='18px'
                                         >
                                             {flexRender(
                                                 header.column.columnDef.header,
                                                 header.getContext()
                                             )}
 
-                                            <Box marginLeft="8px">
+                                            <Box marginLeft='8px'>
                                                 {header.column.getIsSorted() === 'desc' && (
                                                     <MdArrowUpward size={18} />
                                                 )}
@@ -98,9 +98,9 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                     </Thead>
                     <Tbody>
                         {table.getRowModel().rows.map((row, index) => (
-                            <Tr key={row.id} background={index % 2 === 0 ? "" : color}>
+                            <Tr key={row.id} background={index % 2 === 0 ? '' : rowColor}>
                                 {row.getVisibleCells().map((cell) => (
-                                    <Td key={cell.id} padding="18px">
+                                    <Td key={cell.id} padding='18px'>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()
