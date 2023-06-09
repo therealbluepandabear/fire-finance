@@ -30,7 +30,6 @@ export default function SignUp(): JSX.Element {
             height='100vh' 
             justifyContent='center'
             overflowX='clip'
-            flexDirection='column'
         >
             <Flex 
                 alignItems='center' 
