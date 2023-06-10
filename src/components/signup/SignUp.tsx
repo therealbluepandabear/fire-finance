@@ -11,7 +11,13 @@ import {
     Text 
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
+
+interface SignUpParams {
+    email: string
+    password: string
+}
 
 export default function SignUp(): JSX.Element {
     const inputStyle = {
@@ -20,8 +26,16 @@ export default function SignUp(): JSX.Element {
 
     const [showPassword, setShowPassword] = useState(false)
 
+    const { register, handleSubmit, formState: { errors } } = useForm<SignUpParams>()
+
+    const inputRegisterOptions: RegisterOptions = { required: true }
+
     function togglePasswordVisibilityClickHandler(): void {
         setShowPassword((prevShowPassword) => !prevShowPassword)
+    }
+
+    function onSubmit(params: SignUpParams): void {
+        console.log("params")
     }
 
     return (
@@ -34,13 +48,13 @@ export default function SignUp(): JSX.Element {
         >   
             <Flex 
                 width='100%' 
-                height='78px' 
+                height='76px' 
                 borderBottom='1px solid #e1e1dc'
                 alignItems='center'
                 paddingStart='36px'
                 paddingEnd='36px'
             >
-                <Text fontSize='2xl'>FireFinance</Text>
+                <Text fontSize={{ base: 'lg', md: '2xl' }}>FireFinance</Text>
 
                 <Flex 
                     marginLeft='auto' 
@@ -85,45 +99,55 @@ export default function SignUp(): JSX.Element {
                     gap={{ base: '0px', md: '36px' }} 
                     flexBasis='0'
                 >
-                    <Flex 
-                        flexDirection='column' 
-                        gap='16px'
-                        padding={{ base: '34px', md: '0px 0px 0px 34px' }}
-                        width={{ base: '100vw', md: 'auto' }}
-                    >
-                        <Text fontSize='34px'>Build the financial plan that's right for you</Text>
-                        <Text fontSize='16px'>Take control. Make the right decisions for today's priorities and tomorrow's possibilities.</Text>
-                        
-                        <FormControl>
-                            <FormLabel>Email</FormLabel>
-                            <Input sx={inputStyle} />
-                        </FormControl>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Flex 
+                            flexDirection='column' 
+                            gap='16px'
+                            padding={{ base: '34px', md: '0px 0px 0px 34px' }}
+                            width={{ base: '100vw', md: 'auto' }}
+                        >
+                            <Text fontSize='34px'>Build the financial plan that's right for you</Text>
+                            <Text fontSize='16px'>Take control. Make the right decisions for today's priorities and tomorrow's possibilities.</Text>
+                            
+                            <FormControl isInvalid={!!errors.email}>
+                                <FormLabel>Email</FormLabel>
+                                <Input 
+                                    sx={inputStyle} 
+                                    {...register('email', inputRegisterOptions)}
+                                />
+                            </FormControl>
 
-                        <FormControl>
-                            <FormLabel>Password</FormLabel>
+                            <FormControl isInvalid={!!errors.password}>
+                                <FormLabel>Password</FormLabel>
 
-                            <InputGroup>
-                                <Input type={showPassword ? 'text' : 'password'} sx={inputStyle} />
+                                <InputGroup>
+                                    <Input 
+                                        type={showPassword ? 'text' : 'password'} 
+                                        sx={inputStyle} 
+                                        {...register('password', inputRegisterOptions)}
+                                    />
 
-                                <InputRightElement height='100%'>
-                                    <IconButton 
-                                        marginRight='16px'
-                                        background='transparent'
-                                        onClick={togglePasswordVisibilityClickHandler}
-                                        icon={showPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />} 
-                                        aria-label='Toggle password visibility'
-                                    />                   
-                                </InputRightElement>
-                            </InputGroup>
-                        </FormControl>
+                                    <InputRightElement height='100%'>
+                                        <IconButton 
+                                            marginRight='16px'
+                                            background='transparent'
+                                            onClick={togglePasswordVisibilityClickHandler}
+                                            icon={showPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />} 
+                                            aria-label='Toggle password visibility'
+                                        />                   
+                                    </InputRightElement>
+                                </InputGroup>
+                            </FormControl>
 
-                        <Button 
-                            height='56px'
-                            background='orange' 
-                            color='white'
-                            rightIcon={<MdArrowForward />}
-                        >Get Started For Free</Button>
-                    </Flex>
+                            <Button 
+                                height='56px'
+                                background='orange' 
+                                color='white'
+                                type='submit'
+                                rightIcon={<MdArrowForward />}
+                            >Get Started For Free</Button>
+                        </Flex>
+                    </form>
 
                     <Flex
                         height='100%' 
