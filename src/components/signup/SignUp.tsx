@@ -13,29 +13,32 @@ import {
 import { useState } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
+import { useCreateUserMutation, User } from '../../api'
 
-interface SignUpParams {
-    email: string
-    password: string
+interface SignUpProps {
+    onUserCreated: (user: User) => void
 }
 
-export default function SignUp(): JSX.Element {
+export default function SignUp(props: SignUpProps): JSX.Element {
     const inputStyle = {
         height: '56px'
     }
 
     const [showPassword, setShowPassword] = useState(false)
 
-    const { register, handleSubmit, formState: { errors } } = useForm<SignUpParams>()
-
+    const { register, handleSubmit, formState: { errors } } = useForm<User>()
     const inputRegisterOptions: RegisterOptions = { required: true }
+
+    const [createUser] = useCreateUserMutation()
 
     function togglePasswordVisibilityClickHandler(): void {
         setShowPassword((prevShowPassword) => !prevShowPassword)
     }
 
-    function onSubmit(params: SignUpParams): void {
-        console.log("params")
+    async function onSubmit(user: User): Promise<void> {
+        await createUser(user)
+
+        props.onUserCreated(user)
     }
 
     return (

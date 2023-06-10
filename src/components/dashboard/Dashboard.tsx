@@ -1,6 +1,7 @@
 import { Flex, Text, IconButton, Button, Box, Tabs, TabList, Tab, TabIndicator } from '@chakra-ui/react'
 import { useState } from 'react'
 import { MdArrowForwardIos, MdChecklist, MdElectricBolt, MdExplore, MdHelp, MdLabel, MdLightbulb, MdMail, MdMenu, MdPassword, MdPerson, MdSchool, MdSignpost, MdSpeed, MdStar, MdTune } from 'react-icons/md'
+import { User } from '../../api'
 
 interface ProfileCardProps {
     label: string
@@ -55,7 +56,11 @@ function ProfileCard(props: ProfileCardProps): JSX.Element {
     )
 }
 
-export default function Dashboard(): JSX.Element {
+interface DashboardProps {
+    user: User
+}
+
+export default function Dashboard(props: DashboardProps): JSX.Element {
     const [selectedTab, setSelectedTab] = useState(0)
 
     return (
@@ -218,12 +223,12 @@ export default function Dashboard(): JSX.Element {
                             />
                             <ProfileCard 
                                 label='Email' 
-                                text='todoescode@gmail.com' 
+                                text={props.user.email}
                                 icon={<MdMail color='rgb(22, 135, 94)' />} 
                             />
                             <ProfileCard 
                                 label='Password' 
-                                text='DFA25013123'
+                                text={props.user.password}
                                 icon={<MdPassword color='rgb(22, 135, 94)' />} 
                             />
                         </Flex>
