@@ -1,15 +1,11 @@
-import { useState } from 'react'
 import { User } from './api'
 import Dashboard from './components/dashboard/Dashboard'
-import SignUp from './components/signup/SignUp'
 
 function App() {
-    const [user, setUser] = useState<User | null>(null)
+    const user: User = { id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }
 
     return (
-        <>
-            {user ? <Dashboard user={user} /> : <SignUp onUserCreated={(user) => setUser(user)} />}
-        </>
+        <Dashboard user={user} />
     )
 }
 

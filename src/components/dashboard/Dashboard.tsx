@@ -1,73 +1,96 @@
-import { Flex, Text, IconButton, Button, Box, Tabs, TabList, Tab, TabIndicator } from '@chakra-ui/react'
-import { useState } from 'react'
-import { MdArrowForwardIos, MdChecklist, MdElectricBolt, MdExplore, MdHelp, MdLabel, MdLightbulb, MdMail, MdMenu, MdPassword, MdPerson, MdSchool, MdSignpost, MdSpeed, MdStar, MdTune } from 'react-icons/md'
+import { Flex, Button, IconButton, Text } from '@chakra-ui/react'
+import { MdChecklist, MdElectricBolt, MdLightbulb, MdPerson, MdSpeed, MdStar, MdTune } from 'react-icons/md'
+import Menu from '../ui/new/Menu'
+import MenuItem from '../ui/new/MenuItem'
 import { User } from '../../api'
-import AppBar from '../ui/AppBar'
+import AppBar from '../ui/new/AppBar'
+import Settings from './pages/Settings'
+import { useState } from 'react'
 
-interface ProfileCardProps {
-    label: string
-    text: string
-    icon: JSX.Element
+interface DashboardMenuProps {
+    isOpen: boolean
 }
 
-function ProfileCard(props: ProfileCardProps): JSX.Element {
-    const [isHovered, setIsHovered] = useState(false)
-
-    function mouseEnterHandler(): void {
-        setIsHovered(true)
-    }
-
-    function mouseLeaveHandler(): void {
-        setIsHovered(false)
-    }
-
+function DashboardMenu(props: DashboardMenuProps): JSX.Element {
     return (
-        <Flex
-            flexDirection='row'
-            padding='24px'
-            border='1px solid #e1e1dc'
-            borderRadius='2xl'
-            alignItems='center'
-            maxWidth='500px'
-            minWidth='0'
-            _hover={{ borderColor: 'black' }}
-            onMouseEnter={mouseEnterHandler}
-            onMouseLeave={mouseLeaveHandler}
-        >
-            <Flex
-                width='50px'
-                height='50px'
-                background='rgba(22, 135, 94, 0.08)'
-                borderRadius='999px'
-                alignItems='center'
-                justifyContent='center'
-            >
-                {props.icon}
-            </Flex>
+        <Menu isOpen={props.isOpen} onItemClick={(index) => { }}>
+            <MenuItem
+                icon={(
+                    <IconButton
+                        icon={<MdStar size={15} />}
+                        color='rgb(129, 73, 34)'
+                        background='rgba(255, 143, 67, 0.08)'
+                        aria-label='???'
+                        borderRadius='999px'
+                    />
+                )}
+                label='Baseline Plan'
+            />
 
-            <Flex flexDirection='column' marginLeft='16px'>
-                <Text fontSize='md'>{props.label}</Text>
-                <Text fontSize='sm' color='gray'>{props.text}</Text>
-            </Flex>
+            <MenuItem
+                icon={(
+                    <IconButton
+                        icon={<MdSpeed size={25} />}
+                        background='transparent'
+                        aria-label='???'
+                    />
+                )}
+                
+                label='Overview'
+            />
 
-            <Box marginLeft='auto' transform={isHovered ? 'translateX(5px)' : ''} transition='transform 0.2s ease-in-out'>
-                <MdArrowForwardIos />
-            </Box>
-        </Flex>
+            <MenuItem
+                icon={(
+                    <IconButton
+                        icon={<MdChecklist size={25} />}
+                        background='transparent'
+                        aria-label='???'
+                    />
+                )}
+                label='My Plan'
+            />
+
+            <MenuItem
+                icon={(
+                    <IconButton
+                        icon={<MdElectricBolt size={25} />}
+                        background='transparent'
+                        aria-label='???'
+                    />
+                )}
+                label='Coach'
+            />
+
+            <MenuItem
+                icon={(
+                    <IconButton
+                        icon={<MdLightbulb size={25} />}
+                        background='transparent'
+                        aria-label='???'
+                    />
+                )}
+                label='Insights'
+            />
+        </Menu>
     )
 }
 
-interface DashboardProps {
+export interface DashboardProps {
     user: User
 }
 
 export default function Dashboard(props: DashboardProps): JSX.Element {
-    const [selectedTab, setSelectedTab] = useState(0)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    function menuClickHandler(): void {
+        setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen)
+    }
 
     return (
         <Flex flexDirection='column' width='100%' height='100vh'>
             <AppBar 
-                isHamburgerMenu={true} 
+                isMenu={true} 
+                onMenuClick={menuClickHandler}
                 contentRight={[
                     <Button
                         height='49px'
@@ -86,7 +109,10 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
             />
 
             <Flex flexGrow={1}>
-                <Flex 
+                <DashboardMenu isOpen={isMenuOpen} />
+              
+
+                {/* <Menu 
                     width='55px' 
                     background='#faf7f1' 
                     alignItems='center'
@@ -162,53 +188,10 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                             aria-label='???'
                         />
                     </Flex>
-                </Flex>
+                </Flex> */}
 
                 <Flex flexGrow={1}>
-                    <Flex padding='48px' flexDirection='column' width='100%'>
-                        <Text fontSize='3xl'>Settings</Text>
-
-                        <Tabs 
-                            marginTop='16px' 
-                            variant='unstyled' 
-                            index={selectedTab} 
-                            onChange={index => setSelectedTab(index)}
-                        >
-                            <TabList>
-                                <Tab color={selectedTab === 0 ? 'black' : 'gray'}>My Account</Tab>
-                                <Tab color={selectedTab === 1 ? 'black' : 'gray'}>Subscription</Tab>
-                            </TabList>
-
-                            <TabIndicator
-                                height='2px'
-                                background='rgb(255, 143, 67)'
-                            />
-                        </Tabs>
-
-                        <Flex 
-                            flexDirection='column' 
-                            paddingTop='40px' 
-                            gap='24px' 
-                        >
-                            <Text fontSize='xl'>Profile</Text>
-
-                            <ProfileCard 
-                                label='Your name' 
-                                text='Tom' 
-                                icon={<MdLabel color='rgb(22, 135, 94)' />} 
-                            />
-                            <ProfileCard 
-                                label='Email' 
-                                text={props.user.email}
-                                icon={<MdMail color='rgb(22, 135, 94)' />} 
-                            />
-                            <ProfileCard 
-                                label='Password' 
-                                text={props.user.password}
-                                icon={<MdPassword color='rgb(22, 135, 94)' />} 
-                            />
-                        </Flex>
-                    </Flex>
+                    <Settings {...props} />
                 </Flex>
             </Flex>
         </Flex>

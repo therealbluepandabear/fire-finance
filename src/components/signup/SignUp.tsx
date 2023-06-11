@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { useCreateUserMutation, User } from '../../api'
-import AppBar from '../ui/AppBar'
+import AppBar from '../ui/new/AppBar'
 
 interface SignUpProps {
     onUserCreated: (user: User) => void
@@ -51,7 +51,7 @@ export default function SignUp(props: SignUpProps): JSX.Element {
             flexDirection='column'
         >   
             <AppBar 
-                isHamburgerMenu={false} 
+                isMenu={false} 
                 contentRight={[
                     <IconButton
                         icon={<MdSearch size={25} />}
