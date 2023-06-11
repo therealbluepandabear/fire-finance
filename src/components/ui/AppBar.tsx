@@ -13,8 +13,9 @@ export default function AppBar(props: AppBarProps): JSX.Element {
             height='76px'
             borderBottom='1px solid #e1e1dc'
             alignItems='center'
-            paddingStart='36px'
-            paddingEnd='36px'
+            paddingStart='16px'
+            paddingEnd='16px'
+            gap='16px'
         >
             {props.isHamburgerMenu && (
                 <IconButton

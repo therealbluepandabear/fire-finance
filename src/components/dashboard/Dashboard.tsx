@@ -2,6 +2,7 @@ import { Flex, Text, IconButton, Button, Box, Tabs, TabList, Tab, TabIndicator }
 import { useState } from 'react'
 import { MdArrowForwardIos, MdChecklist, MdElectricBolt, MdExplore, MdHelp, MdLabel, MdLightbulb, MdMail, MdMenu, MdPassword, MdPerson, MdSchool, MdSignpost, MdSpeed, MdStar, MdTune } from 'react-icons/md'
 import { User } from '../../api'
+import AppBar from '../ui/AppBar'
 
 interface ProfileCardProps {
     label: string
@@ -65,40 +66,15 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
 
     return (
         <Flex flexDirection='column' width='100%' height='100vh'>
-            <Flex
-                width='100%'
-                height='76px'
-                minHeight='76px'
-                borderBottom='1px solid #e1e1dc'
-                alignItems='center'
-                paddingStart='16px'
-                paddingEnd='36px'
-            >
-                <Flex
-                    gap='16px'
-                    alignItems='center'
-                >
-                    <IconButton
-                        icon={<MdMenu size={25} />}
-                        background='transparent'
-                        aria-label='Menu'
-                        borderRadius='999px'
-                    />
-
-                    <Text fontSize='2xl'>FireFinance</Text>
-                </Flex>
-
-                <Flex
-                    marginLeft='auto'
-                    gap='16px'
-                    alignItems='center'
-                >
+            <AppBar 
+                isHamburgerMenu={true} 
+                contentRight={[
                     <Button
                         height='49px'
                         background='transparent'
                         border='1px solid #e1e1dc'
                         leftIcon={<MdTune size={20} />}
-                    >Assumptions</Button>
+                    >Assumptions</Button>,
 
                     <Button
                         height='49px'
@@ -106,8 +82,8 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                         border='1px solid #e1e1dc'
                         leftIcon={<MdPerson size={20} />}
                     >You</Button>
-                </Flex>
-            </Flex>
+                ]}
+            />
 
             <Flex flexGrow={1}>
                 <Flex 
