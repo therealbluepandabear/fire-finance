@@ -1,28 +1,39 @@
-import { Button, Flex } from '@chakra-ui/react'
-import { MdClose, MdMenu } from 'react-icons/md'
+import { Flex, IconButton, Text } from '@chakra-ui/react'
+import {  MdMenu } from 'react-icons/md'
 
 interface AppBarProps {
-    title: string
-    isMenuOpen: boolean
-    onHamburgerClick: () => void
+    isHamburgerMenu: boolean
+    contentRight: JSX.Element[]
 }
 
 export default function AppBar(props: AppBarProps): JSX.Element {
     return (
-        <Flex height='50px' alignItems='center' gap='8px' shadow='md'>
-            <Button
-                width='50px'
-                height='50px'
-                borderRadius='0'
-                background='transparent'
-                onClick={() => {
-                    props.onHamburgerClick()
-                }}
-            >
-                {props.isMenuOpen ? <MdClose size={25} /> : <MdMenu size={25} />}
-            </Button>
+        <Flex
+            width='100%'
+            height='76px'
+            borderBottom='1px solid #e1e1dc'
+            alignItems='center'
+            paddingStart='36px'
+            paddingEnd='36px'
+        >
+            {props.isHamburgerMenu && (
+                <IconButton
+                    icon={<MdMenu size={25} />}
+                    background='transparent'
+                    aria-label='Menu'
+                    borderRadius='999px'
+                />
+            )}
 
-            {props.title}
+            <Text fontSize={{ base: 'lg', md: '2xl' }}>FireFinance</Text>
+
+            <Flex
+                marginLeft='auto'
+                gap='16px'
+                alignItems='center'
+            >
+                {props.contentRight.map((jsx) => jsx)}
+            </Flex>
         </Flex>
     )
 }

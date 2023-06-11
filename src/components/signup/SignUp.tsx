@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { useCreateUserMutation, User } from '../../api'
+import AppBar from '../ui/AppBar'
 
 interface SignUpProps {
     onUserCreated: (user: User) => void
@@ -49,47 +50,34 @@ export default function SignUp(props: SignUpProps): JSX.Element {
             overflowX='clip'
             flexDirection='column'
         >   
-            <Flex 
-                width='100%' 
-                height='76px' 
-                borderBottom='1px solid #e1e1dc'
-                alignItems='center'
-                paddingStart='36px'
-                paddingEnd='36px'
-            >
-                <Text fontSize={{ base: 'lg', md: '2xl' }}>FireFinance</Text>
-
-                <Flex 
-                    marginLeft='auto' 
-                    gap='16px' 
-                    alignItems='center'
-                >
-
+            <AppBar 
+                isHamburgerMenu={false} 
+                contentRight={[
                     <IconButton
                         icon={<MdSearch size={25} />}
                         background='transparent'
                         aria-label='Search'
-                    />
+                    />,
 
-                    <Flex
+                     <Flex
                         width='1px'
                         height='30px'
                         background='#e1e1dc'
-                    />
+                    />,
 
                     <Button
                         height='49px'
                         background='transparent'
                         color='#0d3f4a'
-                    >Sign In</Button>
+                    >Sign In</Button>,
 
                     <Button
                         height='49px'
                         background='#0d3f4a'
                         color='white'
                     >Get Started Free</Button>
-                </Flex>
-            </Flex>
+                ]}  
+            />
 
             <Flex 
                 flexGrow={1}

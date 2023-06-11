@@ -14,7 +14,9 @@ const theme = extendTheme({
     components: {
         Button: {
             baseStyle: {
-                fontWeight: 'normal'
+                fontWeight: 'normal',
+                hover: { background: 'blue' },
+                active: { filter: "brightness(92%)" }
             }
         },
         Form: {

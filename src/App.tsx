@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { User } from './api'
 import Dashboard from './components/dashboard/Dashboard'
-import SignIn from './components/signin/SignIn'
 import SignUp from './components/signup/SignUp'
 
 function App() {
@@ -9,9 +8,7 @@ function App() {
 
     return (
         <>
-            {/* {user ? <Dashboard user={user} /> : <SignUp onUserCreated={(user) => setUser(user)} />} */}
-    
-            <SignIn />
+            {user ? <Dashboard user={user} /> : <SignUp onUserCreated={(user) => setUser(user)} />}
         </>
     )
 }
