@@ -6,34 +6,73 @@ import AppBar from '../ui/new/AppBar'
 import Settings from './pages/Settings'
 import { useState } from 'react'
 
+const iconSize = 15
+
+const menuItems: MenuItem[] = [
+    {
+        leftContent: (
+            <MdStar size={iconSize} />
+        ),
+        label: 'Baseline Plan'
+    },
+    {
+        leftContent: (
+            <MdChecklist size={iconSize} />
+        ),
+        label: 'Overview',
+        subMenuItems: [
+            { label: 'Accounts and Assets' },
+            { label: 'Home and Real Estate' },
+            { label: 'Debts' },
+            { label: 'Income' },
+            { label: 'Expenses and Healthcare' },
+            { label: 'Money Flows' },
+            { label: 'Estate Planning' },
+            { label: 'Profile and Goals' },
+            { label: 'Assumptions' }
+        ]
+    },
+    {
+        leftContent: (
+            <MdElectricBolt size={iconSize} />
+        ),
+        label: 'Coach',
+        subMenuItems: [
+            { label: 'Suggestions' },
+            { label: 'Progress' },
+            { label: 'Sterngthen Your Plan' }
+        ]
+    },
+    {
+        leftContent: (
+            <MdLightbulb size={iconSize} />
+        ),
+        label: 'Insights',
+        subMenuItems: [
+            { label: 'Library' },
+            { label: 'Lifetime Income Projection' },
+            { label: 'Net Worth Statement' },
+            { label: 'Analysis of Goals' },
+            { label: 'IRMAA' },
+            { label: 'Lifetime Cash Flow' },
+            { label: 'Projected Net Worth' },
+            { label: 'Timeline of Milestones' },
+            { label: 'Income & Expenses' },
+            { label: 'Savings' },
+            { label: 'Taxes' },
+            { label: 'Savings Timeline' },
+            { label: 'What You Need' },
+            { label: 'Withdrawals' },
+            { label: 'Surplus-Gap' }
+        ]
+    }
+]
+
 interface DashboardMenuProps {
     isOpen: boolean
 }
 
 function DashboardMenu(props: DashboardMenuProps): JSX.Element {
-    const menuItems: MenuItem[] = [
-        { 
-            leftContent: (
-                <IconButton
-                    icon={<MdStar size={15} />}
-                    color='rgb(129, 73, 34)'
-                    background='rgba(255, 143, 67, 0.08)'
-                    aria-label='???'
-                    borderRadius='999px'
-                />
-            ),
-            label: 'Baseline Plan',
-            subMenuItems: [
-                { label: 'Test' },
-                { label: 'Test' },
-                { label: 'Test' },
-                { label: 'Test' },
-                { label: 'Test' },
-                { label: 'Test' }
-            ]
-        }
-    ]
-
     return (
         <Menu 
             isOpen={props.isOpen} 
