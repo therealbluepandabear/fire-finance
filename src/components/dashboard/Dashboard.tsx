@@ -1,7 +1,6 @@
 import { Flex, Button, IconButton, Text } from '@chakra-ui/react'
 import { MdChecklist, MdElectricBolt, MdLightbulb, MdPerson, MdSpeed, MdStar, MdTune } from 'react-icons/md'
-import Menu from '../ui/new/Menu'
-import MenuItem from '../ui/new/MenuItem'
+import Menu, { MenuItem } from '../ui/new/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/new/AppBar'
 import Settings from './pages/Settings'
@@ -12,66 +11,35 @@ interface DashboardMenuProps {
 }
 
 function DashboardMenu(props: DashboardMenuProps): JSX.Element {
+    const menuItems: MenuItem[] = [
+        { 
+            leftContent: (
+                <IconButton
+                    icon={<MdStar size={15} />}
+                    color='rgb(129, 73, 34)'
+                    background='rgba(255, 143, 67, 0.08)'
+                    aria-label='???'
+                    borderRadius='999px'
+                />
+            ),
+            label: 'Baseline Plan',
+            subMenuItems: [
+                { label: 'Test' },
+                { label: 'Test' },
+                { label: 'Test' },
+                { label: 'Test' },
+                { label: 'Test' },
+                { label: 'Test' }
+            ]
+        }
+    ]
+
     return (
-        <Menu isOpen={props.isOpen} onItemClick={(index) => { }}>
-            <MenuItem
-                icon={(
-                    <IconButton
-                        icon={<MdStar size={15} />}
-                        color='rgb(129, 73, 34)'
-                        background='rgba(255, 143, 67, 0.08)'
-                        aria-label='???'
-                        borderRadius='999px'
-                    />
-                )}
-                label='Baseline Plan'
-            />
-
-            <MenuItem
-                icon={(
-                    <IconButton
-                        icon={<MdSpeed size={25} />}
-                        background='transparent'
-                        aria-label='???'
-                    />
-                )}
-                
-                label='Overview'
-            />
-
-            <MenuItem
-                icon={(
-                    <IconButton
-                        icon={<MdChecklist size={25} />}
-                        background='transparent'
-                        aria-label='???'
-                    />
-                )}
-                label='My Plan'
-            />
-
-            <MenuItem
-                icon={(
-                    <IconButton
-                        icon={<MdElectricBolt size={25} />}
-                        background='transparent'
-                        aria-label='???'
-                    />
-                )}
-                label='Coach'
-            />
-
-            <MenuItem
-                icon={(
-                    <IconButton
-                        icon={<MdLightbulb size={25} />}
-                        background='transparent'
-                        aria-label='???'
-                    />
-                )}
-                label='Insights'
-            />
-        </Menu>
+        <Menu 
+            isOpen={props.isOpen} 
+            onItemClick={(index) => { }}
+            menuItems={menuItems}
+        />
     )
 }
 
