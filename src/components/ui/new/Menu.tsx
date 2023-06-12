@@ -1,5 +1,4 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { Box, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 
 export interface SubMenuItem {
@@ -23,6 +22,7 @@ export default function Menu(props: MenuProps): JSX.Element {
 
     function itemClickHandler(item: MenuItem | SubMenuItem): void {
         props.onItemClick(item)
+        setSubMenuItemsOpen(prevSubMenuItemsOpen => !prevSubMenuItemsOpen)
     }
 
     return (
@@ -31,64 +31,50 @@ export default function Menu(props: MenuProps): JSX.Element {
             flexDirection='column'
             shadow='md'
         >
-            {props.menuItems.map((menuItem, index) => {
-                return (
-                    <Flex flexDirection='row'>
-                        <Box padding='8px'>
-                            {menuItem.leftContent}
-                        </Box> 
+            <Flex flexDirection='column'>
+                {props.menuItems.map((menuItem, index) => {
+                    return (
+                        <>
+                            <Button 
+                                key={index}
+                                flexDirection='row' 
+                                justifyContent='flex-start' 
+                                paddingStart='16px'
+                                onClick={() => {
+                                    itemClickHandler(menuItem)
+                                }}
+                            >
+                                {props.menuItems[0].leftContent}
 
-                        {props.isOpen && (
-                            <Flex flexDirection='column' flexGrow={1}>
-                                <Button
-                                    borderRadius='0px'
-                                    key={index}
-                                    onClick={() => { 
-                                        itemClickHandler(menuItem) 
-                                        setSubMenuItemsOpen((prevSubMenuItemsOpen) => !prevSubMenuItemsOpen)
-                                    }}
-                                    background='transparent'
-                                    justifyContent='flex-start'
-                                >
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: 'auto' }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-
-                                        <Text fontSize='md' paddingLeft='8px'>{menuItem.label}</Text>
-                                    </motion.div>
-                                </Button>
-
-                                {menuItem.subMenuItems && subMenuItemsOpen && (
-                                    <motion.div
-                                        initial={{ height: 0 }}
-                                        animate={{ height: 'auto' }}
-                                        transition={{ duration: 0.2 }}
-                                        style={{ display: 'flex', flexDirection: 'column'}}
-                                    >
-                                        {menuItem.subMenuItems && menuItem.subMenuItems.map((subMenuItem, index) => (
-                                            <Button 
-                                                background='transparent' 
-                                                borderRadius='0px' 
-                                                onClick={() => {
-                                                    itemClickHandler(subMenuItem)
-                                                }}
-                                            >
-                                                <Text
-                                                    key={index}
-                                                    fontSize='sm'
-                                                    paddingLeft='16px'
-                                                >{subMenuItem.label}</Text>
-                                            </Button>
-                                        ))}
-                                    </motion.div>
+                                {props.isOpen && (
+                                    <Button>
+                                        {menuItem.label}
+                                    </Button>
                                 )}
-                            </Flex>
-                        )}
-                    </Flex>
-                )
-            })}
+                            </Button>
+
+                            {menuItem.subMenuItems && props.isOpen && subMenuItemsOpen && (
+                                <Flex flexDirection='row'>
+                                    <Box opacity={0} paddingStart='16px'>
+                                        {props.menuItems[0].leftContent}
+                                    </Box>
+
+                                    <Flex flexDirection='column' width='100%'>
+                                        {menuItem.subMenuItems.map((subMenuItem, index) => (
+                                            <Button 
+                                                key={index}
+                                                background='transparent'
+                                                borderRadius='0px'
+                                                justifyContent='flex-start'
+                                            >{subMenuItem.label}</Button>
+                                        ))}
+                                    </Flex>
+                                </Flex>
+                            )}
+                        </>
+                    )
+                })}
+            </Flex>
         </Flex>
     )
 }

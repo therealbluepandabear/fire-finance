@@ -74,10 +74,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     <Tab color={selectedTab === 1 ? 'black' : 'gray'}>Subscription</Tab>
                 </TabList>
 
-                <TabIndicator
-                    height='2px'
-                    background='rgb(255, 143, 67)'
-                />
+            
             </Tabs>
 
             <Flex
