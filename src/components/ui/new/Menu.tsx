@@ -70,9 +70,7 @@ export default function Menu(props: MenuProps): JSX.Element {
 
         const isMenuItem = 'leftContent' in item
 
-        if (isMenuItem && !item.subMenuItems) {
-            setSelectedItem(item)
-        } else if (!isMenuItem) {
+        if ((isMenuItem && !item.subMenuItems) || !isMenuItem) {
             setSelectedItem(item)
         }
 
