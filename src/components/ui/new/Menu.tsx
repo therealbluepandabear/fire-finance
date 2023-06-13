@@ -2,20 +2,20 @@ import { Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
 import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
-    isSelected: boolean
+    selectedItem: MenuItemSelection | null
     item: T
     textColor: string
     onClick: () => void
 }
 
-function MenuItemButton({ children, ...props }: HTMLChakraProps<'button'> & PropsWithChildren): JSX.Element {
+function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & PropsWithChildren): JSX.Element {
     return (
         <Button
             flexDirection='row'
             justifyContent='flex-start'
             paddingStart='16px'
-            minHeight='35px'
-            height='35px'
+            minHeight='42px'
+            height='42px'
             borderRadius='0px'
             {...props}
         >
@@ -26,10 +26,11 @@ function MenuItemButton({ children, ...props }: HTMLChakraProps<'button'> & Prop
 
 function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
     return (
-        <MenuItemButton
-            background={props.isSelected ? 'lightBlue' : 'transparent'}
+        <MenuItemButtonBase
             onClick={props.onClick}
-            textColor={props.textColor}
+            textColor={props.selectedItem?.selectedMenuItem === props.item ? 'rgba(22, 135, 94, 0.64)' : props.textColor}
+            borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? '1px solid rgba(22, 135, 94, 0.64)' : ''}
+            background='transparent'
         >
             {props.item.leftContent}
 
@@ -38,19 +39,23 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
                     fontSize='16px' 
                     paddingStart='16px'
                     fontWeight='bold'
+                    textColor={props.textColor}
                 >{props.item.label}</Text>
             )}
-        </MenuItemButton>
+        </MenuItemButtonBase>
     )
 }
 
 function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.Element {
     return (
-        <MenuItemButton
-            background={props.isSelected ? 'lightBlue' : 'transparent'}
+        <MenuItemButtonBase
+            borderBottom={props.selectedItem?.selectedSubMenuItem === props.item ? '1px solid rgba(22, 135, 94, 0.64)' : ''}
+            background='transparent'
             onClick={props.onClick}
             textColor={props.textColor}
-        >{props.item.label}</MenuItemButton>
+        >
+            {props.item.label}
+        </MenuItemButtonBase>
     )
 }
 
@@ -73,25 +78,45 @@ export interface MenuItem {
     subMenuItems?: SubMenuItem[]
 }
 
+interface MenuItemSelection {
+    selectedMenuItem: MenuItem
+    selectedSubMenuItem?: SubMenuItem
+}
+
 interface MenuProps {
     isOpen: boolean
     onItemClick: (item: MenuItem | SubMenuItem) => void
     menuItemGroups: MenuItemGroup[]
 }
 
+function findSubMenuItemParent(menuItemGroups: MenuItemGroup[], subMenuItem: SubMenuItem): MenuItem | undefined {
+    const combinedMenuItems: MenuItem[] = menuItemGroups
+        .map(menuItemGroup => menuItemGroup.menuItems)
+        .flat()
+
+    return combinedMenuItems
+        .find(menuItem => menuItem.subMenuItems && menuItem.subMenuItems.includes(subMenuItem))
+}
+
 export default function Menu(props: MenuProps): JSX.Element {
     // If a particular menu item is open it means the 
     // sub items of that menu item are showing
     const [openMenuItems, setOpenMenuItems] = useState<MenuItem[]>([])
-    const [selectedItem, setSelectedItem] = useState<(MenuItem | SubMenuItem) | null>(null)
+    const [selectedItem, setSelectedItem] = useState<MenuItemSelection | null>(null)
 
     function itemClickHandler(item: MenuItem | SubMenuItem): void {
         props.onItemClick(item)
 
         const isMenuItem = 'leftContent' in item
 
-        if ((isMenuItem && !item.subMenuItems) || !isMenuItem) {
-            setSelectedItem(item)
+        if (isMenuItem && !item.subMenuItems) {
+            setSelectedItem({ selectedMenuItem: item })
+        } else if (!isMenuItem) {
+            const parentMenuItem = findSubMenuItemParent(props.menuItemGroups, item)
+
+            if (parentMenuItem) {
+                setSelectedItem({ selectedMenuItem: parentMenuItem, selectedSubMenuItem: item })
+            }
         }
 
         if (isMenuItem && item.subMenuItems) {
@@ -144,7 +169,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                                         <MenuItemDisplay
                                             textColor={menuItemGroup.textColor}
                                             key={index}
-                                            isSelected={selectedItem === menuItem}
+                                            selectedItem={selectedItem}
                                             item={menuItem}
                                             onClick={() => itemClickHandler(menuItem)}
                                             {...props}
@@ -161,7 +186,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                                                         <SubMenuItemDisplay
                                                             textColor={menuItemGroup.textColor}
                                                             key={index}
-                                                            isSelected={selectedItem === subMenuItem}
+                                                            selectedItem={selectedItem}
                                                             item={subMenuItem}
                                                             onClick={() => itemClickHandler(subMenuItem)}
                                                             {...props}
