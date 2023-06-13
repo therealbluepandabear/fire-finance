@@ -24,12 +24,15 @@ function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & 
     )
 }
 
+const selectedColor = 'rgba(22, 135, 94, 0.64)'
+const selectedBottomBorder = `1px solid ${selectedColor}`
+
 function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
     return (
         <MenuItemButtonBase
             onClick={props.onClick}
-            textColor={props.selectedItem?.selectedMenuItem === props.item ? 'rgba(22, 135, 94, 0.64)' : props.textColor}
-            borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? '1px solid rgba(22, 135, 94, 0.64)' : ''}
+            textColor={props.selectedItem?.selectedMenuItem === props.item ? selectedColor : props.textColor}
+            borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? selectedBottomBorder : ''}
             background='transparent'
         >
             {props.item.leftContent}
@@ -49,7 +52,7 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
 function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.Element {
     return (
         <MenuItemButtonBase
-            borderBottom={props.selectedItem?.selectedSubMenuItem === props.item ? '1px solid rgba(22, 135, 94, 0.64)' : ''}
+            borderBottom={props.selectedItem?.selectedSubMenuItem === props.item ? selectedBottomBorder : ''}
             background='transparent'
             onClick={props.onClick}
             textColor={props.textColor}
@@ -142,9 +145,11 @@ export default function Menu(props: MenuProps): JSX.Element {
                     }
                 }
             }
-            width={props.isOpen ? '294px' : 'auto'}
+            width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : 'auto' }}
             flexDirection='column'
             background='#fbf7f0'
+            position={{ base: 'absolute', md: 'static' }}
+            height='100%'
         >
             {[
                 props.menuItemGroups.filter(menuItemGroup => menuItemGroup.dock === 'top'), 

@@ -169,7 +169,12 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 ]}
             />
 
-            <Flex flexGrow={1} minHeight='0' as='main'>
+            <Flex 
+                flexGrow={1} 
+                minHeight='0' 
+                as='main' 
+                position='relative'
+            >
                 <DashboardMenu isOpen={isMenuOpen} />
 
                 <Flex flexGrow={1}>

@@ -64,7 +64,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
             padding='48px'
             flexDirection='column' 
             width='100%' 
-            overflowY='scroll'
+            overflow='auto'
         >
             <Text fontSize='3xl'>Settings</Text>
 
