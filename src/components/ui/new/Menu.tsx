@@ -1,11 +1,13 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 
-function MenuItemDisplay(props: MenuProps & { 
-        isSelected: boolean,
-        menuItem: MenuItem, 
-        onClick: () => void 
-    }): JSX.Element {
+interface DisplayProps<T extends MenuItem | SubMenuItem> { 
+    isSelected: boolean,
+    item: T,
+    onClick: () => void
+}
+
+function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
 
     return (
         <Button
@@ -15,23 +17,19 @@ function MenuItemDisplay(props: MenuProps & {
             paddingStart='16px'
             onClick={props.onClick}
         >
-            {props.menuItem.leftContent}
+            {props.item.leftContent}
 
             {props.isOpen && (
                 <Text 
                     fontSize='md' 
                     paddingStart='16px'
-                >{props.menuItem.label}</Text>
+                >{props.item.label}</Text>
             )}
         </Button>
     )
 }
 
-function SubMenuItemDisplay(props: MenuProps & { 
-        isSelected: boolean
-        subMenuItem: SubMenuItem, 
-        onClick: () => void 
-    }): JSX.Element {
+function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.Element {
 
     return (
         <Button
@@ -39,7 +37,7 @@ function SubMenuItemDisplay(props: MenuProps & {
             borderRadius='0px'
             justifyContent='flex-start'
             onClick={props.onClick}
-        >{props.subMenuItem.label}</Button>
+        >{props.item.label}</Button>
     )
 }
 
@@ -95,7 +93,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                             <MenuItemDisplay 
                                 key={index}
                                 isSelected={selectedItem?.label === menuItem.label}
-                                menuItem={menuItem} 
+                                item={menuItem} 
                                 onClick={() => itemClickHandler(menuItem)} 
                                 {...props} 
                             />
@@ -111,7 +109,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                                             <SubMenuItemDisplay 
                                                 key={index}
                                                 isSelected={selectedItem === subMenuItem}
-                                                subMenuItem={subMenuItem} 
+                                                item={subMenuItem} 
                                                 onClick={() => itemClickHandler(subMenuItem)}
                                                 {...props} 
                                             />
