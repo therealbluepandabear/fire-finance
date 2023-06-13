@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
+import { background, Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
 import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
@@ -35,6 +35,7 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
                 <Text 
                     fontSize='16px' 
                     paddingStart='16px'
+                    fontWeight='bold'
                 >{props.item.label}</Text>
             )}
         </MenuItemButton>
@@ -104,8 +105,10 @@ export default function Menu(props: MenuProps): JSX.Element {
                     }
                 }
             }
+            background='#fbf7f0'
+            width={props.isOpen ? '264px' : 'auto'}
         >
-            <Flex flexDirection='column'>
+            <Flex flexDirection='column' width='100%'>
                 {props.menuItems.map((menuItem, index) => {
                     return (
                         <>
