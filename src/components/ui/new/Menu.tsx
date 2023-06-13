@@ -5,6 +5,7 @@ interface DisplayProps<T extends MenuItem | SubMenuItem> {
     selectedItem: MenuItemSelection | null
     item: T
     textColor: string
+    background: string
     onClick: () => void
 }
 
@@ -17,6 +18,8 @@ function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & 
             minHeight='42px'
             height='42px'
             borderRadius='0px'
+            _hover={{ filter: 'brightness(94%)' }}
+            _active={{ filter: 'brightness(94%)' }}
             {...props}
         >
             {children}
@@ -33,7 +36,7 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
             onClick={props.onClick}
             textColor={props.selectedItem?.selectedMenuItem === props.item ? selectedColor : props.textColor}
             borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? selectedBottomBorder : ''}
-            background='transparent'
+            background={props.background}
         >
             {props.item.leftContent}
 
@@ -53,9 +56,9 @@ function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.E
     return (
         <MenuItemButtonBase
             borderBottom={props.selectedItem?.selectedSubMenuItem === props.item ? selectedBottomBorder : ''}
-            background='transparent'
             onClick={props.onClick}
             textColor={props.textColor}
+            background={props.background}
         >
             {props.item.label}
         </MenuItemButtonBase>
@@ -173,6 +176,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                                     <>
                                         <MenuItemDisplay
                                             textColor={menuItemGroup.textColor}
+                                            background={menuItemGroup.background}
                                             key={index}
                                             selectedItem={selectedItem}
                                             item={menuItem}
@@ -190,6 +194,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                                                     {menuItem.subMenuItems && menuItem.subMenuItems.map((subMenuItem, index) => (
                                                         <SubMenuItemDisplay
                                                             textColor={menuItemGroup.textColor}
+                                                            background={menuItemGroup.background}
                                                             key={index}
                                                             selectedItem={selectedItem}
                                                             item={subMenuItem}

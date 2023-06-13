@@ -9,7 +9,7 @@ import { useState } from 'react'
 const iconSize = 20
 
 const topMenuItemGroup: MenuItemGroup = {
-    background: 'transparent',
+    background: '#fbf7f0',
     textColor: 'black',
     dock: 'top',
     menuItems: [
