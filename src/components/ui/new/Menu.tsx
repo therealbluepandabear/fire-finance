@@ -91,7 +91,20 @@ export default function Menu(props: MenuProps): JSX.Element {
     }
 
     return (
-        <Flex shadow='md' overflowY='auto'>
+        <Flex 
+            shadow='md' 
+            overflowY='auto'
+            sx={
+                {
+                    '::-webkit-scrollbar': {
+                        width: '8px'
+                    },
+                    '::-webkit-scrollbar-thumb': {
+                        background: 'lightgray'
+                    }
+                }
+            }
+        >
             <Flex flexDirection='column'>
                 {props.menuItems.map((menuItem, index) => {
                     return (
