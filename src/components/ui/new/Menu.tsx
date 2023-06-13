@@ -63,13 +63,13 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
                 <PopoverBody padding='0px'>
                     <Flex flexDirection='column'>
                         {props.item.subMenuItems && props.item.subMenuItems.map((subMenuItem, index) => (
-                            <Button 
+                            <MenuItemButtonBase 
                                 key={index} 
                                 background={props.background} 
-                                justifyContent='flex-start'
+                                textColor={props.textColor}
                             >
                                 {subMenuItem.label}
-                            </Button>
+                            </MenuItemButtonBase>
                         ))}
                     </Flex>
                 </PopoverBody>
@@ -163,7 +163,7 @@ export default function Menu(props: MenuProps): JSX.Element {
     return (
         <Flex 
             shadow='md' 
-            overflowY='auto'
+            overflow='auto'
             sx={
                 {
                     '::-webkit-scrollbar': {
