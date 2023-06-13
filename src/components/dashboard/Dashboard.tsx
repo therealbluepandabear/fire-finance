@@ -108,7 +108,19 @@ const bottomMenuItemGroup: MenuItemGroup = {
     ]
 }
 
-const menuItemGroups: MenuItemGroup[] = [topMenuItemGroup, bottomMenuItemGroup]
+const upgradeMenuItemGroup: MenuItemGroup = {
+    background: '#0d3e4b',
+    textColor: 'white',
+    dock: 'bottom',
+    menuItems: [
+        {
+            leftContent: <MdClass />,
+            label: 'Upgrade to Planner+'
+        }
+    ]
+}
+
+const menuItemGroups: MenuItemGroup[] = [topMenuItemGroup, bottomMenuItemGroup, upgradeMenuItemGroup]
 
 interface DashboardMenuProps {
     isOpen: boolean

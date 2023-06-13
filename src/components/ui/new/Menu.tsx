@@ -129,6 +129,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                     justifySelf={tupleIndex === 0 ? 'flex-start' : ''} 
                     marginTop={tupleIndex === 1 ? 'auto' : ''} 
                     width='100%'
+                    flexDirection='column'
                 >
                     {menuItemGroup.map((menuItemGroup, index) => (
                         <Flex
