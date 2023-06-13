@@ -82,10 +82,7 @@ export default function Menu(props: MenuProps): JSX.Element {
     }
 
     return (
-        <Flex
-            flexDirection='column'
-            shadow='md'
-        >
+        <Flex shadow='md' overflow='scroll'>
             <Flex flexDirection='column'>
                 {props.menuItems.map((menuItem, index) => {
                     return (

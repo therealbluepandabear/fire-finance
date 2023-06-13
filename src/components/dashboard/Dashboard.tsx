@@ -40,7 +40,7 @@ const menuItems: MenuItem[] = [
         subMenuItems: [
             { label: 'Suggestions' },
             { label: 'Progress' },
-            { label: 'Sterngthen Your Plan' }
+            { label: 'Strengthen Your Plan' }
         ]
     },
     {
@@ -115,7 +115,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 ]}
             />
 
-            <Flex flexGrow={1}>
+            <Flex flexGrow={1} maxHeight='100%'>
                 <DashboardMenu isOpen={isMenuOpen} />
 
                 <Flex flexGrow={1}>
