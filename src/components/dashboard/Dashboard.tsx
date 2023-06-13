@@ -1,24 +1,20 @@
 import { Flex, Button, IconButton, Text } from '@chakra-ui/react'
-import { MdChecklist, MdElectricBolt, MdLightbulb, MdPerson, MdSpeed, MdStar, MdTune } from 'react-icons/md'
+import { MdChecklist, MdCompassCalibration, MdDownload, MdElectricBolt, MdExplore, MdLightbulb, MdPerson, MdSpeed, MdStar, MdTune } from 'react-icons/md'
 import Menu, { MenuItem } from '../ui/new/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/new/AppBar'
 import Settings from './pages/Settings'
 import { useState } from 'react'
 
-const iconSize = 15
+const iconSize = 20
 
 const menuItems: MenuItem[] = [
     {
-        leftContent: (
-            <MdStar size={iconSize} />
-        ),
+        leftContent: <MdStar size={iconSize} />,
         label: 'Baseline Plan'
     },
     {
-        leftContent: (
-            <MdChecklist size={iconSize} />
-        ),
+        leftContent: <MdChecklist size={iconSize} />,
         label: 'Overview',
         subMenuItems: [
             { label: 'Accounts and Assets' },
@@ -33,9 +29,7 @@ const menuItems: MenuItem[] = [
         ]
     },
     {
-        leftContent: (
-            <MdElectricBolt size={iconSize} />
-        ),
+        leftContent: <MdElectricBolt size={iconSize} />,
         label: 'Coach',
         subMenuItems: [
             { label: 'Suggestions' },
@@ -44,9 +38,7 @@ const menuItems: MenuItem[] = [
         ]
     },
     {
-        leftContent: (
-            <MdLightbulb size={iconSize} />
-        ),
+        leftContent: <MdLightbulb size={iconSize} />,
         label: 'Insights',
         subMenuItems: [
             { label: 'Library' },
@@ -65,6 +57,20 @@ const menuItems: MenuItem[] = [
             { label: 'Withdrawals' },
             { label: 'Surplus-Gap' }
         ]
+    },
+    {
+        leftContent: <MdExplore />,
+        label: 'Explorers',
+        subMenuItems: [
+            { label: 'What If' },
+            { label: 'Monte Carlo' },
+            { label: 'Social Security Explorer' },
+            { label: 'Roth Conversion Explorer' }
+        ]
+    },
+    {
+        leftContent: <MdDownload />,
+        label: 'Download/Print'
     }
 ]
 
@@ -94,7 +100,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
     }
 
     return (
-        <Flex flexDirection='column' width='100%' height='100vh' maxHeight='100vh'>
+        <Flex flexDirection='column' width='100%' height='100vh'>
             <AppBar 
                 isMenu={true} 
                 onMenuClick={menuClickHandler}
@@ -115,7 +121,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 ]}
             />
 
-            <Flex flexGrow={1} maxHeight='100%'>
+            <Flex flexGrow={1} minHeight='0' as='main'>
                 <DashboardMenu isOpen={isMenuOpen} />
 
                 <Flex flexGrow={1}>

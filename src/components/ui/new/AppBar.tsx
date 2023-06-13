@@ -6,15 +6,19 @@ type AppBarProps =
     { isMenu: false, contentRight: JSX.Element[] }
 
 export default function AppBar(props: AppBarProps): JSX.Element {
+    const height = '76px'
+
     return (
         <Flex
             width='100%'
-            height='76px'
+            height={height}
+            minHeight={height}
             borderBottom='1px solid #e1e1dc'
             alignItems='center'
             paddingStart='16px'
             paddingEnd='16px'
             gap='16px'
+            as='nav'
         >
             {props.isMenu && (
                 <IconButton

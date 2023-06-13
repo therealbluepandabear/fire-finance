@@ -1,7 +1,7 @@
 import { DashboardProps } from '../Dashboard'
-import { Flex, Text, TabList, Tab, Tabs, TabIndicator, Box } from '@chakra-ui/react'
+import { Flex, Text, TabList, Tab, Tabs, Box } from '@chakra-ui/react'
 import { useState } from 'react'
-import { MdArrowForwardIos, MdLabel, MdMail, MdPassword } from 'react-icons/md'
+import { MdArrowForwardIos, MdLabel, MdMail } from 'react-icons/md'
 
 interface ProfileCardProps {
     label: string
@@ -60,7 +60,12 @@ export default function Settings(props: DashboardProps): JSX.Element {
     const [selectedTab, setSelectedTab] = useState(0)
 
     return (
-        <Flex padding='48px' flexDirection='column' width='100%'>
+        <Flex 
+            padding='48px'
+            flexDirection='column' 
+            width='100%' 
+            overflowY='scroll'
+        >
             <Text fontSize='3xl'>Settings</Text>
 
             <Tabs
@@ -94,12 +99,6 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     label='Email'
                     text={props.user.email}
                     icon={<MdMail color='rgb(22, 135, 94)' />}
-                />
-
-                <ProfileCard
-                    label='Password'
-                    text={props.user.password}
-                    icon={<MdPassword color='rgb(22, 135, 94)' />}
                 />
             </Flex>
         </Flex>

@@ -1,5 +1,5 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
+import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
     isSelected: boolean,
@@ -7,37 +7,46 @@ interface DisplayProps<T extends MenuItem | SubMenuItem> {
     onClick: () => void
 }
 
-function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
-
+function MenuItemButton({ children, ...props }: HTMLChakraProps<'button'> & PropsWithChildren): JSX.Element {
     return (
         <Button
-            background={props.isSelected ? 'lightBlue' : 'transparent'}
             flexDirection='row'
             justifyContent='flex-start'
             paddingStart='16px'
+            minHeight='35px'
+            height='35px'
+            borderRadius='0px'
+            {...props}
+        >
+            {children}
+        </Button>
+    )
+}
+
+function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
+    return (
+        <MenuItemButton
+            background={props.isSelected ? 'lightBlue' : 'transparent'}
             onClick={props.onClick}
         >
             {props.item.leftContent}
 
             {props.isOpen && (
                 <Text 
-                    fontSize='md' 
+                    fontSize='16px' 
                     paddingStart='16px'
                 >{props.item.label}</Text>
             )}
-        </Button>
+        </MenuItemButton>
     )
 }
 
 function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.Element {
-
     return (
-        <Button
+        <MenuItemButton
             background={props.isSelected ? 'lightBlue' : 'transparent'}
-            borderRadius='0px'
-            justifyContent='flex-start'
             onClick={props.onClick}
-        >{props.item.label}</Button>
+        >{props.item.label}</MenuItemButton>
     )
 }
 
@@ -82,7 +91,7 @@ export default function Menu(props: MenuProps): JSX.Element {
     }
 
     return (
-        <Flex shadow='md' overflow='scroll'>
+        <Flex shadow='md' overflowY='auto'>
             <Flex flexDirection='column'>
                 {props.menuItems.map((menuItem, index) => {
                     return (
@@ -96,7 +105,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                             />
 
                             {props.isOpen && openMenuItems.includes(menuItem) && (
-                                <Flex flexDirection='row'>
+                                <Flex>
                                     <Box opacity={0} paddingStart='16px'>
                                         {menuItem.leftContent}
                                     </Box>
