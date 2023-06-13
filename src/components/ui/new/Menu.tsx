@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
@@ -32,23 +32,49 @@ const selectedBottomBorder = `1px solid ${selectedColor}`
 
 function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
     return (
-        <MenuItemButtonBase
-            onClick={props.onClick}
-            textColor={props.selectedItem?.selectedMenuItem === props.item ? selectedColor : props.textColor}
-            borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? selectedBottomBorder : ''}
-            background={props.background}
+        <Popover 
+            placement='right-start' 
+            trigger='hover' 
+            isOpen={(props.isOpen || !props.item.subMenuItems) ? false : undefined}
         >
-            {props.item.leftContent}
+            <PopoverTrigger>
+                <Box>
+                    <MenuItemButtonBase
+                        onClick={props.onClick}
+                        textColor={props.selectedItem?.selectedMenuItem === props.item ? selectedColor : props.textColor}
+                        borderBottom={props.selectedItem?.selectedMenuItem === props.item && !props.selectedItem?.selectedSubMenuItem ? selectedBottomBorder : ''}
+                        background={props.background}
+                        width='100%'
+                    >
+                        {props.item.leftContent}
 
-            {props.isOpen && (
-                <Text 
-                    fontSize='16px' 
-                    paddingStart='16px'
-                    fontWeight='bold'
-                    textColor={props.textColor}
-                >{props.item.label}</Text>
-            )}
-        </MenuItemButtonBase>
+                        {props.isOpen && (
+                            <Text
+                                fontSize='16px'
+                                paddingStart='16px'
+                                fontWeight='bold'
+                                textColor={props.textColor}
+                            >{props.item.label}</Text>
+                        )}
+                    </MenuItemButtonBase>
+                </Box>
+            </PopoverTrigger>
+            <PopoverContent>
+                <PopoverBody padding='0px'>
+                    <Flex flexDirection='column'>
+                        {props.item.subMenuItems && props.item.subMenuItems.map((subMenuItem, index) => (
+                            <Button 
+                                key={index} 
+                                background={props.background} 
+                                justifyContent='flex-start'
+                            >
+                                {subMenuItem.label}
+                            </Button>
+                        ))}
+                    </Flex>
+                </PopoverBody>
+            </PopoverContent>
+        </Popover>
     )
 }
 
