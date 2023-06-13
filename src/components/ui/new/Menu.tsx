@@ -1,9 +1,10 @@
-import { background, Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HTMLChakraProps, Text } from '@chakra-ui/react'
 import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
-    isSelected: boolean,
-    item: T,
+    isSelected: boolean
+    item: T
+    textColor: string
     onClick: () => void
 }
 
@@ -28,6 +29,7 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
         <MenuItemButton
             background={props.isSelected ? 'lightBlue' : 'transparent'}
             onClick={props.onClick}
+            textColor={props.textColor}
         >
             {props.item.leftContent}
 
@@ -47,8 +49,18 @@ function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.E
         <MenuItemButton
             background={props.isSelected ? 'lightBlue' : 'transparent'}
             onClick={props.onClick}
+            textColor={props.textColor}
         >{props.item.label}</MenuItemButton>
     )
+}
+
+type MenuItemGroupDock = 'top' | 'bottom'
+
+export interface MenuItemGroup {
+    menuItems: MenuItem[]
+    dock: MenuItemGroupDock
+    background: string
+    textColor: string
 }
 
 export interface SubMenuItem {
@@ -64,7 +76,7 @@ export interface MenuItem {
 interface MenuProps {
     isOpen: boolean
     onItemClick: (item: MenuItem | SubMenuItem) => void
-    menuItems: MenuItem[]
+    menuItemGroups: MenuItemGroup[]
 }
 
 export default function Menu(props: MenuProps): JSX.Element {
@@ -105,44 +117,65 @@ export default function Menu(props: MenuProps): JSX.Element {
                     }
                 }
             }
+            width={props.isOpen ? '294px' : 'auto'}
+            flexDirection='column'
             background='#fbf7f0'
-            width={props.isOpen ? '264px' : 'auto'}
         >
-            <Flex flexDirection='column' width='100%'>
-                {props.menuItems.map((menuItem, index) => {
-                    return (
-                        <>
-                            <MenuItemDisplay 
-                                key={index}
-                                isSelected={selectedItem?.label === menuItem.label}
-                                item={menuItem} 
-                                onClick={() => itemClickHandler(menuItem)} 
-                                {...props} 
-                            />
+            {[
+                props.menuItemGroups.filter(menuItemGroup => menuItemGroup.dock === 'top'), 
+                props.menuItemGroups.filter(menuItemGroup => menuItemGroup.dock === 'bottom')
+            ].map(((menuItemGroup, tupleIndex) => (
+                <Flex 
+                    justifySelf={tupleIndex === 0 ? 'flex-start' : ''} 
+                    marginTop={tupleIndex === 1 ? 'auto' : ''} 
+                    width='100%'
+                >
+                    {menuItemGroup.map((menuItemGroup, index) => (
+                        <Flex
+                            key={index}
+                            flexDirection='column'
+                            width='100%'
+                            background={menuItemGroup.background}
+                        >
+                            {menuItemGroup.menuItems.map((menuItem, index) => {
+                                return (
+                                    <>
+                                        <MenuItemDisplay
+                                            textColor={menuItemGroup.textColor}
+                                            key={index}
+                                            isSelected={selectedItem === menuItem}
+                                            item={menuItem}
+                                            onClick={() => itemClickHandler(menuItem)}
+                                            {...props}
+                                        />
 
-                            {props.isOpen && openMenuItems.includes(menuItem) && (
-                                <Flex>
-                                    <Box opacity={0} paddingStart='16px'>
-                                        {menuItem.leftContent}
-                                    </Box>
+                                        {props.isOpen && openMenuItems.includes(menuItem) && (
+                                            <Flex>
+                                                <Box opacity={0} paddingStart='16px'>
+                                                    {menuItem.leftContent}
+                                                </Box>
 
-                                    <Flex flexDirection='column' width='100%'>
-                                        {menuItem.subMenuItems && menuItem.subMenuItems.map((subMenuItem, index) => (
-                                            <SubMenuItemDisplay 
-                                                key={index}
-                                                isSelected={selectedItem === subMenuItem}
-                                                item={subMenuItem} 
-                                                onClick={() => itemClickHandler(subMenuItem)}
-                                                {...props} 
-                                            />
-                                        ))}
-                                    </Flex>
-                                </Flex>
-                            )}
-                        </>
-                    )
-                })}
-            </Flex>
+                                                <Flex flexDirection='column' width='100%'>
+                                                    {menuItem.subMenuItems && menuItem.subMenuItems.map((subMenuItem, index) => (
+                                                        <SubMenuItemDisplay
+                                                            textColor={menuItemGroup.textColor}
+                                                            key={index}
+                                                            isSelected={selectedItem === subMenuItem}
+                                                            item={subMenuItem}
+                                                            onClick={() => itemClickHandler(subMenuItem)}
+                                                            {...props}
+                                                        />
+                                                    ))}
+                                                </Flex>
+                                            </Flex>
+                                        )}
+                                    </>
+                                )
+                            })}
+                        </Flex>
+                    ))}
+                </Flex>
+            )))}
         </Flex>
     )
 }

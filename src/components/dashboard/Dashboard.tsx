@@ -1,6 +1,6 @@
-import { Flex, Button, IconButton, Text } from '@chakra-ui/react'
-import { MdChecklist, MdCompassCalibration, MdDownload, MdElectricBolt, MdExplore, MdLightbulb, MdPerson, MdSpeed, MdStar, MdTune } from 'react-icons/md'
-import Menu, { MenuItem } from '../ui/new/Menu'
+import { Flex, Button } from '@chakra-ui/react'
+import { MdChecklist, MdClass, MdCompassCalibration, MdDirections, MdDownload, MdElectricBolt, MdExplore, MdLightbulb, MdPerson, MdStar, MdTune } from 'react-icons/md'
+import Menu, { MenuItemGroup } from '../ui/new/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/new/AppBar'
 import Settings from './pages/Settings'
@@ -8,71 +8,107 @@ import { useState } from 'react'
 
 const iconSize = 20
 
-const menuItems: MenuItem[] = [
-    {
-        leftContent: <MdStar size={iconSize} />,
-        label: 'Baseline Plan'
-    },
-    {
-        leftContent: <MdChecklist size={iconSize} />,
-        label: 'Overview',
-        subMenuItems: [
-            { label: 'Accounts and Assets' },
-            { label: 'Home and Real Estate' },
-            { label: 'Debts' },
-            { label: 'Income' },
-            { label: 'Expenses and Healthcare' },
-            { label: 'Money Flows' },
-            { label: 'Estate Planning' },
-            { label: 'Profile and Goals' },
-            { label: 'Assumptions' }
-        ]
-    },
-    {
-        leftContent: <MdElectricBolt size={iconSize} />,
-        label: 'Coach',
-        subMenuItems: [
-            { label: 'Suggestions' },
-            { label: 'Progress' },
-            { label: 'Strengthen Your Plan' }
-        ]
-    },
-    {
-        leftContent: <MdLightbulb size={iconSize} />,
-        label: 'Insights',
-        subMenuItems: [
-            { label: 'Library' },
-            { label: 'Lifetime Income Projection' },
-            { label: 'Net Worth Statement' },
-            { label: 'Analysis of Goals' },
-            { label: 'IRMAA' },
-            { label: 'Lifetime Cash Flow' },
-            { label: 'Projected Net Worth' },
-            { label: 'Timeline of Milestones' },
-            { label: 'Income & Expenses' },
-            { label: 'Savings' },
-            { label: 'Taxes' },
-            { label: 'Savings Timeline' },
-            { label: 'What You Need' },
-            { label: 'Withdrawals' },
-            { label: 'Surplus-Gap' }
-        ]
-    },
-    {
-        leftContent: <MdExplore />,
-        label: 'Explorers',
-        subMenuItems: [
-            { label: 'What If' },
-            { label: 'Monte Carlo' },
-            { label: 'Social Security Explorer' },
-            { label: 'Roth Conversion Explorer' }
-        ]
-    },
-    {
-        leftContent: <MdDownload />,
-        label: 'Download/Print'
-    }
-]
+const topMenuItemGroup: MenuItemGroup = {
+    background: 'transparent',
+    textColor: 'black',
+    dock: 'top',
+    menuItems: [
+        {
+            leftContent: <MdStar size={iconSize} />,
+            label: 'Baseline Plan'
+        },
+        {
+            leftContent: <MdChecklist size={iconSize} />,
+            label: 'Overview',
+            subMenuItems: [
+                { label: 'Accounts and Assets' },
+                { label: 'Home and Real Estate' },
+                { label: 'Debts' },
+                { label: 'Income' },
+                { label: 'Expenses and Healthcare' },
+                { label: 'Money Flows' },
+                { label: 'Estate Planning' },
+                { label: 'Profile and Goals' },
+                { label: 'Assumptions' }
+            ]
+        },
+        {
+            leftContent: <MdElectricBolt size={iconSize} />,
+            label: 'Coach',
+            subMenuItems: [
+                { label: 'Suggestions' },
+                { label: 'Progress' },
+                { label: 'Strengthen Your Plan' }
+            ]
+        },
+        {
+            leftContent: <MdLightbulb size={iconSize} />,
+            label: 'Insights',
+            subMenuItems: [
+                { label: 'Library' },
+                { label: 'Lifetime Income Projection' },
+                { label: 'Net Worth Statement' },
+                { label: 'Analysis of Goals' },
+                { label: 'IRMAA' },
+                { label: 'Lifetime Cash Flow' },
+                { label: 'Projected Net Worth' },
+                { label: 'Timeline of Milestones' },
+                { label: 'Income & Expenses' },
+                { label: 'Savings' },
+                { label: 'Taxes' },
+                { label: 'Savings Timeline' },
+                { label: 'What You Need' },
+                { label: 'Withdrawals' },
+                { label: 'Surplus-Gap' }
+            ]
+        },
+        {
+            leftContent: <MdExplore />,
+            label: 'Explorers',
+            subMenuItems: [
+                { label: 'What If' },
+                { label: 'Monte Carlo' },
+                { label: 'Social Security Explorer' },
+                { label: 'Roth Conversion Explorer' }
+            ]
+        },
+        {
+            leftContent: <MdDownload />,
+            label: 'Download/Print'
+        }
+    ]
+}
+
+const bottomMenuItemGroup: MenuItemGroup = { 
+    background: '#0a2f38',
+    textColor: 'white',
+    dock: 'bottom',
+    menuItems: [
+        {
+            leftContent: <MdDirections size={iconSize} />,
+            label: 'Scenarios'
+        },
+        {
+            leftContent: <MdClass size={iconSize} />,
+            label: 'Classroom'
+        },
+        {
+            leftContent: <MdPerson size={iconSize} />,
+            label: 'Expertise',
+            subMenuItems: [
+                { label: 'Help Center' },
+                { label: 'Live Events' },
+                { label: 'Community' }
+            ]
+        },
+        {
+            leftContent: <MdCompassCalibration size={iconSize} />,
+            label: 'About'
+        }
+    ]
+}
+
+const menuItemGroups: MenuItemGroup[] = [topMenuItemGroup, bottomMenuItemGroup]
 
 interface DashboardMenuProps {
     isOpen: boolean
@@ -83,7 +119,7 @@ function DashboardMenu(props: DashboardMenuProps): JSX.Element {
         <Menu 
             isOpen={props.isOpen} 
             onItemClick={(index) => { }}
-            menuItems={menuItems}
+            menuItemGroups={menuItemGroups}
         />
     )
 }
