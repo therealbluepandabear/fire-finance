@@ -16,7 +16,7 @@ import {
 import Menu, { MenuItemGroup } from '../ui/new/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/new/AppBar'
-import Settings from './pages/Settings'
+import Plans from './pages/Plans'
 import { useState } from 'react'
 
 interface DashboardMenuProps {
@@ -92,7 +92,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 <DashboardMenu isOpen={isMenuOpen} />
 
                 <Flex flexGrow={1} minHeight='0' overflowY='scroll'>
-                    <Settings {...props} />
+                    <Plans {...props} />
                 </Flex>
             </Flex>
         </Flex>

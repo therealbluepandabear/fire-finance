@@ -1,6 +1,6 @@
 import { DashboardProps } from '../Dashboard'
 import { Flex, Text, TabList, Tab, Tabs, Box, Button, IconButton, Grid } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MdAdd, MdArrowForwardIos, MdCompare, MdCompareArrows, MdLabel, MdMail, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
 import Divider from '../../ui/new/Divider'
 
@@ -108,6 +108,25 @@ function getRatingBadgeColor(rating: PlanRating): string {
 }
 
 function Plan(props: PlanProps): JSX.Element {
+
+    const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
+    const hasFavoritedIcon = <MdStar color='#FEBA4F' size={25} />
+
+    const [favoriteButtonIcon, setFavoriteIcon] = useState(yetToFavoriteIcon)
+    const [hasFavorited, setHasFavorited] = useState(false)
+
+    useEffect(() => {
+        if (hasFavorited) {
+            setFavoriteIcon(hasFavoritedIcon)
+        } else {
+            setFavoriteIcon(yetToFavoriteIcon)
+        }
+    }, [hasFavorited])
+
+    function favoriteButtonClickHandler(): void {
+        setHasFavorited(prevHasFavorited => !prevHasFavorited)
+    }
+
     return (
         <Box
             alignSelf='flex-start'
@@ -121,8 +140,6 @@ function Plan(props: PlanProps): JSX.Element {
                 height='240px' 
                 background='white' 
                 position='relative' 
-                backgroundImage='https://i.imgur.com/0jkdIGA.png'
-                backgroundPosition='bottom - 3'
             >
                 <Flex 
                     position='absolute'
@@ -164,7 +181,8 @@ function Plan(props: PlanProps): JSX.Element {
                     marginLeft='auto'
                     aria-label='Favorite'
                     background='transparent'
-                    icon={<MdStarOutline color='#c5c5c5' size={25} />}
+                    icon={favoriteButtonIcon}
+                    onClick={favoriteButtonClickHandler}
                 />
             </Flex>
         </Box>
