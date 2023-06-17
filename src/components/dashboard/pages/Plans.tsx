@@ -83,6 +83,7 @@ function PlanRatingBadge(props: PlanRatingBadgeProps): JSX.Element {
 type PlanRating = 'A+' | 'A' | 'B' | 'B-' | 'C' | 'F'
 
 export interface Plan {
+    id: string
     name: string
     creationDate: Date
     rating: PlanRating
@@ -199,22 +200,27 @@ function Plan(props: PlanProps): JSX.Element {
     )
 }
 
-const initialPlans: Plan[] = [
-    { name: 'Plan 1', creationDate: new Date(2023, 0, 1), rating: 'A' }
-]
-
 export default function Settings(props: DashboardProps): JSX.Element {
 
-    const [plans, setPlans] = useState(initialPlans)
+    const [plans, setPlans] = useState<Plan[]>([])
 
     function addPlanClickHandler(): void {
-        setPlans(prevPlans => [...prevPlans, {...initialPlans[0]}])
-        
-        MenuHandler.addPlan({...initialPlans[0]})
+        const plan: Plan = {
+            id: URL.createObjectURL(new Blob([])).slice(-36),
+            name: 'Plan 1',
+            creationDate: new Date(2002, 0, 9),
+            rating: 'A'
+        }
+
+        setPlans(prevPlans => [...prevPlans, plan])
+
+        MenuHandler.addPlan(plan)
     }
 
     function deletePlanClickHandler(plan: Plan): void {
         setPlans(prevPlans => prevPlans.filter(_plan => _plan !== plan))
+
+        MenuHandler.removePlan(plan)
     }
 
     return (

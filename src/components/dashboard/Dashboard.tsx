@@ -23,6 +23,8 @@ export class MenuHandler {
 
     private constructor() { }
 
+    private static PLANS: Plan[] = []
+
     private static readonly PLAN_MENU: MenuItem = {
         leftContent: <MdHome size={20} />,
         label: 'Plans',
@@ -30,15 +32,23 @@ export class MenuHandler {
     }
 
     static addPlan(plan: Plan): void {
+        this.PLANS.push(plan)
+
         this.PLAN_MENU.subMenuItems?.push({ label: plan.name })
     }
 
+    static removePlan(plan: Plan): void {
+        this.PLANS = this.PLANS.filter(_plan => _plan.id !== plan.id)
+
+        this.PLAN_MENU.subMenuItems = this.PLANS.map(_plan => ({ label: plan.name }))
+    }
+
     static readonly menu: MenuItemGroup[] = [{
-            menuItems: [this.PLAN_MENU],
-            dock: 'top',
-            background: '#fbf7f0',
-            textColor: 'black'
-        }]
+        menuItems: [this.PLAN_MENU],
+        dock: 'top',
+        background: '#fbf7f0',
+        textColor: 'black'
+    }]
 }
 
 interface DashboardMenuProps {
