@@ -1,4 +1,4 @@
-import { DashboardProps } from '../Dashboard'
+import { DashboardProps, MenuHandler } from '../Dashboard'
 import { Flex, Text, TabList, Tab, Tabs, Box, Button, IconButton, Grid } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { MdAdd, MdArrowForwardIos, MdCompare, MdCompareArrows, MdLabel, MdMail, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
@@ -82,7 +82,7 @@ function PlanRatingBadge(props: PlanRatingBadgeProps): JSX.Element {
 
 type PlanRating = 'A+' | 'A' | 'B' | 'B-' | 'C' | 'F'
 
-interface Plan {
+export interface Plan {
     name: string
     creationDate: Date
     rating: PlanRating
@@ -209,6 +209,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
 
     function addPlanClickHandler(): void {
         setPlans(prevPlans => [...prevPlans, {...initialPlans[0]}])
+        
+        MenuHandler.addPlan({...initialPlans[0]})
     }
 
     function deletePlanClickHandler(plan: Plan): void {

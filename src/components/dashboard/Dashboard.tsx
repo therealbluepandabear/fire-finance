@@ -13,11 +13,33 @@ import {
     MdStar, 
     MdTune 
 } from 'react-icons/md'
-import Menu, { MenuItemGroup } from '../ui/new/Menu'
+import Menu, { MenuItem, MenuItemGroup } from '../ui/new/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/new/AppBar'
-import Plans from './pages/Plans'
+import Plans, { Plan } from './pages/Plans'
 import { useState } from 'react'
+
+export class MenuHandler {
+
+    private constructor() { }
+
+    private static readonly PLAN_MENU: MenuItem = {
+        leftContent: <MdHome size={20} />,
+        label: 'Plans',
+        subMenuItems: []
+    }
+
+    static addPlan(plan: Plan): void {
+        this.PLAN_MENU.subMenuItems?.push({ label: plan.name })
+    }
+
+    static readonly menu: MenuItemGroup[] = [{
+            menuItems: [this.PLAN_MENU],
+            dock: 'top',
+            background: '#fbf7f0',
+            textColor: 'black'
+        }]
+}
 
 interface DashboardMenuProps {
     isOpen: boolean
@@ -28,24 +50,7 @@ function DashboardMenu(props: DashboardMenuProps): JSX.Element {
         <Menu 
             isOpen={props.isOpen} 
             onItemClick={(index) => { }}
-            menuItemGroups={[ 
-                {
-                    menuItems: [{ 
-                        leftContent: <MdHome size={20} />, 
-                        label: 'Plans',
-                        subMenuItems: [ 
-                            { label: 'Plan 1' },
-                            { label: 'Plan 2' },
-                            { label: 'Plan 3' },
-                            { label: 'Plan 4' },
-                            { label: 'Plan 5' }
-                        ]
-                    }], 
-                    dock: 'top', 
-                    background: '#fbf7f0', 
-                    textColor: 'black' 
-                }
-            ]}
+            menuItemGroups={MenuHandler.menu}
         />
     )
 }
