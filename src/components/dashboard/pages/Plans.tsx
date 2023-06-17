@@ -1,7 +1,7 @@
 import { DashboardProps, MenuHandler } from '../Dashboard'
-import { Flex, Text, TabList, Tab, Tabs, Box, Button, IconButton, Grid } from '@chakra-ui/react'
+import { Flex, Text, Box, Button, IconButton, Grid, Image } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { MdAdd, MdArrowForwardIos, MdCompare, MdCompareArrows, MdLabel, MdMail, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
+import { MdAdd, MdArrowForwardIos, MdCompareArrows, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
 import Divider from '../../ui/new/Divider'
 
 interface ProfileCardProps {
@@ -274,23 +274,55 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 <Divider />
             </Flex>
 
-            <Grid 
-                paddingBottom='36px'
-                templateColumns={{ 
-                    base: 'repeat(1, 1fr)',
-                    md: 'repeat(2, 1fr)', 
-                    xl: 'repeat(3, 1fr)'
-                }} 
-                gap='12px'
-            >
-                {plans.map((plan, index) => (
-                    <Plan 
-                        key={index} 
-                        onDeletePlan={deletePlanClickHandler} 
-                        plan={plan} 
-                    />
-                ))}
-            </Grid>
+            {plans.length > 0 ? (
+                <Grid 
+                    paddingBottom='36px'
+                    templateColumns={{ 
+                        base: 'repeat(1, 1fr)',
+                        md: 'repeat(2, 1fr)', 
+                        xl: 'repeat(3, 1fr)'
+                    }} 
+                    gap='12px'
+                >
+                    {plans.map((plan, index) => (
+                        <Plan 
+                            key={index} 
+                            onDeletePlan={deletePlanClickHandler} 
+                            plan={plan} 
+                        />
+                    ))}
+                </Grid>
+            ) : (
+                <Flex 
+                    flexGrow={1} 
+                    alignItems='center' 
+                    justifyContent='center' 
+                >
+                    <Flex 
+                        // background=' #fbf7f0' 
+                        width='400px'
+                        height='400px'
+                        flexDirection='column' 
+                        gap='32px' 
+                        alignItems='center' 
+                        justifyContent='center'
+                        borderRadius='100px'
+                    >
+                        <Image src='/empty_state.svg' width='250px' padding='0' />
+
+                        <Flex flexDirection='column' gap='16px'>
+                            <Text 
+                                fontFamily='manrope' 
+                                fontSize='3xl' 
+                                textAlign='center' 
+                                color='black'
+                            >No plans</Text>
+                            
+                            <Text textAlign='center' color='gray'>You currently have no plans, press 'Add' to get started on your journey.</Text>
+                        </Flex>
+                    </Flex>
+                </Flex>
+            )}
         </Flex>
     )
 }
