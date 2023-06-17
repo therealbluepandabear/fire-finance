@@ -40,7 +40,7 @@ export class MenuHandler {
     static removePlan(plan: Plan): void {
         this.PLANS = this.PLANS.filter(_plan => _plan.id !== plan.id)
 
-        this.PLAN_MENU.subMenuItems = this.PLANS.map(_plan => ({ label: plan.name }))
+        this.PLAN_MENU.subMenuItems = this.PLANS.map(_plan => ({ label: _plan.name }))
     }
 
     static readonly menu: MenuItemGroup[] = [{

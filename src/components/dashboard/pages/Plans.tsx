@@ -207,6 +207,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
     function addPlanClickHandler(): void {
         const id = URL.createObjectURL(new Blob([])).slice(-36)
 
+        console.log(id)
+
         const plan: Plan = {
             id: id,
             name: `Plan ${plans.length}`,
@@ -220,7 +222,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
     }
 
     function deletePlanClickHandler(plan: Plan): void {
-        setPlans(prevPlans => prevPlans.filter(_plan => _plan !== plan))
+        setPlans(prevPlans => prevPlans.filter(_plan => _plan.id !== plan.id))
 
         MenuHandler.removePlan(plan)
     }
@@ -281,7 +283,13 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 }} 
                 gap='12px'
             >
-                {plans.map((plan, index) => <Plan key={index} onDeletePlan={deletePlanClickHandler} plan={plan} />)}
+                {plans.map((plan, index) => (
+                    <Plan 
+                        key={index} 
+                        onDeletePlan={deletePlanClickHandler} 
+                        plan={plan} 
+                    />
+                ))}
             </Grid>
         </Flex>
     )
