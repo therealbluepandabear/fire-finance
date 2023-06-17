@@ -84,12 +84,13 @@ type PlanRating = 'A+' | 'A' | 'B' | 'B-' | 'C' | 'F'
 
 interface Plan {
     name: string
-    date: string
+    creationDate: Date
     rating: PlanRating
 }
 
 interface PlanProps {
     plan: Plan
+    onDeletePlan: (plan: Plan) => void
 }
 
 function getRatingBadgeColor(rating: PlanRating): string {
@@ -110,10 +111,18 @@ function getRatingBadgeColor(rating: PlanRating): string {
 function Plan(props: PlanProps): JSX.Element {
 
     const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
-    const hasFavoritedIcon = <MdStar color='#FEBA4F' size={25} />
+    const hasFavoritedIcon = <MdStar color='#feba4f' size={25} />
 
     const [favoriteButtonIcon, setFavoriteIcon] = useState(yetToFavoriteIcon)
     const [hasFavorited, setHasFavorited] = useState(false)
+
+    const options: Intl.DateTimeFormatOptions = { 
+        month: 'short',
+        day: 'numeric', 
+        year: 'numeric' 
+    }
+    
+    const formattedCreationDate = props.plan.creationDate.toLocaleString('en-US', options)
 
     useEffect(() => {
         if (hasFavorited) {
@@ -162,6 +171,7 @@ function Plan(props: PlanProps): JSX.Element {
                         minHeight='0px'
                         marginRight='8px'
                         borderRadius='999px'
+                        onClick={() => props.onDeletePlan(props.plan)}
                     />
                 </Flex>
             </Box>
@@ -174,7 +184,7 @@ function Plan(props: PlanProps): JSX.Element {
             >
                 <Flex flexDirection='column'>
                     <Text fontSize='lg'>{props.plan.name}</Text>
-                    <Text color='rgb(22, 135, 94)' fontSize='sm'>{props.plan.date}</Text>
+                    <Text color='rgb(22, 135, 94)'  fontSize='sm'>{formattedCreationDate}</Text>
                 </Flex>
 
                 <IconButton
@@ -189,16 +199,22 @@ function Plan(props: PlanProps): JSX.Element {
     )
 }
 
-const plans: Plan[] = [
-    { name: 'Plan 1', date: 'June 26', rating: 'A' },
-    { name: 'Plan 2', date: 'June 27', rating: 'A+' },
-    { name: 'Plan 3', date: 'June 28', rating: 'F' },
-    { name: 'Plan 4', date: 'June 29', rating: 'B-' },
-    { name: 'Plan 5', date: 'June 30', rating: 'B' },
-    { name: 'Plan 5', date: 'June 30', rating: 'A' }
+const initialPlans: Plan[] = [
+    { name: 'Plan 1', creationDate: new Date(2023, 0, 1), rating: 'A' }
 ]
 
 export default function Settings(props: DashboardProps): JSX.Element {
+
+    const [plans, setPlans] = useState(initialPlans)
+
+    function addPlanClickHandler(): void {
+        setPlans(prevPlans => [...prevPlans, {...initialPlans[0]}])
+    }
+
+    function deletePlanClickHandler(plan: Plan): void {
+        setPlans(prevPlans => prevPlans.filter(_plan => _plan !== plan))
+    }
+
     return (
         <Flex 
             padding='48px'
@@ -229,6 +245,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                             marginLeft='auto'
                             color='white'
                             background='#0d3f4a'
+                            onClick={addPlanClickHandler}
                         >Add</Button>
 
                         <Button
@@ -254,7 +271,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 }} 
                 gap='12px'
             >
-                {plans.map((plan, index) => <Plan key={index} plan={plan} />)}
+                {plans.map((plan, index) => <Plan key={index} onDeletePlan={deletePlanClickHandler} plan={plan} />)}
             </Grid>
         </Flex>
     )
