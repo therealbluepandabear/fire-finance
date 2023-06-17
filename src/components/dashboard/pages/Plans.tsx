@@ -205,9 +205,11 @@ export default function Settings(props: DashboardProps): JSX.Element {
     const [plans, setPlans] = useState<Plan[]>([])
 
     function addPlanClickHandler(): void {
+        const id = URL.createObjectURL(new Blob([])).slice(-36)
+
         const plan: Plan = {
-            id: URL.createObjectURL(new Blob([])).slice(-36),
-            name: 'Plan 1',
+            id: id,
+            name: `Plan ${plans.length}`,
             creationDate: new Date(2002, 0, 9),
             rating: 'A'
         }
