@@ -1,7 +1,8 @@
 import { DashboardProps } from '../Dashboard'
 import { Flex, Text, TabList, Tab, Tabs, Box, Button, IconButton, Grid } from '@chakra-ui/react'
 import { useState } from 'react'
-import { MdAdd, MdArrowForwardIos, MdCompare, MdCompareArrows, MdLabel, MdMail, MdStar, MdStarOutline } from 'react-icons/md'
+import { MdAdd, MdArrowForwardIos, MdCompare, MdCompareArrows, MdLabel, MdMail, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
+import Divider from '../../ui/new/Divider'
 
 interface ProfileCardProps {
     label: string
@@ -61,12 +62,10 @@ interface PlanRatingBadgeProps {
 }
 
 function PlanRatingBadge(props: PlanRatingBadgeProps): JSX.Element {
-    const ratingBadgeColor = getRatingBadgeColor(props.rating)
-
     return (
         <Flex
             position='absolute'
-            background={ratingBadgeColor}
+            background={getRatingBadgeColor(props.rating)}
             width='25px'
             height='25px'
             margin='12px'
@@ -118,11 +117,44 @@ function Plan(props: PlanProps): JSX.Element {
             _hover={{ shadow: 'md' }}
             width='100%'
         >
-            <Box height='240px' background='black' position='relative'>
-                <PlanRatingBadge rating={props.plan.rating} />
+            <Box 
+                height='240px' 
+                background='white' 
+                position='relative' 
+                backgroundImage='https://i.imgur.com/0jkdIGA.png'
+                backgroundPosition='bottom - 3'
+            >
+                <Flex 
+                    position='absolute'
+                    width='100%'
+                    background='white'
+                    height='40px'
+                    borderRadius='0px'
+                    alignItems='center'
+                >
+                    <PlanRatingBadge rating={props.plan.rating} />
+
+                    <IconButton
+                        marginLeft='auto'
+                        background='white'
+                        icon={<MdMoreVert size={20} />}
+                        aria-label='Options'
+                        width='30px'
+                        height='30px'
+                        minWidth='0px'
+                        minHeight='0px'
+                        marginRight='8px'
+                        borderRadius='999px'
+                    />
+                </Flex>
             </Box>
 
-            <Flex padding='16px' gap='8px' alignItems='center'>
+            <Flex 
+                padding='16px' 
+                gap='8px' 
+                alignItems='center' 
+                borderTop='1px solid #e1e1dc'
+            >
                 <Flex flexDirection='column'>
                     <Text fontSize='lg'>{props.plan.name}</Text>
                     <Text color='rgb(22, 135, 94)' fontSize='sm'>{props.plan.date}</Text>
@@ -192,7 +224,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     </Flex>
                 </Flex>
 
-                <Box height='1px' background='#e1e1dc' marginTop='26px' marginBottom='36px' />
+                <Divider />
             </Flex>
 
             <Grid 
