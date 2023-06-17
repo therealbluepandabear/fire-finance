@@ -1,4 +1,5 @@
 import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
+import { AnimatePresence, motion } from 'framer-motion'
 import { PropsWithChildren, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
@@ -163,7 +164,9 @@ export default function Menu(props: MenuProps): JSX.Element {
     return (
         <Flex 
             shadow='md' 
-            overflow='auto'
+            overflowY='auto'
+            overflowX='hidden'
+            zIndex='999'
             sx={
                 {
                     '::-webkit-scrollbar': {
@@ -174,6 +177,7 @@ export default function Menu(props: MenuProps): JSX.Element {
                     }
                 }
             }
+            minWidth={props.isOpen ? '294px' : '0px' }
             width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : 'auto' }}
             flexDirection='column'
             background='#fbf7f0'

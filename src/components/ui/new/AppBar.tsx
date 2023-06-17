@@ -30,7 +30,7 @@ export default function AppBar(props: AppBarProps): JSX.Element {
                 />
             )}
 
-            <Text fontSize={{ base: 'lg', md: '2xl' }}>FireFinance</Text>
+            <Text fontSize={{ base: 'lg', md: '2xl' }} fontFamily='manrope'>FireFinance</Text>
 
             <Flex
                 marginLeft='auto'

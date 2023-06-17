@@ -29,3 +29,11 @@ body {
     font-weight: 600;
     src: url('../public/noto-sans-v28-latin-600.woff2') format('woff2');
 }
+
+@font-face {
+    font-display: swap;
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../public/manrope-v14-latin-500.woff2') format('woff2');
+}

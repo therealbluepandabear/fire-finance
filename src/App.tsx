@@ -1,11 +1,10 @@
-import { User } from './api'
 import Dashboard from './components/dashboard/Dashboard'
+import RetirementCalculator from './components/retirement-calculator/RetirementCalculator'
 
 function App() {
-    const user: User = { id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }
-
     return (
-        <Dashboard user={user} />
+        <Dashboard user={ { id: 0, email: 'todoescode@gmail.com', password: 'DFA2532423' } } />
+        // <RetirementCalculator />
     )
 }
 
