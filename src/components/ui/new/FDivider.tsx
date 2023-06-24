@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 
-export default function Divider(): JSX.Element {
+export default function FDivider(): JSX.Element {
     return (
         <Box 
             height='1px' 

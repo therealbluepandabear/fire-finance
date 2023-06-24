@@ -1,61 +1,9 @@
 import { DashboardProps, MenuHandler } from '../Dashboard'
-import { Flex, Text, Box, Button, IconButton, Grid, Image } from '@chakra-ui/react'
+import { Flex, Text, Box, Button, IconButton, Grid, Image, Popover, PopoverBody, PopoverContent, PopoverTrigger, useDisclosure, FocusLock } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { MdAdd, MdArrowForwardIos, MdCompareArrows, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
-import Divider from '../../ui/new/Divider'
-
-interface ProfileCardProps {
-    label: string
-    text: string
-    icon: JSX.Element
-}
-
-function ProfileCard(props: ProfileCardProps): JSX.Element {
-    const [isHovered, setIsHovered] = useState(false)
-
-    function mouseEnterHandler(): void {
-        setIsHovered(true)
-    }
-
-    function mouseLeaveHandler(): void {
-        setIsHovered(false)
-    }
-
-    return (
-        <Flex
-            flexDirection='row'
-            padding='24px'
-            border='1px solid #e1e1dc'
-            borderRadius='2xl'
-            alignItems='center'
-            maxWidth='500px'
-            minWidth='0'
-            _hover={{ borderColor: 'black' }}
-            onMouseEnter={mouseEnterHandler}
-            onMouseLeave={mouseLeaveHandler}
-        >
-            <Flex
-                width='50px'
-                height='50px'
-                background='rgba(22, 135, 94, 0.08)'
-                borderRadius='999px'
-                alignItems='center'
-                justifyContent='center'
-            >
-                {props.icon}
-            </Flex>
-
-            <Flex flexDirection='column' marginLeft='16px'>
-                <Text fontSize='md'>{props.label}</Text>
-                <Text fontSize='sm' color='gray'>{props.text}</Text>
-            </Flex>
-
-            <Box marginLeft='auto' transform={isHovered ? 'translateX(5px)' : ''} transition='transform 0.2s ease-in-out'>
-                <MdArrowForwardIos />
-            </Box>
-        </Flex>
-    )
-}
+import { MdAdd, MdArrowForwardIos, MdCompareArrows, MdContentCopy, MdDelete, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
+import Divider from '../../ui/new/FDivider'
+import { Area, AreaChart, Line, LineChart, ResponsiveContainer } from 'recharts'
 
 interface PlanRatingBadgeProps {
     rating: PlanRating
@@ -89,11 +37,6 @@ export interface Plan {
     rating: PlanRating
 }
 
-interface PlanProps {
-    plan: Plan
-    onDeletePlan: (plan: Plan) => void
-}
-
 function getRatingBadgeColor(rating: PlanRating): string {
     switch (rating) {
         case 'A+':
@@ -109,8 +52,121 @@ function getRatingBadgeColor(rating: PlanRating): string {
     }
 }
 
-function Plan(props: PlanProps): JSX.Element {
+const data = [
+    {
+        name: 'Page A',
+        uv: 4000,
+        pv: 2400,
+        amt: 2400,
+    },
+    {
+        name: 'Page B',
+        uv: 3000,
+        pv: 1398,
+        amt: 2210,
+    },
+    {
+        name: 'Page C',
+        uv: 2000,
+        pv: 9800,
+        amt: 2290,
+    },
+    {
+        name: 'Page D',
+        uv: 2780,
+        pv: 3908,
+        amt: 2000,
+    },
+    {
+        name: 'Page E',
+        uv: 1890,
+        pv: 4800,
+        amt: 2181,
+    },
+    {
+        name: 'Page F',
+        uv: 2390,
+        pv: 3800,
+        amt: 2500,
+    },
+    {
+        name: 'Page G',
+        uv: 3490,
+        pv: 4300,
+        amt: 2100,
+    }
+]
 
+interface PlanPopoverProps {
+    onDuplicate: () => void
+    onDelete: () => void
+}
+
+function PlanPopover(props: PlanPopoverProps): JSX.Element {
+    const { onOpen, onClose, isOpen } = useDisclosure()
+
+    return (
+        <Popover
+            variant='responsive'
+            placement='left-start'
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+        >
+            <PopoverTrigger>
+                <IconButton
+                    marginLeft='auto'
+                    background='white'
+                    icon={<MdMoreVert size={20} />}
+                    aria-label='Options'
+                    width='30px'
+                    height='30px'
+                    minWidth='0px'
+                    minHeight='0px'
+                    marginRight='8px'
+                    borderRadius='999px'
+                />
+            </PopoverTrigger>
+            <PopoverContent>
+                <PopoverBody padding='0px'>
+                    <FocusLock persistentFocus={false}>
+                        <Flex flexDirection='column' width='200px'>
+                            <Button
+                                background='white'
+                                justifyContent='flex-start'
+                                leftIcon={<MdContentCopy />}
+                                borderRadius='0px'
+                                onClick={() => {
+                                    props.onDuplicate()
+                                    onClose()
+                                }}
+                            >Duplicate</Button>
+
+                            <Button
+                                background='white'
+                                justifyContent='flex-start'
+                                leftIcon={<MdDelete />}
+                                borderRadius='0px'
+                                onClick={() => {
+                                    props.onDelete()
+                                    onClose()
+                                }}
+                            >Delete</Button>
+                        </Flex>
+                    </FocusLock>
+                </PopoverBody>
+            </PopoverContent>
+        </Popover>
+    )
+}
+
+interface PlanProps {
+    plan: Plan
+    onDuplicatePlan: (plan: Plan) => void
+    onDeletePlan: (plan: Plan) => void
+}
+
+function Plan(props: PlanProps): JSX.Element {
     const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
     const hasFavoritedIcon = <MdStar color='#feba4f' size={25} />
 
@@ -145,34 +201,35 @@ function Plan(props: PlanProps): JSX.Element {
             border='1px solid #e1e1dc'
             _hover={{ shadow: 'md' }}
             width='100%'
+            minWidth='0px'
         >
-            <Box 
-                height='240px' 
-                background='white' 
-                position='relative' 
-            >
-                <Flex 
+            <Box height='240px' position='relative'>         
+                <ResponsiveContainer>
+                    <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                        <Area 
+                            type='monotone' 
+                            dataKey='pv' 
+                            stroke='#50C878' 
+                            fill='#50C878' 
+                            strokeWidth={3} 
+                            opacity={0.75} 
+                        />
+                    </AreaChart>
+                </ResponsiveContainer>
+
+                <Flex
                     position='absolute'
+                    top='0'
                     width='100%'
-                    background='white'
                     height='40px'
                     borderRadius='0px'
                     alignItems='center'
                 >
                     <PlanRatingBadge rating={props.plan.rating} />
 
-                    <IconButton
-                        marginLeft='auto'
-                        background='white'
-                        icon={<MdMoreVert size={20} />}
-                        aria-label='Options'
-                        width='30px'
-                        height='30px'
-                        minWidth='0px'
-                        minHeight='0px'
-                        marginRight='8px'
-                        borderRadius='999px'
-                        onClick={() => props.onDeletePlan(props.plan)}
+                    <PlanPopover 
+                        onDuplicate={() => props.onDuplicatePlan(props.plan)} 
+                        onDelete={() => props.onDeletePlan(props.plan)}
                     />
                 </Flex>
             </Box>
@@ -183,8 +240,14 @@ function Plan(props: PlanProps): JSX.Element {
                 alignItems='center' 
                 borderTop='1px solid #e1e1dc'
             >
-                <Flex flexDirection='column'>
-                    <Text fontSize='lg'>{props.plan.name}</Text>
+                <Flex flexDirection='column' minWidth='0px'>
+                    <Text 
+                        fontSize='lg' 
+                        textOverflow='ellipsis' 
+                        overflow='hidden' 
+                        whiteSpace='nowrap'
+                    >{props.plan.name}</Text>
+                    
                     <Text color='rgb(22, 135, 94)'  fontSize='sm'>{formattedCreationDate}</Text>
                 </Flex>
 
@@ -200,17 +263,17 @@ function Plan(props: PlanProps): JSX.Element {
     )
 }
 
+function generatePlanId(): string {
+    return URL.createObjectURL(new Blob([])).slice(-36)
+}
+
 export default function Settings(props: DashboardProps): JSX.Element {
 
     const [plans, setPlans] = useState<Plan[]>([])
 
     function addPlanClickHandler(): void {
-        const id = URL.createObjectURL(new Blob([])).slice(-36)
-
-        console.log(id)
-
         const plan: Plan = {
-            id: id,
+            id: generatePlanId(),
             name: `Plan ${plans.length}`,
             creationDate: new Date(2002, 0, 9),
             rating: 'A'
@@ -218,7 +281,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
 
         setPlans(prevPlans => [...prevPlans, plan])
 
-        MenuHandler.addPlan(plan)
+        MenuHandler.addPlan(plan) 
     }
 
     function deletePlanClickHandler(plan: Plan): void {
@@ -227,9 +290,15 @@ export default function Settings(props: DashboardProps): JSX.Element {
         MenuHandler.removePlan(plan)
     }
 
+    function duplicatePlanClickHandler(plan: Plan): void {
+        const duplicatePlan: Plan = { ...plan, id: generatePlanId(), name: `Duplicate of ${plan.name}` }
+
+        setPlans(prevPlans => [...prevPlans, duplicatePlan])
+    }
+
     return (
         <Flex 
-            padding='48px'
+            padding={{ base: '24px', md: '48px' }}
             flexDirection='column' 
             width='100%'
         >
@@ -237,7 +306,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
 
             <Flex flexDirection='column'>
                 <Flex 
-                    marginTop='48px' 
+                    marginTop={{ base: '24px', md: '48px' }}
                     flexDirection={{ base: 'column', xl: 'row' }}
                 >
                     <Flex flexDirection='column' gap='8px'>
@@ -256,8 +325,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
                             leftIcon={<MdAdd color='white' size={20} />}
                             marginLeft='auto'
                             color='white'
-                            background='#0d3f4a'
                             onClick={addPlanClickHandler}
+                            colorScheme='buttonPrimary'
                         >Add</Button>
 
                         <Button
@@ -265,8 +334,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
                             marginLeft='auto'
                             alignSelf='flex-end'
                             border='1px solid #e1e1dc'
-                            background='white'
                             color='black'
+                            variant='outline'
                         >Compare</Button>
                     </Flex>
                 </Flex>
@@ -288,6 +357,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         <Plan 
                             key={index} 
                             onDeletePlan={deletePlanClickHandler} 
+                            onDuplicatePlan={duplicatePlanClickHandler}
                             plan={plan} 
                         />
                     ))}
@@ -299,7 +369,6 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     justifyContent='center' 
                 >
                     <Flex 
-                        // background=' #fbf7f0' 
                         width='400px'
                         height='400px'
                         flexDirection='column' 

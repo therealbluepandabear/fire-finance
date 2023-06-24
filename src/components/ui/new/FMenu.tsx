@@ -131,7 +131,7 @@ function findSubMenuItemParent(menuItemGroups: MenuItemGroup[], subMenuItem: Sub
         .find(menuItem => menuItem.subMenuItems && menuItem.subMenuItems.includes(subMenuItem))
 }
 
-export default function Menu(props: MenuProps): JSX.Element {
+export default function FMenu(props: MenuProps): JSX.Element {
     // If a particular menu item is open it means the 
     // sub items of that menu item are showing
     const [openMenuItems, setOpenMenuItems] = useState<MenuItem[]>([])
@@ -177,8 +177,8 @@ export default function Menu(props: MenuProps): JSX.Element {
                     }
                 }
             }
-            minWidth={props.isOpen ? '294px' : '0px' }
-            width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : 'auto' }}
+            minWidth={{ base: '0px', md: props.isOpen ? '294px' : '52px' }}
+            width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : '52px' }}
             flexDirection='column'
             background='#fbf7f0'
             position={{ base: 'absolute', md: 'static' }}

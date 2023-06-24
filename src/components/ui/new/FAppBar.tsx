@@ -2,10 +2,10 @@ import { Flex, IconButton, Text } from '@chakra-ui/react'
 import { MdMenu } from 'react-icons/md'
 
 type AppBarProps = 
-    { isMenu: true, onMenuClick: () => void, contentRight: JSX.Element[] } | 
-    { isMenu: false, contentRight: JSX.Element[] }
+    { isMenu: true, onMenuClick: () => void, contentRight: JSX.Element } | 
+    { isMenu: false, contentRight: JSX.Element }
 
-export default function AppBar(props: AppBarProps): JSX.Element {
+export default function FAppBar(props: AppBarProps): JSX.Element {
     const height = '76px'
 
     return (
@@ -32,12 +32,8 @@ export default function AppBar(props: AppBarProps): JSX.Element {
 
             <Text fontSize={{ base: 'lg', md: '2xl' }} fontFamily='manrope'>FireFinance</Text>
 
-            <Flex
-                marginLeft='auto'
-                gap='16px'
-                alignItems='center'
-            >
-                {props.contentRight.map((element) => element)}
+            <Flex marginLeft='auto' alignItems='center'>
+                {props.contentRight}
             </Flex>
         </Flex>
     )
