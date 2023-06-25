@@ -5,8 +5,8 @@ import App from './App'
 import theme from './theme'
 
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react'
-import { userApi } from './api'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 
 const root = ReactDOM.createRoot(
@@ -16,10 +16,10 @@ const root = ReactDOM.createRoot(
 root.render(
     <ChakraProvider theme={theme}>
         <React.StrictMode>
-            <ApiProvider api={userApi}>
+            <Provider store={store}>
                 <ColorModeScript initialColorMode={theme.config.initialColorMode} />
                 <App />
-            </ApiProvider>
+            </Provider>
         </React.StrictMode>
     </ChakraProvider>
 )

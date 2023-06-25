@@ -36,6 +36,8 @@ import {
 import Divider from '../../ui/new/FDivider'
 import { Area, AreaChart, Line, LineChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import { plansActions } from '../../../store/plans-slice'
 
 interface PlanRatingBadgeProps {
     rating: PlanRating
@@ -371,8 +373,9 @@ function generatePlanId(): string {
 }
 
 export default function Settings(props: DashboardProps): JSX.Element {
+    const dispatch = useAppDispatch()
 
-    const [plans, setPlans] = useState<Plan[]>([])
+    const plans = useAppSelector(state => state.plans.plans)
 
     const [renameContext, setRenameContext] = useState<Plan | null>(null)
 
@@ -384,21 +387,19 @@ export default function Settings(props: DashboardProps): JSX.Element {
             rating: 'A'
         }
 
-        setPlans(prevPlans => [...prevPlans, plan])
+        dispatch(plansActions.addPlan(plan))
 
         MenuHandler.addPlan(plan) 
     }
 
     function deletePlanClickHandler(plan: Plan): void {
-        setPlans(prevPlans => prevPlans.filter(_plan => _plan.id !== plan.id))
+        dispatch(plansActions.removePlan(plan.id))
 
         MenuHandler.removePlan(plan)
     }
 
     function duplicatePlanClickHandler(plan: Plan): void {
-        const duplicatePlan: Plan = { ...plan, id: generatePlanId(), name: `Duplicate of ${plan.name}` }
-
-        setPlans(prevPlans => [...prevPlans, duplicatePlan])
+        dispatch(plansActions.duplicatePlan(plan.id))
     }
 
     function renamePlanClickHandler(plan: Plan): void {
@@ -406,10 +407,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
     }
 
     function renameHandler(newName: string): void {
-        const newPlan: Plan = { ...renameContext!!, name: newName }
-
-        setPlans(prevPlans => prevPlans.filter(plan => plan.id !== renameContext!!.id))
-        setPlans(prevPlans => [...prevPlans, newPlan])
+        dispatch(plansActions.renamePlan({ id: renameContext!!.id, newName: newName }))
 
         setRenameContext(null)
     }
