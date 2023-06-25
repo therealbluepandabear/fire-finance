@@ -80,7 +80,6 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 aria-label='...'
                 icon={<MdTune size={20} />}
                 borderRadius='999px'
-                border='1px solid #e1e1dc'
                 variant='outline'
             >Assumptions</IconButton>,
 
@@ -90,7 +89,6 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 aria-label='...'
                 icon={<MdPerson size={20} />}
                 borderRadius='999px'
-                border='1px solid #e1e1dc'
                 variant='outline'
             >You</IconButton>
         ], 

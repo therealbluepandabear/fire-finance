@@ -8,13 +8,20 @@ const theme = extendTheme({
     components: {
         Button: {
             baseStyle: {
-                fontWeight: 'normal',
-                _hover: {
-                    backgroundImage: 'linear-gradient(rgb(0 0 0/40%) 0 0)'
-                },
-                _active: {
-                    backgroundImage: 'linear-gradient(rgb(0 0 0/80%) 0 0)'
+                fontWeight: 'normal'
+            },
+            variants: {
+                base: {
+                    _hover: {
+                        backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)'
+                    },
+                    _active: {
+                        backgroundImage: 'linear-gradient(rgb(0 0 0/25%) 0 0)'
+                    }
                 }
+            },
+            defaultProps: {
+                variant: 'base'
             }
         },
         Popover: {
@@ -28,9 +35,7 @@ const theme = extendTheme({
         }
     },
     colors: {
-        buttonPrimary: {
-            500: '#404040'
-        }
+        buttonPrimary: '#1E90FF'
     },
     initialColorMode: 'light',
     useSystemColorMode: false

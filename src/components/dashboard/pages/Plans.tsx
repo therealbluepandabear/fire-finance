@@ -1,9 +1,41 @@
 import { DashboardProps, MenuHandler } from '../Dashboard'
-import { Flex, Text, Box, Button, IconButton, Grid, Image, Popover, PopoverBody, PopoverContent, PopoverTrigger, useDisclosure, FocusLock } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { MdAdd, MdArrowForwardIos, MdCompareArrows, MdContentCopy, MdDelete, MdMoreVert, MdStar, MdStarOutline } from 'react-icons/md'
+import { 
+    Flex, 
+    Text, 
+    Box, 
+    Button, 
+    IconButton,
+    Grid, 
+    Image, 
+    Popover, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverTrigger, 
+    useDisclosure, 
+    FocusLock,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Input,
+    ModalCloseButton
+} from '@chakra-ui/react'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { 
+    MdAdd, 
+    MdCompareArrows, 
+    MdContentCopy, 
+    MdDelete, 
+    MdEdit, 
+    MdMoreVert, 
+    MdStar, 
+    MdStarOutline 
+} from 'react-icons/md'
 import Divider from '../../ui/new/FDivider'
 import { Area, AreaChart, Line, LineChart, ResponsiveContainer } from 'recharts'
+import { useForm } from 'react-hook-form'
 
 interface PlanRatingBadgeProps {
     rating: PlanRating
@@ -97,7 +129,26 @@ const data = [
     }
 ]
 
+interface PlanPopoverButtonProps extends PropsWithChildren {
+    icon: JSX.Element
+    text: string
+    onClick: () => void
+}
+
+function PlanPopoverButton(props: PlanPopoverButtonProps): JSX.Element {
+    return (
+        <Button
+            background='white'
+            justifyContent='flex-start'
+            leftIcon={props.icon}
+            borderRadius='0px'
+            onClick={props.onClick}
+        >{props.text}</Button>
+    )
+}
+
 interface PlanPopoverProps {
+    onRename: () => void
     onDuplicate: () => void
     onDelete: () => void
 }
@@ -131,27 +182,29 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
                 <PopoverBody padding='0px'>
                     <FocusLock persistentFocus={false}>
                         <Flex flexDirection='column' width='200px'>
-                            <Button
-                                background='white'
-                                justifyContent='flex-start'
-                                leftIcon={<MdContentCopy />}
-                                borderRadius='0px'
+                            <PlanPopoverButton
+                                icon={<MdEdit />}
+                                onClick={props.onRename}
+                                text='Rename'
+                            />
+
+                            <PlanPopoverButton
+                                icon={<MdContentCopy />}
                                 onClick={() => {
                                     props.onDuplicate()
                                     onClose()
                                 }}
-                            >Duplicate</Button>
+                                text='Duplicate'
+                            >Duplicate</PlanPopoverButton>
 
-                            <Button
-                                background='white'
-                                justifyContent='flex-start'
-                                leftIcon={<MdDelete />}
-                                borderRadius='0px'
+                            <PlanPopoverButton
+                                icon={<MdDelete />}
                                 onClick={() => {
                                     props.onDelete()
                                     onClose()
                                 }}
-                            >Delete</Button>
+                                text='Delete'
+                            >Delete</PlanPopoverButton>
                         </Flex>
                     </FocusLock>
                 </PopoverBody>
@@ -160,10 +213,70 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
     )
 }
 
+function PlanChart(): JSX.Element {
+    return (
+        <ResponsiveContainer>
+            <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                <Area
+                    type='monotone'
+                    dataKey='pv'
+                    stroke='#50C878'
+                    fill='#50C878'
+                    strokeWidth={3}
+                    opacity={0.75}
+                />
+            </AreaChart>
+        </ResponsiveContainer>
+    )
+}
+
+interface RenamePlanModalProps {
+    planName: string
+    onRename: (newName: string) => void
+}
+
+function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
+
+    const { register, watch } = useForm<{ inputValue: string }>(
+        { defaultValues: { inputValue: props.planName } }
+    )
+
+    function okClickHandler(): void {
+        const newName = watch('inputValue')
+        props.onRename(newName)
+    }
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader fontWeight='normal' fontFamily='Manrope' fontSize='2xl'>Rename</ModalHeader>
+                <ModalBody>
+                    <Input {...register('inputValue', { required: true })} />
+                </ModalBody>
+
+                <ModalCloseButton />
+
+                <ModalFooter>
+                    <Flex gap='12px'>
+                        <Button variant='ghost' height='36px'>Cancel</Button>
+
+                        <Button color='white' background='buttonPrimary' height='36px' onClick={okClickHandler}>
+                            OK
+                        </Button>
+                    </Flex>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
 interface PlanProps {
     plan: Plan
-    onDuplicatePlan: (plan: Plan) => void
-    onDeletePlan: (plan: Plan) => void
+    onRename: (plan: Plan) => void
+    onDuplicate: (plan: Plan) => void
+    onDelete: (plan: Plan) => void
 }
 
 function Plan(props: PlanProps): JSX.Element {
@@ -204,18 +317,7 @@ function Plan(props: PlanProps): JSX.Element {
             minWidth='0px'
         >
             <Box height='240px' position='relative'>         
-                <ResponsiveContainer>
-                    <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-                        <Area 
-                            type='monotone' 
-                            dataKey='pv' 
-                            stroke='#50C878' 
-                            fill='#50C878' 
-                            strokeWidth={3} 
-                            opacity={0.75} 
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
+                <PlanChart />
 
                 <Flex
                     position='absolute'
@@ -228,8 +330,9 @@ function Plan(props: PlanProps): JSX.Element {
                     <PlanRatingBadge rating={props.plan.rating} />
 
                     <PlanPopover 
-                        onDuplicate={() => props.onDuplicatePlan(props.plan)} 
-                        onDelete={() => props.onDeletePlan(props.plan)}
+                        onRename={() => props.onRename(props.plan)}
+                        onDuplicate={() => props.onDuplicate(props.plan)} 
+                        onDelete={() => props.onDelete(props.plan)}
                     />
                 </Flex>
             </Box>
@@ -271,6 +374,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
 
     const [plans, setPlans] = useState<Plan[]>([])
 
+    const [renameContext, setRenameContext] = useState<Plan | null>(null)
+
     function addPlanClickHandler(): void {
         const plan: Plan = {
             id: generatePlanId(),
@@ -296,102 +401,119 @@ export default function Settings(props: DashboardProps): JSX.Element {
         setPlans(prevPlans => [...prevPlans, duplicatePlan])
     }
 
+    function renamePlanClickHandler(plan: Plan): void {
+        setRenameContext(plan)
+    }
+
+    function renameHandler(newName: string): void {
+        const newPlan: Plan = { ...renameContext!!, name: newName }
+
+        setPlans(prevPlans => prevPlans.filter(plan => plan.id !== renameContext!!.id))
+        setPlans(prevPlans => [...prevPlans, newPlan])
+
+        setRenameContext(null)
+    }
+
     return (
-        <Flex 
-            padding={{ base: '24px', md: '48px' }}
-            flexDirection='column' 
-            width='100%'
-        >
-            <Text fontSize='3xl' fontFamily='manrope'>Home</Text>
+        <>
+            {renameContext && <RenamePlanModal onRename={renameHandler} planName={renameContext.name} />}
 
-            <Flex flexDirection='column'>
-                <Flex 
-                    marginTop={{ base: '24px', md: '48px' }}
-                    flexDirection={{ base: 'column', xl: 'row' }}
-                >
-                    <Flex flexDirection='column' gap='8px'>
-                        <Text fontSize='2xl'>Plans</Text>
-                        <Text fontSize='sm' maxWidth='700px' color='gray' textOverflow='ellipsis'>The purpose of a financial plan is to provide a clear framework for making informed financial decisions, optimizing cash flow, minimizing financial risks, and maximizing wealth accumulation over time.</Text>
-                    </Flex>
+            <Flex 
+                padding={{ base: '24px', md: '48px' }}
+                flexDirection='column' 
+                width='100%'
+            >
+                <Text fontSize='3xl' fontFamily='manrope'>Home</Text>
 
+                <Flex flexDirection='column'>
                     <Flex 
-                        flexDirection='row' 
-                        marginLeft={{ base: '0px', xl: 'auto' }}
-                        alignSelf={{ base: 'flex-start', xl: 'flex-end' }}
-                        marginTop={{ base: '16px', xl: '0px' }}
-                        gap='12px'
+                        marginTop={{ base: '24px', md: '48px' }}
+                        flexDirection={{ base: 'column', xl: 'row' }}
                     >
-                        <Button
-                            leftIcon={<MdAdd color='white' size={20} />}
-                            marginLeft='auto'
-                            color='white'
-                            onClick={addPlanClickHandler}
-                            colorScheme='buttonPrimary'
-                        >Add</Button>
+                        <Flex flexDirection='column' gap='8px'>
+                            <Text fontSize='2xl'>Plans</Text>
+                            <Text fontSize='sm' maxWidth='700px' color='gray' textOverflow='ellipsis'>The purpose of a financial plan is to provide a clear framework for making informed financial decisions, optimizing cash flow, minimizing financial risks, and maximizing wealth accumulation over time.</Text>
+                        </Flex>
 
-                        <Button
-                            leftIcon={<MdCompareArrows color='black' size={20} />}
-                            marginLeft='auto'
-                            alignSelf='flex-end'
-                            border='1px solid #e1e1dc'
-                            color='black'
-                            variant='outline'
-                        >Compare</Button>
-                    </Flex>
-                </Flex>
+                        <Flex 
+                            flexDirection='row' 
+                            marginLeft={{ base: '0px', xl: 'auto' }}
+                            alignSelf={{ base: 'flex-start', xl: 'flex-end' }}
+                            marginTop={{ base: '16px', xl: '0px' }}
+                            gap='12px'
+                        >
+                            <Button
+                                leftIcon={<MdAdd color='white' size={20} />}
+                                marginLeft='auto'
+                                color='white'
+                                onClick={addPlanClickHandler}
+                                background='buttonPrimary'
+                            >Add</Button>
 
-                <Divider />
-            </Flex>
-
-            {plans.length > 0 ? (
-                <Grid 
-                    paddingBottom='36px'
-                    templateColumns={{ 
-                        base: 'repeat(1, 1fr)',
-                        md: 'repeat(2, 1fr)', 
-                        xl: 'repeat(3, 1fr)'
-                    }} 
-                    gap='12px'
-                >
-                    {plans.map((plan, index) => (
-                        <Plan 
-                            key={index} 
-                            onDeletePlan={deletePlanClickHandler} 
-                            onDuplicatePlan={duplicatePlanClickHandler}
-                            plan={plan} 
-                        />
-                    ))}
-                </Grid>
-            ) : (
-                <Flex 
-                    flexGrow={1} 
-                    alignItems='center' 
-                    justifyContent='center' 
-                >
-                    <Flex 
-                        width='400px'
-                        height='400px'
-                        flexDirection='column' 
-                        gap='32px' 
-                        alignItems='center' 
-                        justifyContent='center'
-                        borderRadius='100px'
-                    >
-                        <Image src='/empty_state.svg' width='250px' padding='0' />
-
-                        <Flex flexDirection='column' gap='16px'>
-                            <Text 
-                                fontFamily='manrope' 
-                                fontSize='3xl' 
-                                textAlign='center' 
+                            <Button
+                                leftIcon={<MdCompareArrows color='black' size={20} />}
+                                marginLeft='auto'
+                                alignSelf='flex-end'
                                 color='black'
-                            >No plans</Text>
-                            
-                            <Text textAlign='center' color='gray'>You currently have no plans, press 'Add' to get started on your journey.</Text>
+                                variant='outline'
+                            >Compare</Button>
                         </Flex>
                     </Flex>
+
+                    <Divider />
                 </Flex>
-            )}
-        </Flex>
+
+                {plans.length > 0 ? (
+                    <Grid 
+                        paddingBottom='36px'
+                        templateColumns={{ 
+                            base: 'repeat(1, 1fr)',
+                            md: 'repeat(2, 1fr)', 
+                            xl: 'repeat(3, 1fr)'
+                        }} 
+                        gap='12px'
+                    >
+                        {plans.map((plan, index) => (
+                            <Plan 
+                                key={index} 
+                                onRename={renamePlanClickHandler}
+                                onDelete={deletePlanClickHandler} 
+                                onDuplicate={duplicatePlanClickHandler}
+                                plan={plan} 
+                            />
+                        ))}
+                    </Grid>
+                ) : (
+                    <Flex 
+                        flexGrow={1} 
+                        alignItems='center' 
+                        justifyContent='center' 
+                    >
+                        <Flex 
+                            width='400px'
+                            height='400px'
+                            flexDirection='column' 
+                            gap='32px' 
+                            alignItems='center' 
+                            justifyContent='center'
+                            borderRadius='100px'
+                        >
+                            <Image src='/empty_state.svg' width='250px' padding='0' />
+
+                            <Flex flexDirection='column' gap='16px'>
+                                <Text 
+                                    fontFamily='manrope' 
+                                    fontSize='3xl' 
+                                    textAlign='center' 
+                                    color='black'
+                                >No plans</Text>
+                                
+                                <Text textAlign='center' color='gray'>You currently have no plans, press 'Add' to get started on your journey.</Text>
+                            </Flex>
+                        </Flex>
+                    </Flex>
+                )}
+            </Flex>
+        </>
     )
 }
