@@ -37,7 +37,9 @@ const plansSlice = createSlice({
             const plan = state.plans.find(plan => plan.id === action.payload)
             
             if (plan) {
-                state.plans.push(plan)
+                const duplicatedPlan = { ...plan, name: `Duplicate of ${plan.name}` }
+                
+                state.plans.push(duplicatedPlan)
             }
         }
     }
