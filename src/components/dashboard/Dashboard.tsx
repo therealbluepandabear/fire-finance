@@ -18,49 +18,33 @@ import { User } from '../../api'
 import FAppBar from '../ui/new/FAppBar'
 import Plans, { Plan } from './pages/Plans'
 import { useState } from 'react'
-
-export class MenuHandler {
-
-    private constructor() { }
-
-    private static PLANS: Plan[] = []
-
-    private static readonly PLAN_MENU: MenuItem = {
-        leftContent: <MdHome size={20} />,
-        label: 'Plans',
-        subMenuItems: []
-    }
-
-    static addPlan(plan: Plan): void {
-        this.PLANS.push(plan)
-
-        this.PLAN_MENU.subMenuItems?.push({ label: plan.name })
-    }
-
-    static removePlan(plan: Plan): void {
-        this.PLANS = this.PLANS.filter(_plan => _plan.id !== plan.id)
-
-        this.PLAN_MENU.subMenuItems = this.PLANS.map(_plan => ({ label: _plan.name }))
-    }
-
-    static readonly menu: MenuItemGroup[] = [{
-        menuItems: [this.PLAN_MENU],
-        dock: 'top',
-        background: '#fbf7f0',
-        textColor: 'black'
-    }]
-}
+import { useAppSelector } from '../../store'
 
 interface DashboardMenuProps {
     isOpen: boolean
 }
 
 function DashboardMenu(props: DashboardMenuProps): JSX.Element {
+    const plans = useAppSelector(state => state.plans.plans)
+
+    const planMenu: MenuItem = {
+        leftContent: <MdHome size={20} />,
+        label: 'Plans',
+        subMenuItems: plans.map(plan => ({ label: plan.name }))
+    }
+
+    const menuItemGroups: MenuItemGroup[] = [{ 
+        menuItems: [planMenu],
+        dock: 'top',
+        background: '#fbf7f0',
+        textColor: 'black'
+    }]
+
     return (
         <FMenu 
             isOpen={props.isOpen} 
             onItemClick={(index) => { }}
-            menuItemGroups={MenuHandler.menu}
+            menuItemGroups={menuItemGroups}
         />
     )
 }

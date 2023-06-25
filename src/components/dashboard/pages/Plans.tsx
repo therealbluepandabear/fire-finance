@@ -1,4 +1,4 @@
-import { DashboardProps, MenuHandler } from '../Dashboard'
+import { DashboardProps } from '../Dashboard'
 import { 
     Flex, 
     Text, 
@@ -235,10 +235,11 @@ function PlanChart(): JSX.Element {
 interface RenamePlanModalProps {
     planName: string
     onRename: (newName: string) => void
+    onClose: () => void
 }
 
 function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
+    const { isOpen } = useDisclosure({ defaultIsOpen: true })
 
     const { register, watch } = useForm<{ inputValue: string }>(
         { defaultValues: { inputValue: props.planName } }
@@ -250,7 +251,7 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+        <Modal isOpen={isOpen} onClose={props.onClose} isCentered={true}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader fontWeight='normal' fontFamily='Manrope' fontSize='2xl'>Rename</ModalHeader>
@@ -258,11 +259,11 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
                     <Input {...register('inputValue', { required: true })} />
                 </ModalBody>
 
-                <ModalCloseButton />
+                <ModalCloseButton onClick={props.onClose} />
 
                 <ModalFooter>
                     <Flex gap='12px'>
-                        <Button variant='ghost' height='36px'>Cancel</Button>
+                        <Button variant='ghost' height='36px' onClick={props.onClose}>Cancel</Button>
 
                         <Button color='white' background='buttonPrimary' height='36px' onClick={okClickHandler}>
                             OK
@@ -388,14 +389,10 @@ export default function Settings(props: DashboardProps): JSX.Element {
         }
 
         dispatch(plansActions.addPlan(plan))
-
-        MenuHandler.addPlan(plan) 
     }
 
     function deletePlanClickHandler(plan: Plan): void {
         dispatch(plansActions.removePlan(plan.id))
-
-        MenuHandler.removePlan(plan)
     }
 
     function duplicatePlanClickHandler(plan: Plan): void {
@@ -412,9 +409,19 @@ export default function Settings(props: DashboardProps): JSX.Element {
         setRenameContext(null)
     }
 
+    function renameCloseHandler(): void {
+        setRenameContext(null)
+    }
+
     return (
         <>
-            {renameContext && <RenamePlanModal onRename={renameHandler} planName={renameContext.name} />}
+            {renameContext && (
+                <RenamePlanModal 
+                    onRename={renameHandler} 
+                    planName={renameContext.name} 
+                    onClose={renameCloseHandler}
+                />
+            )}
 
             <Flex 
                 padding={{ base: '24px', md: '48px' }}

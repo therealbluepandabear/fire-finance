@@ -1,6 +1,6 @@
 import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion'
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
     selectedItem: MenuItemSelection | null
