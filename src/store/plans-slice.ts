@@ -1,6 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { Plan } from '../components/dashboard/pages/Plans'
 import { generatePlanId } from '../utils'
+
+export interface Plan {
+    id: string
+    name: string
+    creationDate: Date
+    isFavorite: boolean
+    description?: string
+}
 
 interface PlansState {
     plans: Plan[]
@@ -31,20 +38,24 @@ const plansSlice = createSlice({
         },
 
         duplicatePlan(state, action: PayloadAction<string>) {
-            const plan = state.plans.find(plan => plan.id === action.payload)
+            const index = state.plans.findIndex(plan => plan.id === action.payload)
             
-            if (plan) {
+            if (index !== -1) {
+                const plan = state.plans[index]
                 const duplicatedPlan: Plan = { ...plan, name: `Duplicate of ${plan.name}`, id: generatePlanId() }
                 
                 state.plans.push(duplicatedPlan)
             }
         },
-
-        addPlanDescription(state, action: PayloadAction<{ id: string, description: string }>) {
+        
+        editPlan(state, action: PayloadAction<{ id: string, partialState: Partial<Plan> }>) {
             const index = state.plans.findIndex(plan => plan.id === action.payload.id)
 
             if (index !== -1) {
-                state.plans[index].description = action.payload.description
+                const plan = state.plans[index]
+                const partialPlan = action.payload.partialState
+
+                state.plans[index] = { ...plan, ...partialPlan }
             }
         }
     }

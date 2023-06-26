@@ -35,58 +35,58 @@ import {
     MdStarOutline 
 } from 'react-icons/md'
 import Divider from '../../ui/new/FDivider'
-import { Area, AreaChart, Line, LineChart, ResponsiveContainer } from 'recharts'
+import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
-import { plansActions } from '../../../store/plans-slice'
+import { plansActions, Plan } from '../../../store/plans-slice'
 import { generatePlanId } from '../../../utils'
+import FScrollableBox from '../../ui/new/FScrollableBox'
 
-interface PlanRatingBadgeProps {
-    rating: PlanRating
+interface PlanDescriptionBadgeProps {
+    description: string
 }
 
-function PlanRatingBadge(props: PlanRatingBadgeProps): JSX.Element {
+function PlanDescriptionBadge(props: PlanDescriptionBadgeProps): JSX.Element {
+
+    const { onOpen, onClose, isOpen } = useDisclosure()
+
     return (
-        <Flex
-            position='absolute'
-            background={getRatingBadgeColor(props.rating)}
-            width='25px'
-            height='25px'
-            margin='12px'
-            fontFamily='manrope'
-            alignItems='center'
-            justifyContent='center'
-            fontSize='12px'
-            borderRadius='lg'
+        <Popover
+            variant='responsive'
+            placement='left-start'
+            trigger='hover'
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
         >
-            {props.rating}
-        </Flex>
+            <PopoverTrigger>
+                <IconButton
+                    background='white'
+                    icon={<MdDescription size={20} />}
+                    aria-label='Description'
+                    width='30px'
+                    height='30px'
+                    minWidth='0px'
+                    minHeight='0px'
+                    borderRadius='999px'
+                />
+            </PopoverTrigger>
+            <PopoverContent>
+                <PopoverBody padding='0px'>
+                    <FocusLock persistentFocus={false}>
+                        <FScrollableBox 
+                            padding='8px' 
+                            maxWidth='300px' 
+                            maxHeight='300px' 
+                            overflowY='scroll'
+                        >
+                            {props.description}
+                        </FScrollableBox>
+                    </FocusLock>
+                </PopoverBody>
+            </PopoverContent>
+        </Popover>
     )
-}
-
-type PlanRating = 'A+' | 'A' | 'B' | 'B-' | 'C' | 'F'
-
-export interface Plan {
-    id: string
-    name: string
-    creationDate: Date
-    rating: PlanRating
-    description?: string
-}
-
-function getRatingBadgeColor(rating: PlanRating): string {
-    switch (rating) {
-        case 'A+':
-        case 'A':
-            return 'lightgreen'
-        case 'B':
-        case 'B-':
-            return 'orange'
-        case 'C':
-            return 'yellow'
-        case 'F':
-            return 'red'
-    }
 }
 
 const data = [
@@ -152,14 +152,14 @@ function PlanPopoverButton(props: PlanPopoverButtonProps): JSX.Element {
     )
 }
 
-interface PlanPopoverProps {
-    onAddDescription: () => void
+interface PlanOptionsBadgeProps {
+    onEditDescription: () => void
     onRename: () => void
     onDuplicate: () => void
     onDelete: () => void
 }
 
-function PlanPopover(props: PlanPopoverProps): JSX.Element {
+function PlanOptionsBadge(props: PlanOptionsBadgeProps): JSX.Element {
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     return (
@@ -172,7 +172,6 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
         >
             <PopoverTrigger>
                 <IconButton
-                    marginLeft='auto'
                     background='white'
                     icon={<MdMoreVert size={20} />}
                     aria-label='Options'
@@ -180,7 +179,6 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
                     height='30px'
                     minWidth='0px'
                     minHeight='0px'
-                    marginRight='8px'
                     borderRadius='999px'
                 />
             </PopoverTrigger>
@@ -190,8 +188,8 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
                         <Flex flexDirection='column' width='200px'>
                             <PlanPopoverButton
                                 icon={<MdDescription />}
-                                onClick={props.onAddDescription}
-                                text='Add Description'
+                                onClick={props.onEditDescription}
+                                text='Edit Description'
                             />
 
                             <PlanPopoverButton
@@ -305,12 +303,12 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
     )
 }
 
-interface AddDescriptionModalProps {
+interface EditDescriptionModalProps {
     plan: Plan
     onClose: () => void
 }
 
-function AddDescriptionModal(props: AddDescriptionModalProps): JSX.Element {
+function EditDescriptionModal(props: EditDescriptionModalProps): JSX.Element {
     const dispatch = useAppDispatch()
 
     const planDescription = props.plan.description ?? ''
@@ -321,32 +319,76 @@ function AddDescriptionModal(props: AddDescriptionModalProps): JSX.Element {
 
     function OKClickHandler(): void {
         const description = watch('description')
-        dispatch(plansActions.addPlanDescription({ id: props.plan.id, description: description }))
+        dispatch(plansActions.editPlan({ id: props.plan.id, partialState: { description: description } }))
     
         props.onClose()
     }
 
     return (
-        <FModal title='Add Description' onOKClick={OKClickHandler} onClose={props.onClose}>
+        <FModal title='Edit Description' onOKClick={OKClickHandler} onClose={props.onClose}>
             <Input {...register('description', { required: true })} />
         </FModal>
     )
 }
 
-interface PlanProps {
+interface PlanFavoriteButtonProps {
     plan: Plan
-    onAddDescription: (plan: Plan) => void
+}
+
+function PlanFavoriteButton(props: PlanFavoriteButtonProps): JSX.Element {
+
+    const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
+    const hasFavoritedIcon = <MdStar color='#feba4f' size={25} />
+
+    const [favoriteButtonIcon, setFavoriteIcon] = useState(yetToFavoriteIcon)
+    const [hasFavorited, setHasFavorited] = useState(props.plan.isFavorite)
+
+    const dispatch = useAppDispatch()
+
+    function setIsFavorite(isFavorite: boolean): void {
+        dispatch(plansActions.editPlan(
+            { id: props.plan.id, partialState: { isFavorite: isFavorite } }
+        ))
+    }
+
+    useEffect(() => {
+        if (hasFavorited) {
+            setFavoriteIcon(hasFavoritedIcon)
+            setIsFavorite(true)
+        } else {
+            setFavoriteIcon(yetToFavoriteIcon)
+            setIsFavorite(false)
+        }
+    }, [hasFavorited])
+
+    function favoriteButtonClickHandler(): void {
+        setHasFavorited(prevHasFavorited => !prevHasFavorited)
+    }
+
+    return (
+        <IconButton
+            aria-label='Favorite'
+            background='white'
+            _hover={{ background: 'gray.100' }}
+            _active={{ background: 'gray.200' }}
+            icon={favoriteButtonIcon}
+            onClick={favoriteButtonClickHandler}
+            marginLeft='auto'
+        >
+            {favoriteButtonIcon}
+        </IconButton>
+    )
+}
+
+interface PlanCardProps {
+    plan: Plan
+    onEditDescription: (plan: Plan) => void
     onRename: (plan: Plan) => void
     onDuplicate: (plan: Plan) => void
     onDelete: (plan: Plan) => void
 }
 
-function Plan(props: PlanProps): JSX.Element {
-    const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
-    const hasFavoritedIcon = <MdStar color='#feba4f' size={25} />
-
-    const [favoriteButtonIcon, setFavoriteIcon] = useState(yetToFavoriteIcon)
-    const [hasFavorited, setHasFavorited] = useState(false)
+function PlanCard(props: PlanCardProps): JSX.Element {
 
     const options: Intl.DateTimeFormatOptions = { 
         month: 'short',
@@ -356,17 +398,7 @@ function Plan(props: PlanProps): JSX.Element {
     
     const formattedCreationDate = props.plan.creationDate.toLocaleString('en-US', options)
 
-    useEffect(() => {
-        if (hasFavorited) {
-            setFavoriteIcon(hasFavoritedIcon)
-        } else {
-            setFavoriteIcon(yetToFavoriteIcon)
-        }
-    }, [hasFavorited])
-
-    function favoriteButtonClickHandler(): void {
-        setHasFavorited(prevHasFavorited => !prevHasFavorited)
-    }
+    const showDescriptionBadge = props.plan.description && props.plan.description.trim().length > 0 
 
     return (
         <Box
@@ -384,15 +416,16 @@ function Plan(props: PlanProps): JSX.Element {
                 <Flex
                     position='absolute'
                     top='0'
-                    width='100%'
+                    right='0'
+                    marginRight='8px'
                     height='40px'
                     borderRadius='0px'
                     alignItems='center'
                 >
-                    <PlanRatingBadge rating={props.plan.rating} />
+                    {showDescriptionBadge && <PlanDescriptionBadge description={props.plan.description ?? ''} />}
 
-                    <PlanPopover 
-                        onAddDescription={() => props.onAddDescription(props.plan)}
+                    <PlanOptionsBadge
+                        onEditDescription={() => props.onEditDescription(props.plan)}
                         onRename={() => props.onRename(props.plan)}
                         onDuplicate={() => props.onDuplicate(props.plan)} 
                         onDelete={() => props.onDelete(props.plan)}
@@ -417,15 +450,7 @@ function Plan(props: PlanProps): JSX.Element {
                     <Text color='rgb(22, 135, 94)'  fontSize='sm'>{formattedCreationDate}</Text>
                 </Flex>
 
-                <IconButton
-                    marginLeft='auto'
-                    aria-label='Favorite'
-                    background='white'
-                    _hover={{ background: 'gray.100' }}
-                    _active={{ background: 'gray.200' }}
-                    icon={favoriteButtonIcon}
-                    onClick={favoriteButtonClickHandler}
-                />
+                <PlanFavoriteButton plan={props.plan} />
             </Flex>
         </Box>
     )
@@ -437,14 +462,14 @@ export default function Settings(props: DashboardProps): JSX.Element {
     const plans = useAppSelector(state => state.plans.plans)
 
     const [renameContext, setRenameContext] = useState<Plan | null>(null)
-    const [addDescriptionContext, setAddDescriptionContext] = useState<Plan | null>(null)
+    const [descriptionContext, setDescriptionContext] = useState<Plan | null>(null)
 
     function addPlanClickHandler(): void {
         const plan: Plan = {
             id: generatePlanId(),
             name: `Plan ${plans.length}`,
             creationDate: new Date(2002, 0, 9),
-            rating: 'A'
+            isFavorite: false
         }
 
         dispatch(plansActions.addPlan(plan))
@@ -462,22 +487,24 @@ export default function Settings(props: DashboardProps): JSX.Element {
         setRenameContext(plan)
     }
 
-    function addDescriptionPlanClickHandler(plan: Plan): void {
-        setAddDescriptionContext(plan)
+    function editDescriptionPlanClickHandler(plan: Plan): void {
+        setDescriptionContext(plan)
     }
 
     function onRenamePlanModalClose(): void {
         setRenameContext(null)
     }
 
-    function onAddDescriptionModalClose(): void {
-        setAddDescriptionContext(null)
+    function onEditDescriptionModalClose(): void {
+        setDescriptionContext(null)
     }
+
+    // STARRED/UNSTARRED CHIP
 
     return (
         <>
             {renameContext && <RenamePlanModal plan={renameContext} onClose={onRenamePlanModalClose} />}
-            {addDescriptionContext && <AddDescriptionModal plan={addDescriptionContext} onClose={onAddDescriptionModalClose} />}
+            {descriptionContext && <EditDescriptionModal plan={descriptionContext} onClose={onEditDescriptionModalClose} />}
 
             <Flex 
                 padding={{ base: '24px', md: '48px' }}
@@ -535,9 +562,9 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         gap='12px'
                     >
                         {plans.map((plan, index) => (
-                            <Plan 
+                            <PlanCard 
                                 key={index} 
-                                onAddDescription={addDescriptionPlanClickHandler}
+                                onEditDescription={editDescriptionPlanClickHandler}
                                 onRename={renamePlanClickHandler}
                                 onDelete={deletePlanClickHandler} 
                                 onDuplicate={duplicatePlanClickHandler}

@@ -16,7 +16,7 @@ import {
 import FMenu, { MenuItem, MenuItemGroup } from '../ui/new/FMenu'
 import { User } from '../../api'
 import FAppBar from '../ui/new/FAppBar'
-import Plans, { Plan } from './pages/Plans'
+import Plans from './pages/Plans'
 import { useState } from 'react'
 import { useAppSelector } from '../../store'
 

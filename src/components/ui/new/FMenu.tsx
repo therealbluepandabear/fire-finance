@@ -1,6 +1,7 @@
 import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion'
 import { PropsWithChildren, useEffect, useState } from 'react'
+import FScrollableBox from './FScrollableBox'
 
 interface DisplayProps<T extends MenuItem | SubMenuItem> { 
     selectedItem: MenuItemSelection | null
@@ -162,21 +163,11 @@ export default function FMenu(props: FMenuProps): JSX.Element {
     }
 
     return (
-        <Flex 
+        <FScrollableBox 
             shadow='md' 
             overflowY='auto'
             overflowX='hidden'
             zIndex='999'
-            sx={
-                {
-                    '::-webkit-scrollbar': {
-                        width: '8px'
-                    },
-                    '::-webkit-scrollbar-thumb': {
-                        background: 'lightgray'
-                    }
-                }
-            }
             minWidth={{ base: '0px', md: props.isOpen ? '294px' : '52px' }}
             width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : '52px' }}
             flexDirection='column'
@@ -242,6 +233,6 @@ export default function FMenu(props: FMenuProps): JSX.Element {
                     ))}
                 </Flex>
             )))}
-        </Flex>
+        </FScrollableBox>
     )
 }
