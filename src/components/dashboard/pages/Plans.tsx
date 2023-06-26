@@ -228,6 +228,7 @@ function PlanChart(): JSX.Element {
         <ResponsiveContainer>
             <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Area
+                    isAnimationActive={false}
                     type='monotone'
                     dataKey='pv'
                     stroke='#50C878'
