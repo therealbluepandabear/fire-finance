@@ -31,7 +31,7 @@ function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & 
 const selectedColor = 'rgba(22, 135, 94, 0.64)'
 const selectedBottomBorder = `1px solid ${selectedColor}`
 
-function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element {
+function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Element {
     return (
         <Popover 
             placement='right-start' 
@@ -79,7 +79,7 @@ function MenuItemDisplay(props: MenuProps & DisplayProps<MenuItem>): JSX.Element
     )
 }
 
-function SubMenuItemDisplay(props: MenuProps & DisplayProps<SubMenuItem>): JSX.Element {
+function SubMenuItemDisplay(props: FMenuProps & DisplayProps<SubMenuItem>): JSX.Element {
     return (
         <MenuItemButtonBase
             borderBottom={props.selectedItem?.selectedSubMenuItem === props.item ? selectedBottomBorder : ''}
@@ -116,7 +116,7 @@ interface MenuItemSelection {
     selectedSubMenuItem?: SubMenuItem
 }
 
-interface MenuProps {
+interface FMenuProps {
     isOpen: boolean
     onItemClick: (item: MenuItem | SubMenuItem) => void
     menuItemGroups: MenuItemGroup[]
@@ -131,7 +131,7 @@ function findSubMenuItemParent(menuItemGroups: MenuItemGroup[], subMenuItem: Sub
         .find(menuItem => menuItem.subMenuItems && menuItem.subMenuItems.includes(subMenuItem))
 }
 
-export default function FMenu(props: MenuProps): JSX.Element {
+export default function FMenu(props: FMenuProps): JSX.Element {
     // If a particular menu item is open it means the 
     // sub items of that menu item are showing
     const [openMenuItems, setOpenMenuItems] = useState<MenuItem[]>([])

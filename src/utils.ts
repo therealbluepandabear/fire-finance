@@ -36,3 +36,7 @@ export function saveToFile(fileName: string, url: string): void {
     window.URL.revokeObjectURL(url)
     a.remove()
 }
+
+export function generatePlanId(): string {
+    return URL.createObjectURL(new Blob([])).slice(-36)
+}

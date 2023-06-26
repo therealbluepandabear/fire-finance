@@ -28,6 +28,7 @@ import {
     MdCompareArrows, 
     MdContentCopy, 
     MdDelete, 
+    MdDescription, 
     MdEdit, 
     MdMoreVert, 
     MdStar, 
@@ -38,6 +39,7 @@ import { Area, AreaChart, Line, LineChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions } from '../../../store/plans-slice'
+import { generatePlanId } from '../../../utils'
 
 interface PlanRatingBadgeProps {
     rating: PlanRating
@@ -69,6 +71,7 @@ export interface Plan {
     name: string
     creationDate: Date
     rating: PlanRating
+    description?: string
 }
 
 function getRatingBadgeColor(rating: PlanRating): string {
@@ -150,6 +153,7 @@ function PlanPopoverButton(props: PlanPopoverButtonProps): JSX.Element {
 }
 
 interface PlanPopoverProps {
+    onAddDescription: () => void
     onRename: () => void
     onDuplicate: () => void
     onDelete: () => void
@@ -184,6 +188,12 @@ function PlanPopover(props: PlanPopoverProps): JSX.Element {
                 <PopoverBody padding='0px'>
                     <FocusLock persistentFocus={false}>
                         <Flex flexDirection='column' width='200px'>
+                            <PlanPopoverButton
+                                icon={<MdDescription />}
+                                onClick={props.onAddDescription}
+                                text='Add Description'
+                            />
+
                             <PlanPopoverButton
                                 icon={<MdEdit />}
                                 onClick={props.onRename}
@@ -232,31 +242,25 @@ function PlanChart(): JSX.Element {
     )
 }
 
-interface RenamePlanModalProps {
-    planName: string
-    onRename: (newName: string) => void
+interface FModalProps extends PropsWithChildren {
+    title: string
+    onOKClick: () => void
     onClose: () => void
 }
 
-function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
-    const { isOpen } = useDisclosure({ defaultIsOpen: true })
-
-    const { register, watch } = useForm<{ inputValue: string }>(
-        { defaultValues: { inputValue: props.planName } }
-    )
-
-    function okClickHandler(): void {
-        const newName = watch('inputValue')
-        props.onRename(newName)
-    }
-
+function FModal(props: FModalProps): JSX.Element {
     return (
-        <Modal isOpen={isOpen} onClose={props.onClose} isCentered={true}>
+        <Modal isOpen={true} onClose={props.onClose} isCentered={true}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader fontWeight='normal' fontFamily='Manrope' fontSize='2xl'>Rename</ModalHeader>
+                <ModalHeader 
+                    fontWeight='normal' 
+                    fontFamily='Manrope' 
+                    fontSize='2xl'
+                >{props.title}</ModalHeader>
+
                 <ModalBody>
-                    <Input {...register('inputValue', { required: true })} />
+                    {props.children}
                 </ModalBody>
 
                 <ModalCloseButton onClick={props.onClose} />
@@ -265,7 +269,7 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
                     <Flex gap='12px'>
                         <Button variant='ghost' height='36px' onClick={props.onClose}>Cancel</Button>
 
-                        <Button color='white' background='buttonPrimary' height='36px' onClick={okClickHandler}>
+                        <Button color='white' background='buttonPrimary' height='36px' onClick={props.onOKClick}>
                             OK
                         </Button>
                     </Flex>
@@ -275,8 +279,63 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
     )
 }
 
+interface RenamePlanModalProps {
+    plan: Plan
+    onClose: () => void
+}
+
+function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {  
+    const dispatch = useAppDispatch()
+      
+    const { register, watch } = useForm<{ inputValue: string }>(
+        { defaultValues: { inputValue: props.plan.name } }
+    )
+
+    function OKClickHandler(): void {
+        const newName = watch('inputValue')
+        dispatch(plansActions.renamePlan({ id: props.plan.id, newName: newName }))
+
+        props.onClose()
+    }
+
+    return (
+        <FModal title='Rename' onOKClick={OKClickHandler} onClose={props.onClose}>
+            <Input {...register('inputValue', { required: true })} />
+        </FModal>
+    )
+}
+
+interface AddDescriptionModalProps {
+    plan: Plan
+    onClose: () => void
+}
+
+function AddDescriptionModal(props: AddDescriptionModalProps): JSX.Element {
+    const dispatch = useAppDispatch()
+
+    const planDescription = props.plan.description ?? ''
+
+    const { register, watch } = useForm<{ description: string }>(
+        { defaultValues: { description: planDescription } }
+    )
+
+    function OKClickHandler(): void {
+        const description = watch('description')
+        dispatch(plansActions.addPlanDescription({ id: props.plan.id, description: description }))
+    
+        props.onClose()
+    }
+
+    return (
+        <FModal title='Add Description' onOKClick={OKClickHandler} onClose={props.onClose}>
+            <Input {...register('description', { required: true })} />
+        </FModal>
+    )
+}
+
 interface PlanProps {
     plan: Plan
+    onAddDescription: (plan: Plan) => void
     onRename: (plan: Plan) => void
     onDuplicate: (plan: Plan) => void
     onDelete: (plan: Plan) => void
@@ -333,6 +392,7 @@ function Plan(props: PlanProps): JSX.Element {
                     <PlanRatingBadge rating={props.plan.rating} />
 
                     <PlanPopover 
+                        onAddDescription={() => props.onAddDescription(props.plan)}
                         onRename={() => props.onRename(props.plan)}
                         onDuplicate={() => props.onDuplicate(props.plan)} 
                         onDelete={() => props.onDelete(props.plan)}
@@ -360,7 +420,9 @@ function Plan(props: PlanProps): JSX.Element {
                 <IconButton
                     marginLeft='auto'
                     aria-label='Favorite'
-                    background='transparent'
+                    background='white'
+                    _hover={{ background: 'gray.100' }}
+                    _active={{ background: 'gray.200' }}
                     icon={favoriteButtonIcon}
                     onClick={favoriteButtonClickHandler}
                 />
@@ -369,16 +431,13 @@ function Plan(props: PlanProps): JSX.Element {
     )
 }
 
-function generatePlanId(): string {
-    return URL.createObjectURL(new Blob([])).slice(-36)
-}
-
 export default function Settings(props: DashboardProps): JSX.Element {
     const dispatch = useAppDispatch()
 
     const plans = useAppSelector(state => state.plans.plans)
 
     const [renameContext, setRenameContext] = useState<Plan | null>(null)
+    const [addDescriptionContext, setAddDescriptionContext] = useState<Plan | null>(null)
 
     function addPlanClickHandler(): void {
         const plan: Plan = {
@@ -403,25 +462,22 @@ export default function Settings(props: DashboardProps): JSX.Element {
         setRenameContext(plan)
     }
 
-    function renameHandler(newName: string): void {
-        dispatch(plansActions.renamePlan({ id: renameContext!!.id, newName: newName }))
+    function addDescriptionPlanClickHandler(plan: Plan): void {
+        setAddDescriptionContext(plan)
+    }
 
+    function onRenamePlanModalClose(): void {
         setRenameContext(null)
     }
 
-    function renameCloseHandler(): void {
-        setRenameContext(null)
+    function onAddDescriptionModalClose(): void {
+        setAddDescriptionContext(null)
     }
 
     return (
         <>
-            {renameContext && (
-                <RenamePlanModal 
-                    onRename={renameHandler} 
-                    planName={renameContext.name} 
-                    onClose={renameCloseHandler}
-                />
-            )}
+            {renameContext && <RenamePlanModal plan={renameContext} onClose={onRenamePlanModalClose} />}
+            {addDescriptionContext && <AddDescriptionModal plan={addDescriptionContext} onClose={onAddDescriptionModalClose} />}
 
             <Flex 
                 padding={{ base: '24px', md: '48px' }}
@@ -481,6 +537,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         {plans.map((plan, index) => (
                             <Plan 
                                 key={index} 
+                                onAddDescription={addDescriptionPlanClickHandler}
                                 onRename={renamePlanClickHandler}
                                 onDelete={deletePlanClickHandler} 
                                 onDuplicate={duplicatePlanClickHandler}
