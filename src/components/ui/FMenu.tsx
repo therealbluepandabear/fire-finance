@@ -42,7 +42,7 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Elemen
             <Box 
                 padding='16px' 
                 color={isSelectedItem ? '#1a73e8' : ''}
-                background={!props.isOpen ? 'pastelPrimary' : 'transparent'} 
+                background={!props.isOpen && isSelectedItem ? 'pastelPrimary' : 'transparent'} 
                 borderRadius='999px'
             >
                 {props.item.leftContent}
