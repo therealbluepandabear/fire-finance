@@ -1,11 +1,10 @@
 import { Flex, Button, useBreakpointValue, Box, IconButton } from '@chakra-ui/react'
-import { MdBarChart, MdChecklist, MdHome, MdList, MdPerson, MdTune } from 'react-icons/md'
-import FMenu, { MenuItem, MenuItemGroup } from '../ui/FMenu'
+import { MdAutoGraph, MdChecklist, MdHelpOutline, MdOutlineCalculate, MdOutlineSchool, MdPerson, MdSettings, MdSupportAgent } from 'react-icons/md'
+import FMenu, { MenuItem } from '../ui/FMenu'
 import { User } from '../../api'
 import FAppBar from '../ui/FAppBar'
 import Plans from './pages/Plans'
 import { useState } from 'react'
-import { useAppSelector } from '../../store'
 import FScrollableBox from '../ui/FScrollableBox'
 
 interface DashboardMenuProps {
@@ -13,7 +12,6 @@ interface DashboardMenuProps {
 }
 
 function DashboardMenu(props: DashboardMenuProps): JSX.Element {
-    const plans = useAppSelector(state => state.plans.plans)
 
     const planMenuItem: MenuItem = {
         leftContent: <MdChecklist size={20} />,
@@ -21,15 +19,35 @@ function DashboardMenu(props: DashboardMenuProps): JSX.Element {
     }
 
     const progressMenuItem: MenuItem = {
-        leftContent: <MdBarChart size={20} />,
+        leftContent: <MdAutoGraph size={20} />,
         label: 'Progress'
+    }
+
+    const calculatorsMenuItem: MenuItem = {
+        leftContent: <MdOutlineCalculate size={20} />,
+        label: 'Calculators'
+    }
+
+    const learnMenuItem: MenuItem = {
+        leftContent: <MdOutlineSchool size={20} />,
+        label: 'Learn'
+    }
+
+    const helpMenuItem: MenuItem = {
+        leftContent: <MdHelpOutline size={20} />,
+        label: 'Help'
+    }
+
+    const supportMenuItem: MenuItem = {
+        leftContent: <MdSupportAgent size={20} />,
+        label: 'Support'
     }
 
     return (
         <FMenu 
             isOpen={props.isOpen} 
             onItemClick={(index) => { }}
-            menuItems={[planMenuItem, progressMenuItem]}
+            menuItems={[planMenuItem, progressMenuItem, calculatorsMenuItem, learnMenuItem, helpMenuItem, supportMenuItem]}
         />
     )
 }
@@ -47,7 +65,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 height='49px'
                 width='49px'
                 aria-label='...'
-                icon={<MdTune size={20} />}
+                icon={<MdSettings size={20} />}
                 borderRadius='999px'
                 variant='outline'
             />,
@@ -66,8 +84,8 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 height='49px'
                 background='transparent'
                 border='1px solid #e1e1dc'
-                leftIcon={<MdTune size={20} />}
-            >Assumptions</Button>,
+                leftIcon={<MdSettings size={20} />}
+            >Settings</Button>,
 
             <Button
                 height='49px'

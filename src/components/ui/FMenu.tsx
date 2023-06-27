@@ -17,8 +17,8 @@ function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & 
             minHeight='42px'
             height='42px'
             borderRadius='0px'
-            _hover={{ filter: 'brightness(94%)' }}
-            _active={{ filter: 'brightness(94%)' }}
+            _hover={{ background: 'blue.100' }}
+            _active={{ background: 'blue.200' }}
             width='100%'
             {...props}
         >
@@ -42,7 +42,7 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Elemen
             <Box 
                 padding='16px' 
                 color={isSelectedItem ? '#1a73e8' : ''}
-                background={isSelectedItem ? 'pastelPrimary' : ''} 
+                background={!props.isOpen ? 'pastelPrimary' : 'transparent'} 
                 borderRadius='999px'
             >
                 {props.item.leftContent}
@@ -101,7 +101,7 @@ export default function FMenu(props: FMenuProps): JSX.Element {
     // If a particular menu item is open it means the 
     // sub items of that menu item are showing
     const [openMenuItems, setOpenMenuItems] = useState<MenuItem[]>([])
-    const [selectedItem, setSelectedItem] = useState<MenuItemSelection | null>(null)
+    const [selectedItem, setSelectedItem] = useState<MenuItemSelection>({ selectedMenuItem: props.menuItems[0] })
 
     function itemClickHandler(item: MenuItem | SubMenuItem): void {
         props.onItemClick(item)
@@ -138,6 +138,8 @@ export default function FMenu(props: FMenuProps): JSX.Element {
             position={{ base: 'absolute', md: 'static' }}
             height='100%'
             paddingTop='16px'
+            background='white'
+            shadow={{ base: 'md', md: 'none' }}
         >   
             {props.menuItems.map((menuItem, index) => {
                 return (
