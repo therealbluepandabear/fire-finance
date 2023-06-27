@@ -25,7 +25,7 @@ import {
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { 
     MdAdd, 
-    MdCompareArrows, 
+    MdChecklist, 
     MdContentCopy, 
     MdDelete, 
     MdDescription, 
@@ -34,13 +34,15 @@ import {
     MdStar, 
     MdStarOutline 
 } from 'react-icons/md'
-import Divider from '../../ui/new/FDivider'
+import Divider from '../../ui/FDivider'
 import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions, Plan } from '../../../store/plans-slice'
 import { generatePlanId } from '../../../utils'
-import FScrollableBox from '../../ui/new/FScrollableBox'
+import FScrollableBox from '../../ui/FScrollableBox'
+import FChip from '../../ui/FChip'
+import FChips from '../../ui/FChips'
 
 interface PlanDescriptionBadgeProps {
     description: string
@@ -460,10 +462,12 @@ function PlanCard(props: PlanCardProps): JSX.Element {
 export default function Settings(props: DashboardProps): JSX.Element {
     const dispatch = useAppDispatch()
 
-    const plans = useAppSelector(state => state.plans.plans)
-
     const [renameContext, setRenameContext] = useState<Plan | null>(null)
     const [descriptionContext, setDescriptionContext] = useState<Plan | null>(null)
+
+    const [viewStarred, setViewStarred] = useState(false)
+
+    const plans = useAppSelector(state => viewStarred ? state.plans.plans.filter(plan => plan.isFavorite) : state.plans.plans)
 
     function addPlanClickHandler(): void {
         const plan: Plan = {
@@ -500,7 +504,9 @@ export default function Settings(props: DashboardProps): JSX.Element {
         setDescriptionContext(null)
     }
 
-    // STARRED/UNSTARRED CHIP
+    function chipIndexChangeHandler(index: number): void {
+        setViewStarred(index === 1)
+    }
 
     return (
         <>
@@ -511,6 +517,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 padding={{ base: '24px', md: '48px' }}
                 flexDirection='column' 
                 width='100%'
+                height='100%'
             >
                 <Text fontSize='3xl' fontFamily='manrope'>Home</Text>
 
@@ -539,13 +546,10 @@ export default function Settings(props: DashboardProps): JSX.Element {
                                 background='buttonPrimary'
                             >Add</Button>
 
-                            <Button
-                                leftIcon={<MdCompareArrows color='black' size={20} />}
-                                marginLeft='auto'
-                                alignSelf='flex-end'
-                                color='black'
-                                variant='outline'
-                            >Compare</Button>
+                            <FChips onIndexChange={chipIndexChangeHandler}>
+                                <FChip icon={<MdChecklist size={20} />}>All Plans</FChip>
+                                <FChip icon={<MdStarOutline size={20} />}>Starred</FChip>
+                            </FChips>
                         </Flex>
                     </Flex>
 
@@ -577,7 +581,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     <Flex 
                         flexGrow={1} 
                         alignItems='center' 
-                        justifyContent='center' 
+                        justifyContent='center'
                     >
                         <Flex 
                             width='400px'
@@ -588,7 +592,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                             justifyContent='center'
                             borderRadius='100px'
                         >
-                            <Image src='/empty_state.svg' width='250px' padding='0' />
+                            <Image src={viewStarred ? '/star.svg' : '/empty_state.svg'} width='250px' padding='0' />
 
                             <Flex flexDirection='column' gap='16px'>
                                 <Text 
@@ -596,9 +600,13 @@ export default function Settings(props: DashboardProps): JSX.Element {
                                     fontSize='3xl' 
                                     textAlign='center' 
                                     color='black'
-                                >No plans</Text>
+                                >
+                                    {viewStarred ? 'No starred plans' : 'No plans'}
+                                </Text>
                                 
-                                <Text textAlign='center' color='gray'>You currently have no plans, press 'Add' to get started on your journey.</Text>
+                                <Text textAlign='center' color='gray'>
+                                    {viewStarred ? 'You currently have no starred plans, star a plan to get started.' : `You currently have no plans, press 'Add' to get started on your journey.`}
+                                </Text>
                             </Flex>
                         </Flex>
                     </Flex>

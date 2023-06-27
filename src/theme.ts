@@ -35,7 +35,8 @@ const theme = extendTheme({
         }
     },
     colors: {
-        buttonPrimary: '#1E90FF'
+        buttonPrimary: '#1e90ff',
+        pastelPrimary: '#f7f0fb'
     },
     initialColorMode: 'light',
     useSystemColorMode: false

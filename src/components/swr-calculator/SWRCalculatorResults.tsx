@@ -8,8 +8,8 @@ import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorNetworthChart, { ChartFocus, ChartType } from './charts/SWRCalculatorNetworthChart'
 import { useEffect, useRef, useState } from 'react'
 import { MdAreaChart, MdBarChart } from 'react-icons/md'
-import Chips from '../ui/Chips'
-import Chip from '../ui/Chip'
+import Chips from '../ui/FChips'
+import Chip from '../ui/FChip'
 
 
 interface EzTabProps {
@@ -160,7 +160,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                             <Text fontSize='sm' fontWeight='bold' padding='3px'>Start Year Statistics</Text>
 
                             <Flex marginLeft='auto' gap='8px'>
-                                <Chips 
+                                {/* <Chips 
                                     height='100%'
                                     onIndexChange={chartFocusChangeHandler}
                                 >
@@ -185,7 +185,7 @@ export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): 
                                     <Chip>
                                         <MdAreaChart />
                                     </Chip>
-                                </Chips>
+                                </Chips> */}
                             </Flex>
                         </Flex>
 

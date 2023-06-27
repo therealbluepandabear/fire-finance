@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { useCreateUserMutation, User } from '../../api'
-import FAppBar from '../ui/new/FAppBar'
+import FAppBar from '../ui/FAppBar'
 
 interface SignUpProps {
     onUserCreated: (user: User) => void

@@ -1,24 +1,12 @@
 import { Flex, Button, useBreakpointValue, Box, IconButton } from '@chakra-ui/react'
-import { 
-    MdChecklist, 
-    MdClass, 
-    MdCompassCalibration, 
-    MdDirections, 
-    MdDownload, 
-    MdElectricBolt, 
-    MdExplore, 
-    MdHome, 
-    MdLightbulb,
-    MdPerson, 
-    MdStar, 
-    MdTune 
-} from 'react-icons/md'
-import FMenu, { MenuItem, MenuItemGroup } from '../ui/new/FMenu'
+import { MdBarChart, MdChecklist, MdHome, MdList, MdPerson, MdTune } from 'react-icons/md'
+import FMenu, { MenuItem, MenuItemGroup } from '../ui/FMenu'
 import { User } from '../../api'
-import FAppBar from '../ui/new/FAppBar'
+import FAppBar from '../ui/FAppBar'
 import Plans from './pages/Plans'
 import { useState } from 'react'
 import { useAppSelector } from '../../store'
+import FScrollableBox from '../ui/FScrollableBox'
 
 interface DashboardMenuProps {
     isOpen: boolean
@@ -27,24 +15,21 @@ interface DashboardMenuProps {
 function DashboardMenu(props: DashboardMenuProps): JSX.Element {
     const plans = useAppSelector(state => state.plans.plans)
 
-    const planMenu: MenuItem = {
-        leftContent: <MdHome size={20} />,
-        label: 'Plans',
-        subMenuItems: plans.map(plan => ({ label: plan.name }))
+    const planMenuItem: MenuItem = {
+        leftContent: <MdChecklist size={20} />,
+        label: 'Plans'
     }
 
-    const menuItemGroups: MenuItemGroup[] = [{ 
-        menuItems: [planMenu],
-        dock: 'top',
-        background: '#fbf7f0',
-        textColor: 'black'
-    }]
+    const progressMenuItem: MenuItem = {
+        leftContent: <MdBarChart size={20} />,
+        label: 'Progress'
+    }
 
     return (
         <FMenu 
             isOpen={props.isOpen} 
             onItemClick={(index) => { }}
-            menuItemGroups={menuItemGroups}
+            menuItems={[planMenuItem, progressMenuItem]}
         />
     )
 }
@@ -65,7 +50,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 icon={<MdTune size={20} />}
                 borderRadius='999px'
                 variant='outline'
-            >Assumptions</IconButton>,
+            />,
 
             <IconButton
                 height='49px'
@@ -74,7 +59,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 icon={<MdPerson size={20} />}
                 borderRadius='999px'
                 variant='outline'
-            >You</IconButton>
+            />
         ], 
         md: [
             <Button
@@ -89,7 +74,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 background='transparent'
                 border='1px solid #e1e1dc'
                 leftIcon={<MdPerson size={20} />}
-            >You</Button>
+            >tom66</Button>
         ] 
     });
 
@@ -122,9 +107,14 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
             >
                 <DashboardMenu isOpen={isMenuOpen} />
 
-                <Flex flexGrow={1} minHeight='0' overflowY='scroll'>
+                <FScrollableBox 
+                    thickness='thick' 
+                    flexGrow={1}
+                    minHeight='0' 
+                    overflowY='scroll'
+                >
                     <Plans {...props} />
-                </Flex>
+                </FScrollableBox>
             </Flex>
         </Flex>
     )

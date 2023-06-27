@@ -27,6 +27,8 @@ export default function FAppBar(props: FAppBarProps): JSX.Element {
                     background='transparent'
                     aria-label='Menu'
                     borderRadius='999px'
+                    width='52px'
+                    height='52px'
                 />
             )}
 
