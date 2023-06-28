@@ -62,6 +62,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
     const responsiveMenuContentRight = useBreakpointValue({
         base: [
             <IconButton
+                key={0}
                 height='49px'
                 width='49px'
                 aria-label='...'
@@ -71,6 +72,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
             />,
 
             <IconButton
+                key={1}
                 height='49px'
                 width='49px'
                 aria-label='...'
@@ -81,6 +83,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
         ], 
         md: [
             <Button
+                key={0}
                 height='49px'
                 background='transparent'
                 border='1px solid #e1e1dc'
@@ -88,6 +91,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
             >Settings</Button>,
 
             <Button
+                key={1}
                 height='49px'
                 background='transparent'
                 border='1px solid #e1e1dc'

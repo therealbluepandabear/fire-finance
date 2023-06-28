@@ -4,7 +4,7 @@ import { generatePlanId } from '../utils'
 export interface Plan {
     id: string
     name: string
-    creationDate: Date
+    creationDate: string
     isFavorite: boolean
     description?: string
 }

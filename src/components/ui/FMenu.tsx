@@ -143,9 +143,8 @@ export default function FMenu(props: FMenuProps): JSX.Element {
         >   
             {props.menuItems.map((menuItem, index) => {
                 return (
-                    <>
+                    <Box key={index}>
                         <MenuItemDisplay
-                            key={index}
                             selectedItem={selectedItem}
                             item={menuItem}
                             onClick={() => itemClickHandler(menuItem)}
@@ -171,7 +170,7 @@ export default function FMenu(props: FMenuProps): JSX.Element {
                                 </Flex>
                             </Flex>
                         )}
-                    </>
+                    </Box>
                 )
             })}
         </FScrollableBox>

@@ -334,34 +334,25 @@ function EditDescriptionModal(props: EditDescriptionModalProps): JSX.Element {
     )
 }
 
+
+
 interface PlanFavoriteButtonProps {
     plan: Plan
 }
 
 function PlanFavoriteButton(props: PlanFavoriteButtonProps): JSX.Element {
 
+    const dispatch = useAppDispatch()
+
     const yetToFavoriteIcon = <MdStarOutline color='#c5c5c5' size={25} />
     const hasFavoritedIcon = <MdStar color='#feba4f' size={25} />
 
-    const [favoriteButtonIcon, setFavoriteIcon] = useState(yetToFavoriteIcon)
     const [hasFavorited, setHasFavorited] = useState(props.plan.isFavorite)
 
-    const dispatch = useAppDispatch()
-
-    function setIsFavorite(isFavorite: boolean): void {
-        dispatch(plansActions.editPlan(
-            { id: props.plan.id, partialState: { isFavorite: isFavorite } }
-        ))
-    }
-
     useEffect(() => {
-        if (hasFavorited) {
-            setFavoriteIcon(hasFavoritedIcon)
-            setIsFavorite(true)
-        } else {
-            setFavoriteIcon(yetToFavoriteIcon)
-            setIsFavorite(false)
-        }
+        dispatch(plansActions.editPlan(
+            { id: props.plan.id, partialState: { isFavorite: hasFavorited } }
+        ))
     }, [hasFavorited])
 
     function favoriteButtonClickHandler(): void {
@@ -374,12 +365,10 @@ function PlanFavoriteButton(props: PlanFavoriteButtonProps): JSX.Element {
             background='white'
             _hover={{ background: 'gray.100' }}
             _active={{ background: 'gray.200' }}
-            icon={favoriteButtonIcon}
+            icon={hasFavorited ? hasFavoritedIcon : yetToFavoriteIcon}
             onClick={favoriteButtonClickHandler}
             marginLeft='auto'
-        >
-            {favoriteButtonIcon}
-        </IconButton>
+        />
     )
 }
 
@@ -399,7 +388,7 @@ function PlanCard(props: PlanCardProps): JSX.Element {
         year: 'numeric' 
     }
     
-    const formattedCreationDate = props.plan.creationDate.toLocaleString('en-US', options)
+    const formattedCreationDate = new Date(props.plan.creationDate).toLocaleString('en-US', options)
 
     const showDescriptionBadge = props.plan.description && props.plan.description.trim().length > 0 
 
@@ -448,12 +437,12 @@ function PlanCard(props: PlanCardProps): JSX.Element {
                         textOverflow='ellipsis' 
                         overflow='hidden' 
                         whiteSpace='nowrap'
-                    >{props.plan.name}</Text>
+                    >{props.plan.name} {props.plan.isFavorite.toString()}</Text>
                     
                     <Text color='rgb(22, 135, 94)'  fontSize='sm'>{formattedCreationDate}</Text>
                 </Flex>
 
-                <PlanFavoriteButton plan={props.plan} />
+                <PlanFavoriteButton key={props.plan.id} plan={props.plan} />
             </Flex>
         </Box>
     )
@@ -473,7 +462,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
         const plan: Plan = {
             id: generatePlanId(),
             name: `Plan ${plans.length}`,
-            creationDate: new Date(2002, 0, 9),
+            creationDate: new Date(2002, 0, 9).toISOString(),
             isFavorite: false
         }
 
