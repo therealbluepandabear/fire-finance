@@ -2,37 +2,32 @@ import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, Popo
 import { PropsWithChildren, useEffect, useState } from 'react'
 import FScrollableBox from './FScrollableBox'
 
-interface DisplayProps<T extends MenuItem | SubMenuItem> { 
-    selectedItem: MenuItemSelection | null
-    item: T
+interface DisplayProps { 
+    selectedItem: MenuItem
+    item: MenuItem
     onClick: () => void
 }
 
-function MenuItemButtonBase({ children, ...props }: HTMLChakraProps<'button'> & PropsWithChildren): JSX.Element {
+function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
+
+    const isSelectedItem = props.item.label === props.selectedItem.label
+
+    let hoverColor = 'blue.100'
+    let activeColor = 'blue.200'
+
+    if (!isSelectedItem) {
+        hoverColor = 'gray.100'
+        activeColor = 'gray.200'
+    }
+    
     return (
         <Button
             flexDirection='row'
             justifyContent='flex-start'
             paddingStart='16px'
-            minHeight='42px'
-            height='42px'
-            borderRadius='0px'
-            _hover={{ background: 'blue.100' }}
-            _active={{ background: 'blue.200' }}
+            _hover={{ background: props.isOpen ? hoverColor : '' }}
+            _active={{ background: props.isOpen ? activeColor : '' }}
             width='100%'
-            {...props}
-        >
-            {children}
-        </Button>
-    )
-}
-
-function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Element {
-    
-    const isSelectedItem = props.selectedItem?.selectedMenuItem.label === props.item.label
-
-    return (
-        <MenuItemButtonBase
             onClick={props.onClick}
             borderRadius={props.isOpen ? '0px' : '999px'}
             borderEndRadius='999px'
@@ -44,6 +39,8 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Elemen
                 color={isSelectedItem ? '#1a73e8' : ''}
                 background={!props.isOpen && isSelectedItem ? 'pastelPrimary' : 'transparent'} 
                 borderRadius='999px'
+                _hover={{ background: !props.isOpen ? hoverColor : '' }}
+                _active={{ background: !props.isOpen ? activeColor : '' }}
             >
                 {props.item.leftContent}
             </Box>
@@ -56,15 +53,7 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps<MenuItem>): JSX.Elemen
                     color={isSelectedItem ? '#1a73e8' : ''}
                 >{props.item.label}</Text>
             )}
-        </MenuItemButtonBase>
-    )
-}
-
-function SubMenuItemDisplay(props: FMenuProps & DisplayProps<SubMenuItem>): JSX.Element {
-    return (
-        <MenuItemButtonBase onClick={props.onClick}>
-            {props.item.label}
-        </MenuItemButtonBase>
+        </Button>
     )
 }
 
@@ -72,59 +61,29 @@ export interface MenuItemGroup {
     menuItems: MenuItem[]
 }
 
-export interface SubMenuItem {
-    label: string
-}
-
 export interface MenuItem {
     leftContent: JSX.Element
     label: string
-    subMenuItems?: SubMenuItem[]
 }
 
 interface MenuItemSelection {
     selectedMenuItem: MenuItem
-    selectedSubMenuItem?: SubMenuItem
 }
 
 interface FMenuProps {
     isOpen: boolean
-    onItemClick: (item: MenuItem | SubMenuItem) => void
+    onItemClick: (item: MenuItem) => void
     menuItems: MenuItem[]
 }
 
-function findSubMenuItemParent(menuItems: MenuItem[], subMenuItem: SubMenuItem): MenuItem | undefined {
-    return menuItems.find(menuItem => menuItem.subMenuItems && menuItem.subMenuItems.includes(subMenuItem))
-}
-
 export default function FMenu(props: FMenuProps): JSX.Element {
-    // If a particular menu item is open it means the 
-    // sub items of that menu item are showing
-    const [openMenuItems, setOpenMenuItems] = useState<MenuItem[]>([])
-    const [selectedItem, setSelectedItem] = useState<MenuItemSelection>({ selectedMenuItem: props.menuItems[0] })
 
-    function itemClickHandler(item: MenuItem | SubMenuItem): void {
+    const [selectedItem, setSelectedItem] = useState<MenuItem>(props.menuItems[0])
+
+    function itemClickHandler(item: MenuItem): void {
         props.onItemClick(item)
 
-        const isMenuItem = 'leftContent' in item
-
-        if (isMenuItem && !item.subMenuItems) {
-            setSelectedItem({ selectedMenuItem: item })
-        } else if (!isMenuItem) {
-            const parentMenuItem = findSubMenuItemParent(props.menuItems, item)
-
-            if (parentMenuItem) {
-                setSelectedItem({ selectedMenuItem: parentMenuItem, selectedSubMenuItem: item })
-            }
-        }
-
-        if (isMenuItem && item.subMenuItems) {
-            if (!openMenuItems.includes(item)) {
-                setOpenMenuItems((prevOpenMenuItems) => [...prevOpenMenuItems, item])
-            } else {
-                setOpenMenuItems(openMenuItems.filter(menuItems => menuItems !== item))
-            }
-        } 
+        setSelectedItem(item)
     }
 
     return (
@@ -150,26 +109,6 @@ export default function FMenu(props: FMenuProps): JSX.Element {
                             onClick={() => itemClickHandler(menuItem)}
                             {...props}
                         />
-
-                        {props.isOpen && openMenuItems.includes(menuItem) && (
-                            <Flex>
-                                <Box opacity={0} borderRadius='999px'>
-                                    {menuItem.leftContent}
-                                </Box>
-
-                                <Flex flexDirection='column' width='100%'>
-                                    {menuItem.subMenuItems && menuItem.subMenuItems.map((subMenuItem, index) => (
-                                        <SubMenuItemDisplay
-                                            key={index}
-                                            selectedItem={selectedItem}
-                                            item={subMenuItem}
-                                            onClick={() => itemClickHandler(subMenuItem)}
-                                            {...props}
-                                        />
-                                    ))}
-                                </Flex>
-                            </Flex>
-                        )}
                     </Box>
                 )
             })}

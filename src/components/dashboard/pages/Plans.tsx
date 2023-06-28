@@ -437,7 +437,7 @@ function PlanCard(props: PlanCardProps): JSX.Element {
                         textOverflow='ellipsis' 
                         overflow='hidden' 
                         whiteSpace='nowrap'
-                    >{props.plan.name} {props.plan.isFavorite.toString()}</Text>
+                    >{props.plan.name}</Text>
                     
                     <Text color='rgb(22, 135, 94)'  fontSize='sm'>{formattedCreationDate}</Text>
                 </Flex>
