@@ -280,12 +280,12 @@ function FModal(props: FModalProps): JSX.Element {
     )
 }
 
-interface RenamePlanModalProps {
+interface ModalProps {
     plan: Plan
     onClose: () => void
 }
 
-function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {  
+function RenamePlanModal(props: ModalProps): JSX.Element {  
     const dispatch = useAppDispatch()
       
     const { register, watch } = useForm<{ inputValue: string }>(
@@ -306,12 +306,7 @@ function RenamePlanModal(props: RenamePlanModalProps): JSX.Element {
     )
 }
 
-interface EditDescriptionModalProps {
-    plan: Plan
-    onClose: () => void
-}
-
-function EditDescriptionModal(props: EditDescriptionModalProps): JSX.Element {
+function EditDescriptionModal(props: ModalProps): JSX.Element {
     const dispatch = useAppDispatch()
 
     const planDescription = props.plan.description ?? ''
@@ -334,6 +329,21 @@ function EditDescriptionModal(props: EditDescriptionModalProps): JSX.Element {
     )
 }
 
+function DeletePlanModal(props: ModalProps): JSX.Element {
+    const dispatch = useAppDispatch()
+
+    function OKClickHandler(): void {
+        dispatch(plansActions.removePlan(props.plan.id))
+
+        props.onClose()
+    }
+
+    return (
+        <FModal title='Delete Plan' onOKClick={OKClickHandler} onClose={props.onClose}>
+            <Text>{`Are you sure you want to delete ${props.plan.name}? This cannot be undone.`}</Text>
+        </FModal>
+    )
+}
 
 
 interface PlanFavoriteButtonProps {
@@ -448,11 +458,12 @@ function PlanCard(props: PlanCardProps): JSX.Element {
     )
 }
 
+type Context = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
+
 export default function Settings(props: DashboardProps): JSX.Element {
     const dispatch = useAppDispatch()
 
-    const [renameContext, setRenameContext] = useState<Plan | null>(null)
-    const [descriptionContext, setDescriptionContext] = useState<Plan | null>(null)
+    const [context, setContext] = useState<Context | null>()
 
     const [viewStarred, setViewStarred] = useState(false)
 
@@ -469,28 +480,24 @@ export default function Settings(props: DashboardProps): JSX.Element {
         dispatch(plansActions.addPlan(plan))
     }
 
-    function deletePlanClickHandler(plan: Plan): void {
-        dispatch(plansActions.removePlan(plan.id))
-    }
-
     function duplicatePlanClickHandler(plan: Plan): void {
         dispatch(plansActions.duplicatePlan(plan.id))
     }
 
     function renamePlanClickHandler(plan: Plan): void {
-        setRenameContext(plan)
+        setContext({ data: plan, type: 'rename' })
     }
 
     function editDescriptionPlanClickHandler(plan: Plan): void {
-        setDescriptionContext(plan)
+        setContext({ data: plan, type: 'editDescription' })
     }
 
-    function onRenamePlanModalClose(): void {
-        setRenameContext(null)
+    function deletePlanClickHandler(plan: Plan): void {
+        setContext({ data: plan, type: 'delete' })
     }
 
-    function onEditDescriptionModalClose(): void {
-        setDescriptionContext(null)
+    function onContextModalClose(): void {
+        setContext(null)
     }
 
     function chipIndexChangeHandler(index: number): void {
@@ -499,8 +506,9 @@ export default function Settings(props: DashboardProps): JSX.Element {
 
     return (
         <>
-            {renameContext && <RenamePlanModal plan={renameContext} onClose={onRenamePlanModalClose} />}
-            {descriptionContext && <EditDescriptionModal plan={descriptionContext} onClose={onEditDescriptionModalClose} />}
+            {context && context.type === 'rename' && <RenamePlanModal plan={context.data} onClose={onContextModalClose} />}
+            {context && context.type === 'editDescription' && <EditDescriptionModal plan={context.data} onClose={onContextModalClose} />}
+            {context && context.type === 'delete' && <DeletePlanModal plan={context.data} onClose={onContextModalClose} />}
 
             <Flex 
                 padding={{ base: '24px', md: '48px' }}
