@@ -18,7 +18,8 @@ export default function FScrollableBox({ children, thickness, ...props }: FScrol
             {...props}
             sx={{
                 '::-webkit-scrollbar': {
-                    width: scrollbarWidth
+                    width: 'scrollbarWidth',
+                    overflowY: 'auto'
                 },
                 '::-webkit-scrollbar-thumb:hover': {
                     background: 'darkgray'

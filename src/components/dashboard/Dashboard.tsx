@@ -133,7 +133,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                     thickness='thick' 
                     flexGrow={1}
                     minHeight='0' 
-                    overflowY='scroll'
+                    overflowY='auto'
                 >
                     <Plans {...props} />
                 </FScrollableBox>

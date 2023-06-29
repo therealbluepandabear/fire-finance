@@ -1,5 +1,5 @@
 import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverBody } from '@chakra-ui/react';
-import { PropsWithChildren, useEffect, useState } from 'react'
+import {  useState } from 'react'
 import FScrollableBox from './FScrollableBox'
 
 interface DisplayProps { 
@@ -66,10 +66,6 @@ export interface MenuItem {
     label: string
 }
 
-interface MenuItemSelection {
-    selectedMenuItem: MenuItem
-}
-
 interface FMenuProps {
     isOpen: boolean
     onItemClick: (item: MenuItem) => void
@@ -100,18 +96,16 @@ export default function FMenu(props: FMenuProps): JSX.Element {
             background='white'
             shadow={{ base: 'md', md: 'none' }}
         >   
-            {props.menuItems.map((menuItem, index) => {
-                return (
-                    <Box key={index}>
-                        <MenuItemDisplay
-                            selectedItem={selectedItem}
-                            item={menuItem}
-                            onClick={() => itemClickHandler(menuItem)}
-                            {...props}
-                        />
-                    </Box>
-                )
-            })}
+            {props.menuItems.map((menuItem, index) => (
+                <Box key={index}>
+                    <MenuItemDisplay
+                        selectedItem={selectedItem}
+                        item={menuItem}
+                        onClick={() => itemClickHandler(menuItem)}
+                        {...props}
+                    />
+                </Box>
+            ))}
         </FScrollableBox>
     )
 }

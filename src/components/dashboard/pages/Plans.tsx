@@ -1,7 +1,6 @@
 import { DashboardProps } from '../Dashboard'
 import { 
     Flex, 
-    Text, 
     Box, 
     Button, 
     IconButton,
@@ -20,7 +19,13 @@ import {
     ModalHeader,
     ModalOverlay,
     Input,
-    ModalCloseButton
+    ModalCloseButton,
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
+    Text
 } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { 
@@ -515,6 +520,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 flexDirection='column' 
                 width='100%'
                 height='100%'
+                position='relative'
             >
                 <Text fontSize='3xl' fontFamily='manrope'>Home</Text>
 
@@ -529,11 +535,46 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         </Flex>
 
                         <Flex 
+                            display={{ base: 'flex', md: 'none' }}
+                            marginTop={{ base: '16px', xl: '0px' }}
+                            marginLeft='-24px'
+                            marginRight='-24px'
+                            marginBottom='36px'
+                        >
+                            <Tabs isFitted={true} width='100%'>
+                                <TabList>
+                                    <Tab 
+                                        gap='8px' 
+                                        ringColor='yellow' 
+                                        _selected={{ 
+                                            borderBottomColor: 'buttonPrimary', 
+                                            color: 'buttonPrimary'
+                                        }}
+                                    >
+                                        <MdChecklist size={20} />
+                                        All Plans
+                                    </Tab>
+                                    <Tab 
+                                        gap='8px' 
+                                        _selected={{ 
+                                            borderBottomColor: 'buttonPrimary', 
+                                            color: 'buttonPrimary', 
+                                        }}
+                                    >
+                                        <MdStarOutline size={20} />
+                                        Starred
+                                    </Tab>
+                                </TabList>
+                            </Tabs>
+                        </Flex>
+
+                        <Flex 
                             flexDirection='row' 
                             marginLeft={{ base: '0px', xl: 'auto' }}
                             alignSelf={{ base: 'flex-start', xl: 'flex-end' }}
                             marginTop={{ base: '16px', xl: '0px' }}
                             gap='12px'
+                            display={{ base: 'none', md: 'flex' }}
                         >
                             <Button
                                 leftIcon={<MdAdd color='white' size={20} />}
@@ -550,7 +591,9 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         </Flex>
                     </Flex>
 
-                    <Divider />
+                    <Box display={{ base: 'none', md: 'block' }}>
+                        <Divider />
+                    </Box>
                 </Flex>
 
                 {plans.length > 0 ? (
@@ -609,6 +652,20 @@ export default function Settings(props: DashboardProps): JSX.Element {
                     </Flex>
                 )}
             </Flex>
+
+            <IconButton
+                visibility={{ base: 'visible', md: 'collapse' }}
+                width='50px'
+                height='50px'
+                right='0'
+                bottom='0'
+                background='buttonPrimary'
+                position='absolute'
+                icon={<MdAdd color='white' size={20} />}
+                aria-label='Add Plan'
+                onClick={addPlanClickHandler}
+                margin='16px'
+            />
         </>
     )
 }
