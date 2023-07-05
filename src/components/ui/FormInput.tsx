@@ -27,30 +27,29 @@ interface FormInputProps {
 
 export default function FormInput(props: FormInputProps): JSX.Element {
     return (
-        <FormControl isInvalid={props.isInvalid} variant="floating">
+        <FormControl isInvalid={props.isInvalid} variant='floating'>
             <InputGroup>
                 <InputLeftElement>
                     {props.inputLeftElement}
                 </InputLeftElement>
 
                 <Input 
-                    borderRadius="24px"
-                    size="md"
-                    errorBorderColor="red.500"
-                    placeholder=" "
-                    type="number"
+                    size='md'
+                    errorBorderColor='red.500'
+                    placeholder=' '
+                    type='number'
                     {...props.register}
                 />
 
                 <FormLabel 
-                    style={{ marginLeft: "32px" }} 
-                    color="gray"
+                    style={{ marginLeft: '32px' }} 
+                    color='gray'
                     backgroundColor={useColorModeValue('white', 'gray.800')}
                 >{props.placeholder}</FormLabel>
 
-                <Tooltip label={props.tooltipText} textAlign="center" fontSize="12px">
+                <Tooltip label={props.tooltipText} textAlign='center' fontSize='12px'>
                     <InputRightElement>
-                        <MdHelp color="lightgray" />
+                        <MdHelp color='lightgray' />
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>

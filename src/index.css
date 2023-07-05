@@ -38,6 +38,14 @@ body {
     src: url('../public/manrope-v14-latin-500.woff2') format('woff2');
 }
 
+@font-face {
+    font-display: swap;
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../public/manrope-v14-latin-700.woff2') format('woff2');
+}
+
 input, textarea, button, select, a {
     -webkit-tap-highlight-color: transparent;
 }

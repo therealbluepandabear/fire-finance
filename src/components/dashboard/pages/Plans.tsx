@@ -1,4 +1,3 @@
-import { DashboardProps } from '../Dashboard'
 import { 
     Flex, 
     Box, 
@@ -24,20 +23,35 @@ import {
     TabList,
     TabPanel,
     TabPanels,
+    Select,
     Tabs,
-    Text
+    Text,
+    useBreakpointValue,
+    Tooltip
 } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { 
     MdAdd, 
+    MdArrowBack, 
+    MdArrowLeft, 
     MdChecklist, 
     MdContentCopy, 
     MdDelete, 
     MdDescription, 
     MdEdit, 
+    MdGrid4X4, 
+    MdGridView, 
+    MdInfo, 
+    MdInfoOutline, 
+    MdList, 
     MdMoreVert, 
+    MdOutlineGridView, 
+    MdOutlineViewList, 
+    MdOutlineViewModule, 
+    MdSearch, 
     MdStar, 
-    MdStarOutline 
+    MdStarOutline, 
+    MdViewList
 } from 'react-icons/md'
 import Divider from '../../ui/FDivider'
 import { Area, AreaChart, ResponsiveContainer } from 'recharts'
@@ -45,9 +59,10 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions, Plan } from '../../../store/plans-slice'
 import { generatePlanId } from '../../../utils'
-import FScrollableBox from '../../ui/FScrollableBox'
+import FScrollableBox, { ScrollbarThumbThickness } from '../../ui/FScrollableBox'
 import FChip from '../../ui/FChip'
 import FChips from '../../ui/FChips'
+import { GenIcon } from 'react-icons'
 
 interface PlanDescriptionBadgeProps {
     description: string
@@ -239,7 +254,7 @@ function PlanChart(): JSX.Element {
                     type='monotone'
                     dataKey='pv'
                     stroke='#50C878'
-                    fill='#50C878'
+                    fill='#73d393'
                     strokeWidth={3}
                     opacity={0.75}
                 />
@@ -465,12 +480,17 @@ function PlanCard(props: PlanCardProps): JSX.Element {
 
 type Context = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
 
-export default function Settings(props: DashboardProps): JSX.Element {
+interface PlansPageProps {
+    onAddPlanClick: () => void
+}
+
+export default function PlansPage(props: PlansPageProps): JSX.Element {
     const dispatch = useAppDispatch()
 
     const [context, setContext] = useState<Context | null>()
-
     const [viewStarred, setViewStarred] = useState(false)
+
+    const thumbThickness = useBreakpointValue<ScrollbarThumbThickness>({ base: 'normal', md: 'thick' })
 
     const plans = useAppSelector(state => viewStarred ? state.plans.plans.filter(plan => plan.isFavorite) : state.plans.plans)
 
@@ -483,6 +503,8 @@ export default function Settings(props: DashboardProps): JSX.Element {
         }
 
         dispatch(plansActions.addPlan(plan))
+
+        props.onAddPlanClick()
     }
 
     function duplicatePlanClickHandler(plan: Plan): void {
@@ -510,7 +532,12 @@ export default function Settings(props: DashboardProps): JSX.Element {
     }
 
     return (
-        <>
+        <FScrollableBox
+            thickness={thumbThickness}
+            flexGrow={1}
+            minHeight='0'
+            overflowY='auto'
+        >
             {context && context.type === 'rename' && <RenamePlanModal plan={context.data} onClose={onContextModalClose} />}
             {context && context.type === 'editDescription' && <EditDescriptionModal plan={context.data} onClose={onContextModalClose} />}
             {context && context.type === 'delete' && <DeletePlanModal plan={context.data} onClose={onContextModalClose} />}
@@ -519,19 +546,12 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 padding={{ base: '24px', md: '48px' }}
                 flexDirection='column' 
                 width='100%'
-                height='100%'
                 position='relative'
             >
-                <Text fontSize='3xl' fontFamily='manrope'>Home</Text>
-
                 <Flex flexDirection='column'>
-                    <Flex 
-                        marginTop={{ base: '24px', md: '48px' }}
-                        flexDirection={{ base: 'column', xl: 'row' }}
-                    >
-                        <Flex flexDirection='column' gap='8px'>
-                            <Text fontSize='2xl'>Plans</Text>
-                            <Text fontSize='sm' maxWidth='700px' color='gray' textOverflow='ellipsis'>The purpose of a financial plan is to provide a clear framework for making informed financial decisions, optimizing cash flow, minimizing financial risks, and maximizing wealth accumulation over time.</Text>
+                    <Flex flexDirection={{ base: 'column', md: 'row' }}>
+                        <Flex gap='16px' alignSelf='center' alignItems='center'>
+                            <Text fontSize='2xl' fontFamily='manrope'>Plans</Text>
                         </Flex>
 
                         <Flex 
@@ -541,7 +561,7 @@ export default function Settings(props: DashboardProps): JSX.Element {
                             marginRight='-24px'
                             marginBottom='36px'
                         >
-                            <Tabs isFitted={true} width='100%'>
+                            <Tabs isFitted={true} width='100%' onChange={chipIndexChangeHandler} isLazy={true}>
                                 <TabList>
                                     <Tab 
                                         gap='8px' 
@@ -569,13 +589,10 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         </Flex>
 
                         <Flex 
-                            flexDirection='row' 
-                            marginLeft={{ base: '0px', xl: 'auto' }}
-                            alignSelf={{ base: 'flex-start', xl: 'flex-end' }}
-                            marginTop={{ base: '16px', xl: '0px' }}
+                            marginLeft='auto'
                             gap='12px'
                             display={{ base: 'none', md: 'flex' }}
-                        >
+                        >   
                             <Button
                                 leftIcon={<MdAdd color='white' size={20} />}
                                 marginLeft='auto'
@@ -583,17 +600,19 @@ export default function Settings(props: DashboardProps): JSX.Element {
                                 onClick={addPlanClickHandler}
                                 background='buttonPrimary'
                             >Add</Button>
-
-                            <FChips onIndexChange={chipIndexChangeHandler}>
-                                <FChip icon={<MdChecklist size={20} />}>All Plans</FChip>
-                                <FChip icon={<MdStarOutline size={20} />}>Starred</FChip>
-                            </FChips>
                         </Flex>
                     </Flex>
 
                     <Box display={{ base: 'none', md: 'block' }}>
                         <Divider />
                     </Box>
+                </Flex>
+
+                <Flex marginTop='-16px' height='35px' minHeight='35px' marginBottom='32px' display={{ base: 'none', md: 'flex' }}>
+                    <FChips onIndexChange={chipIndexChangeHandler}>
+                        <FChip>All Plans</FChip>
+                        <FChip>Starred</FChip>
+                    </FChips>
                 </Flex>
 
                 {plans.length > 0 ? (
@@ -634,25 +653,25 @@ export default function Settings(props: DashboardProps): JSX.Element {
                         >
                             <Image src={viewStarred ? '/star.svg' : '/empty_state.svg'} width='250px' padding='0' />
 
-                            <Flex flexDirection='column' gap='16px'>
+                            <Flex flexDirection='column' gap='8px'>
                                 <Text 
                                     fontFamily='manrope' 
                                     fontSize='3xl' 
                                     textAlign='center' 
                                     color='black'
                                 >
-                                    {viewStarred ? 'No starred plans' : 'No plans'}
+                                    {viewStarred ? `You haven't stared a plan yet` : `You don't have any plans yet`}
                                 </Text>
                                 
-                                <Text textAlign='center' color='gray'>
-                                    {viewStarred ? 'You currently have no starred plans, star a plan to get started.' : `You currently have no plans, press 'Add' to get started on your journey.`}
+                                <Text textAlign='center' color='gray' fontFamily='Manrope'>
+                                    {viewStarred ? 'Star a plan to get started.' : 'Create a plan to get started.'}
                                 </Text>
                             </Flex>
                         </Flex>
                     </Flex>
                 )}
             </Flex>
-
+                
             <IconButton
                 visibility={{ base: 'visible', md: 'collapse' }}
                 width='50px'
@@ -666,6 +685,6 @@ export default function Settings(props: DashboardProps): JSX.Element {
                 onClick={addPlanClickHandler}
                 margin='16px'
             />
-        </>
+        </FScrollableBox>
     )
 }

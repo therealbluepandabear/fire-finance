@@ -1,6 +1,7 @@
-import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverBody } from '@chakra-ui/react';
+import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverBody, useBreakpointValue } from '@chakra-ui/react';
 import {  useState } from 'react'
 import FScrollableBox from './FScrollableBox'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface DisplayProps { 
     selectedItem: MenuItem
@@ -20,7 +21,7 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
         activeColor = 'gray.200'
     }
     
-    return (
+    return (    
         <Button
             flexDirection='row'
             justifyContent='flex-start'
@@ -47,10 +48,11 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
 
             {props.isOpen && (
                 <Text
-                    fontSize='md'
+                    letterSpacing='0.3px'
+                    fontSize='17px'
                     paddingStart='8px'
-                    fontWeight='bold'
-                    color={isSelectedItem ? '#1a73e8' : ''}
+                    color={isSelectedItem ? 'pastelForeground' : ''}
+                    fontFamily='Manrope'
                 >{props.item.label}</Text>
             )}
         </Button>
@@ -74,6 +76,8 @@ interface FMenuProps {
 
 export default function FMenu(props: FMenuProps): JSX.Element {
 
+    const animationDuration = useBreakpointValue({ base: '0.15s', md: '0.25s' })
+
     const [selectedItem, setSelectedItem] = useState<MenuItem>(props.menuItems[0])
 
     function itemClickHandler(item: MenuItem): void {
@@ -83,7 +87,7 @@ export default function FMenu(props: FMenuProps): JSX.Element {
     }
 
     return (
-        <FScrollableBox 
+        <FScrollableBox
             overflowY='auto'
             overflowX='hidden'
             zIndex='999'
@@ -92,19 +96,33 @@ export default function FMenu(props: FMenuProps): JSX.Element {
             flexDirection='column'
             position={{ base: 'absolute', md: 'static' }}
             height='100%'
-            paddingTop='16px'
+            paddingTop={{ base: '0px', md: '16px' }}
             background='white'
             shadow={{ base: 'md', md: 'none' }}
-        >   
+            top='0'
+            transition={`width ${animationDuration}, min-width ${animationDuration}`}
+        >  
+            <Flex 
+                height='76px' 
+                transition={`width ${animationDuration}, min-width ${animationDuration}`}
+                marginBottom='16px' 
+                borderBottom='1px solid #e1e1dc' 
+                alignItems='center'
+                paddingStart='36px'
+                width={{ base: props.isOpen ? 'auto' : '0px', md: '0px' }}
+                display={{ base: 'flex', md: 'none' }}
+            >
+                <Text fontSize='xl' fontFamily='manrope'>FireFinance</Text>
+            </Flex> 
+
             {props.menuItems.map((menuItem, index) => (
-                <Box key={index}>
-                    <MenuItemDisplay
-                        selectedItem={selectedItem}
-                        item={menuItem}
-                        onClick={() => itemClickHandler(menuItem)}
-                        {...props}
-                    />
-                </Box>
+                <MenuItemDisplay
+                    key={index}
+                    selectedItem={selectedItem}
+                    item={menuItem}
+                    onClick={() => itemClickHandler(menuItem)}
+                    {...props}
+                />
             ))}
         </FScrollableBox>
     )

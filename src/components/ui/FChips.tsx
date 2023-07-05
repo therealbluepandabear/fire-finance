@@ -1,5 +1,6 @@
 import { Flex, HTMLChakraProps, useColorModeValue } from '@chakra-ui/react'
 import { Children, PropsWithChildren, cloneElement, useState } from 'react'
+import { MdCheck } from 'react-icons/md'
 
 interface FChipsProps extends PropsWithChildren {
     onIndexChange: (index: number) => void
@@ -16,15 +17,17 @@ export default function FChips({ onIndexChange, children, defaultIndex }: FChips
 
     return (
         <Flex
-            borderRadius='md'
             overflow='hidden'
-            border='1px solid #e1e1dc'
         >
             {children && Children.map(children, (child: any, itrIndex) => {
                 return cloneElement(child, {
                     key: itrIndex,
                     onClick: chipClickHandler.bind(null, itrIndex),
-                    background: itrIndex === index ? 'pastelPrimary' : 'transparent'
+                    background: itrIndex === index ? 'pastelPrimary' : 'transparent',
+                    border: itrIndex !== index ? '1px solid #e1e1dc' : '',
+                    marginLeft: itrIndex !== 0 ? '8px' : '0px',
+                    color: itrIndex === index ? 'pastelForeground' : '',
+                    leftIcon: itrIndex === index ? <MdCheck /> : null
                 })
             })}
         </Flex>

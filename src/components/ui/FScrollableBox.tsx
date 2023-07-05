@@ -1,16 +1,18 @@
 import { Box, Flex, HTMLChakraProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
+export type ScrollbarThumbThickness = 'normal' | 'thick'
+
 interface FScrollableBoxProps extends PropsWithChildren<HTMLChakraProps<'div'>> {
-    thickness?: 'normal' | 'thick'
+    thickness?: ScrollbarThumbThickness
 }
 
 export default function FScrollableBox({ children, thickness, ...props }: FScrollableBoxProps): JSX.Element {
 
-    let scrollbarWidth = '8px'
+    let scrollbarWidth = '9px'
 
     if (thickness === 'thick') {
-        scrollbarWidth = '12px'
+        scrollbarWidth = '16px'
     }
 
     return (
@@ -18,7 +20,7 @@ export default function FScrollableBox({ children, thickness, ...props }: FScrol
             {...props}
             sx={{
                 '::-webkit-scrollbar': {
-                    width: 'scrollbarWidth',
+                    width: scrollbarWidth,
                     overflowY: 'auto'
                 },
                 '::-webkit-scrollbar-thumb:hover': {

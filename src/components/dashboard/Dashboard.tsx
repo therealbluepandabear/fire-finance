@@ -3,9 +3,9 @@ import { MdAutoGraph, MdChecklist, MdHelpOutline, MdOutlineCalculate, MdOutlineS
 import FMenu, { MenuItem } from '../ui/FMenu'
 import { User } from '../../api'
 import FAppBar from '../ui/FAppBar'
-import Plans from './pages/Plans'
 import { useState } from 'react'
-import FScrollableBox from '../ui/FScrollableBox'
+import PlansPage from './pages/Plans'
+import PlanStepDialog from './pages/PlanStepDialog'
 
 interface DashboardMenuProps {
     isOpen: boolean
@@ -57,6 +57,16 @@ export interface DashboardProps {
 }
 
 export default function Dashboard(props: DashboardProps): JSX.Element {
+
+    const [showPlanFormDialog, setShowPlanFormDialog] = useState(false)
+
+    const [currentPage, setCurrentPage] = useState<JSX.Element>(
+        <PlansPage 
+            {...props} 
+            onAddPlanClick={() => setShowPlanFormDialog(true)} 
+        />
+    )
+
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const responsiveMenuContentRight = useBreakpointValue({
@@ -105,39 +115,47 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
     }
 
     return (
-        <Flex 
-            flexDirection='column' 
-            width='100%' 
-            height='100vh' 
-            maxHeight='100vh'
-        >
-            <FAppBar 
-                isMenu={true} 
-                onMenuClick={menuClickHandler}
-                contentRight={
-                    <Flex gap={{ base: '8px', md: '16px' }}>
-                        {responsiveMenuContentRight}
-                    </Flex>
-                }
+        <>
+            <Flex
+                width='100%'
+                height='100%'
+                background='rgba(0, 0, 0, 0.48)'
+                position='absolute'
+                top='0'
+                zIndex='998'
+                display={{ base: isMenuOpen ? 'flex' : 'none', md: 'none' }}
+                onClick={() => setIsMenuOpen(false)}
             />
 
-            <Flex 
-                flexGrow={1} 
-                minHeight='0' 
-                as='main' 
-                position='relative'
-            >
-                <DashboardMenu isOpen={isMenuOpen} />
+            {showPlanFormDialog && <PlanStepDialog onClose={() => setShowPlanFormDialog(false)} />}
 
-                <FScrollableBox 
-                    thickness='thick' 
-                    flexGrow={1}
+            <Flex 
+                flexDirection='column' 
+                width='100%' 
+                height='100vh' 
+                maxHeight='100vh'
+            >
+                <FAppBar 
+                    isMenu={true} 
+                    onMenuClick={menuClickHandler}
+                    contentRight={
+                        <Flex gap={{ base: '8px', md: '16px' }}>
+                            {responsiveMenuContentRight}
+                        </Flex>
+                    }
+                />
+
+                <Flex 
+                    flexGrow={1} 
                     minHeight='0' 
-                    overflowY='auto'
+                    as='main' 
+                    position={{ base: 'static', md: 'relative' }}
                 >
-                    <Plans {...props} />
-                </FScrollableBox>
+                    <DashboardMenu isOpen={isMenuOpen} />
+                    
+                    {currentPage}
+                </Flex>
             </Flex>
-        </Flex>
+        </>
     )
 }
