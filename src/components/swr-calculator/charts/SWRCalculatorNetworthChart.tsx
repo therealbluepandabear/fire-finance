@@ -12,7 +12,7 @@ interface SWRCalculatorNetworthChartProps {
     focus: ChartFocus
 }
 
-export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthChartProps): JSX.Element {
+export default function SWRCalculatorNetworthChart(props: SWRCalculatorNetworthChartProps) {
     const xAxis = (
         <XAxis axisLine={false} tickFormatter={(value) => 1930 + value} />
     )

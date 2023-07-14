@@ -8,7 +8,7 @@ interface SWRCalculatorPieChartProps {
     cycleInfo: CycleInfo
 }
 
-export default function SWRCalculatorPieChart(props: SWRCalculatorPieChartProps): JSX.Element {
+export default function SWRCalculatorPieChart(props: SWRCalculatorPieChartProps) {
     const data = [
         { name: 'Successes', value: props.cycleInfo.successes },
         { name: 'Failures', value: props.cycleInfo.failures }

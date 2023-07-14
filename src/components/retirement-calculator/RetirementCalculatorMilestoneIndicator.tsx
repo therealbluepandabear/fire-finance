@@ -11,7 +11,7 @@ interface CircleProps extends PropsWithChildren {
     type: MilestoneType
 }
 
-function Circle(props: CircleProps): JSX.Element {
+function Circle(props: CircleProps) {
     return (
         <Box 
             width="20px" 
@@ -36,7 +36,7 @@ interface RetirementCalculatorMilestoneIndicatorProps {
     cy: number
 }
 
-export default function RetirementCalculatorMilestoneIndicator(props: RetirementCalculatorMilestoneIndicatorProps): JSX.Element {
+export default function RetirementCalculatorMilestoneIndicator(props: RetirementCalculatorMilestoneIndicatorProps) {
     const left = props.cx - 10
     const top = (props.cy - 10) - 40
 

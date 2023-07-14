@@ -9,7 +9,7 @@ interface DisplayProps {
     onClick: () => void
 }
 
-function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
+function MenuItemDisplay(props: FMenuProps & DisplayProps) {
 
     const isSelectedItem = props.item.label === props.selectedItem.label
 
@@ -25,7 +25,8 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
         <Button
             flexDirection='row'
             justifyContent='flex-start'
-            paddingStart='16px'
+            paddingStart={{ base: '4px', md: '16px' }}
+            variant='foo'
             _hover={{ background: props.isOpen ? hoverColor : '' }}
             _active={{ background: props.isOpen ? activeColor : '' }}
             width='100%'
@@ -50,12 +51,29 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps): JSX.Element {
                 <Text
                     letterSpacing='0.3px'
                     fontSize='17px'
-                    paddingStart='8px'
+                    paddingStart={{ base: '0px', md: '8px' }}
                     color={isSelectedItem ? 'pastelForeground' : ''}
                     fontFamily='Manrope'
                 >{props.item.label}</Text>
             )}
         </Button>
+    )
+}
+
+export function MenuOverlay(props: { isOpen: boolean } & HTMLChakraProps<'div'>) {
+    return (
+        <Flex
+            width='100%'
+            height='100%'
+            background='black'
+            opacity={props.isOpen ? '0.48' : '0'}
+            transition='opacity 0.3s, visibility 0.3s'
+            position='absolute'
+            top='0'
+            zIndex='998'
+            visibility={{ base: props.isOpen ? 'visible' : 'collapse', md: 'collapse' }}
+            {...props}
+        />
     )
 }
 
@@ -74,9 +92,9 @@ interface FMenuProps {
     menuItems: MenuItem[]
 }
 
-export default function FMenu(props: FMenuProps): JSX.Element {
+export default function FMenu(props: FMenuProps) {
 
-    const animationDuration = useBreakpointValue({ base: '0.15s', md: '0.25s' })
+    const isOpenMenuItemDisplay = useBreakpointValue({ base: true, md: props.isOpen })
 
     const [selectedItem, setSelectedItem] = useState<MenuItem>(props.menuItems[0])
 
@@ -88,28 +106,27 @@ export default function FMenu(props: FMenuProps): JSX.Element {
 
     return (
         <FScrollableBox
+            background='white'
             overflowY='auto'
             overflowX='hidden'
             zIndex='999'
-            minWidth={{ base: '0px', md: props.isOpen ? '294px' : '68px' }}
-            width={{ base: props.isOpen ? '294px' : '0px', md: props.isOpen ? '294px' : '68px' }}
+            minWidth={{ base: '294px', md: props.isOpen ? '294px' : '68px' }}
+            width={{ base: '294px', md: props.isOpen ? '294px' : '68px' }}
             flexDirection='column'
             position={{ base: 'absolute', md: 'static' }}
             height='100%'
             paddingTop={{ base: '0px', md: '16px' }}
-            background='white'
             shadow={{ base: 'md', md: 'none' }}
             top='0'
-            transition={`width ${animationDuration}, min-width ${animationDuration}`}
+            transition={{ base: `transform 0.26s ease-out`, md: `width 0.25s, min-width 0.25s` }}
+            transform={{ base: `translateX(${props.isOpen ? '0' : '-294'}px)`, md: 'translateX(0)' }}
         >  
             <Flex 
                 height='76px' 
-                transition={`width ${animationDuration}, min-width ${animationDuration}`}
                 marginBottom='16px' 
                 borderBottom='1px solid #e1e1dc' 
                 alignItems='center'
                 paddingStart='36px'
-                width={{ base: props.isOpen ? 'auto' : '0px', md: '0px' }}
                 display={{ base: 'flex', md: 'none' }}
             >
                 <Text fontSize='xl' fontFamily='manrope'>FireFinance</Text>
@@ -122,6 +139,7 @@ export default function FMenu(props: FMenuProps): JSX.Element {
                     item={menuItem}
                     onClick={() => itemClickHandler(menuItem)}
                     {...props}
+                    isOpen={isOpenMenuItemDisplay ?? props.isOpen}
                 />
             ))}
         </FScrollableBox>

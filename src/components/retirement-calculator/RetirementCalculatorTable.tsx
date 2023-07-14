@@ -8,7 +8,7 @@ interface RetirementCalculatorTableProps {
     outputs: RetirementCalculatorOutputs
 }
 
-export default function RetirementCalculatorTable(props: RetirementCalculatorTableProps): JSX.Element {
+export default function RetirementCalculatorTable(props: RetirementCalculatorTableProps) {
     const columnHelper = createColumnHelper<RetirementProjectionPoint>()
 
     const columns = [

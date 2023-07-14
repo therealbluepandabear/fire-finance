@@ -20,7 +20,7 @@ interface SignUpProps {
     onUserCreated: (user: User) => void
 }
 
-export default function SignUp(props: SignUpProps): JSX.Element {
+export default function SignUp(props: SignUpProps) {
     const inputStyle = {
         height: '56px'
     }

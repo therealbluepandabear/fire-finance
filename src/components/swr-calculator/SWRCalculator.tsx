@@ -4,7 +4,7 @@ import { useState } from 'react'
 import SWRCalculatorResults from './SWRCalculatorResults'
 
 
-export default function SWRCalculator(): JSX.Element {
+export default function SWRCalculator() {
     const [outputs, setOutputs] = useState<SWRCalculatorOutputs | null>(null)
     const [cycleInfo, setCycleInfo] = useState<CycleInfo | null>(null)   
 

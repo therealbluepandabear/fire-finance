@@ -1,17 +1,19 @@
 import { Flex, Button, useBreakpointValue, Box, IconButton } from '@chakra-ui/react'
 import { MdAutoGraph, MdChecklist, MdHelpOutline, MdOutlineCalculate, MdOutlineSchool, MdPerson, MdSettings, MdSupportAgent } from 'react-icons/md'
-import FMenu, { MenuItem } from '../ui/FMenu'
+import FMenu, { MenuItem, MenuOverlay } from '../ui/FMenu'
 import { User } from '../../api'
 import FAppBar from '../ui/FAppBar'
 import { useState } from 'react'
 import PlansPage from './pages/Plans'
 import PlanStepDialog from './pages/PlanStepDialog'
+import PlanResultsPage from './pages/PlanResults'
+import { RetirementCalculatorInputs, calculateRetirementAge } from '../../models/retirement-calculator'
 
 interface DashboardMenuProps {
     isOpen: boolean
 }
 
-function DashboardMenu(props: DashboardMenuProps): JSX.Element {
+function DashboardMenu(props: DashboardMenuProps) {
 
     const planMenuItem: MenuItem = {
         leftContent: <MdChecklist size={20} />,
@@ -56,15 +58,31 @@ export interface DashboardProps {
     user: User
 }
 
-export default function Dashboard(props: DashboardProps): JSX.Element {
+export default function Dashboard(props: DashboardProps) {
 
     const [showPlanFormDialog, setShowPlanFormDialog] = useState(false)
 
-    const [currentPage, setCurrentPage] = useState<JSX.Element>(
-        <PlansPage 
-            {...props} 
-            onAddPlanClick={() => setShowPlanFormDialog(true)} 
-        />
+    const [currentPage, setCurrentPage] = useState<JSX.Element>(<PlansPage onAddPlanClick={() => setCurrentPage(<PlanResultsPage outputs={calculateRetirementAge({
+        age: 20,
+        annualIncome: 70_000,
+        annualSpending: 30_000,
+
+        networth: 0,
+        safeWithdrawalRate: 0.02,
+        inflationRate: 0,
+
+        stocksAllocationRate: 1,
+        bondsAllocationRate: 0,
+        cashAllocationRate: 0,
+
+        stocksReturnRate: 0.07,
+        bondsReturnRate: 0,
+        cashReturnRate: 0,
+
+        retirementAge: 50,
+        incomeGrowthRate: 0.09,
+        maximumAge: 100
+    })} />)} />
     )
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -116,18 +134,30 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
 
     return (
         <>
-            <Flex
-                width='100%'
-                height='100%'
-                background='rgba(0, 0, 0, 0.48)'
-                position='absolute'
-                top='0'
-                zIndex='998'
-                display={{ base: isMenuOpen ? 'flex' : 'none', md: 'none' }}
-                onClick={() => setIsMenuOpen(false)}
-            />
+            <MenuOverlay isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
 
-            {showPlanFormDialog && <PlanStepDialog onClose={() => setShowPlanFormDialog(false)} />}
+            {showPlanFormDialog && <PlanStepDialog onClose={(inputs) => {
+                setShowPlanFormDialog(false)
+                setCurrentPage(<PlanResultsPage outputs={calculateRetirementAge({
+                    age: 20,
+                    annualIncome: 70_000,
+                    annualSpending: 30_000,
+
+                    networth: 0,
+                    safeWithdrawalRate: 2,
+                    inflationRate: 0,
+
+                    stocksAllocationRate: 1,
+                    bondsAllocationRate: 0,
+                    cashAllocationRate: 0,
+
+                    stocksReturnRate: 0.07,
+                    bondsReturnRate: 0,
+                    cashReturnRate: 0,
+
+                    maximumAge: 50
+                })} />)
+            }} />}
 
             <Flex 
                 flexDirection='column' 
@@ -152,8 +182,31 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                     position={{ base: 'static', md: 'relative' }}
                 >
                     <DashboardMenu isOpen={isMenuOpen} />
-                    
+
                     {currentPage}
+                     
+                    {/* <PlanResultsPage outputs={calculateRetirementAge({
+                        age: 20,
+                        annualIncome: 70_000,
+                        annualSpending: 30_000,
+
+                        networth: 0,
+                        safeWithdrawalRate: 0.02,
+                        inflationRate: 0,
+
+                        stocksAllocationRate: 1,
+                        bondsAllocationRate: 0,
+                        cashAllocationRate: 0,
+
+                        stocksReturnRate: 0.07,
+                        bondsReturnRate: 0,
+                        cashReturnRate: 0,
+
+                        retirementAge: 50,
+                        incomeGrowthRate: 0.09,
+                        maximumAge: 100
+                    })} /> */}
+            
                 </Flex>
             </Flex>
         </>

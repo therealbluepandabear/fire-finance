@@ -7,7 +7,7 @@ import RetirementCalculatorForm from './RetirementCalculatorForm'
 import RetirementCalculatorChart from './RetirementCalculatorChart'
 import RetirementCalculatorTable from './RetirementCalculatorTable'
 
-export default function RetirementCalculator(): JSX.Element {
+export default function RetirementCalculator() {
     const [outputs, setOutputs] = useState<RetirementCalculatorOutputs | null>(null)
 
     function submitHandler(inputs: RetirementCalculatorInputs): void {

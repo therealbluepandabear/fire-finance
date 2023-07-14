@@ -7,7 +7,7 @@ interface StatsBoxProps {
     statistic: string
 }
 
-export default function SWRCalculatorStatsBox(props: StatsBoxProps): JSX.Element {
+export default function SWRCalculatorStatsBox(props: StatsBoxProps) {
     return (
         <Card padding="16px" height="100%">
             <Text fontSize="sm" fontWeight="bold">{props.header}</Text>

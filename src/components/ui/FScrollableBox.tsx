@@ -7,13 +7,11 @@ interface FScrollableBoxProps extends PropsWithChildren<HTMLChakraProps<'div'>> 
     thickness?: ScrollbarThumbThickness
 }
 
-export default function FScrollableBox({ children, thickness, ...props }: FScrollableBoxProps): JSX.Element {
+export default function FScrollableBox({ children, thickness, ...props }: FScrollableBoxProps) {
 
     let scrollbarWidth = '9px'
 
-    if (thickness === 'thick') {
-        scrollbarWidth = '16px'
-    }
+
 
     return (
         <Flex 

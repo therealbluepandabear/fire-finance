@@ -55,7 +55,7 @@ function getBaseColor(result: StartingYearResult) {
     return result.isRetirementPossible ? 'rgb(87, 233, 100)' : 'rgb(255, 0, 0)'
 }
 
-export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsChartProps): JSX.Element {
+export default function SWRCalculatorResultsChart(props: SWRCalculatorResultsChartProps) {
     const [activeResult, setActiveResult] = useState<StartingYearResult | null>(null)
 
     function mouseEnterHandler(result: StartingYearResult): void {

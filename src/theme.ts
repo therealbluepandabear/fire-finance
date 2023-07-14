@@ -19,6 +19,7 @@ const theme = extendTheme({
                     _hover: {
                         backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)'
                     },
+                 
                     _active: {
                         backgroundImage: 'linear-gradient(rgb(0 0 0/25%) 0 0)'
                     }
@@ -67,7 +68,7 @@ const theme = extendTheme({
         }
     },
     colors: {
-        buttonPrimary: '#5E83FF',
+        buttonPrimary: '#5e83ff',
         pastelPrimary: '#edf1ff',
         pastelForeground: '#1a73e8'
     },

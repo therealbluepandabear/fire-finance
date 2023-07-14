@@ -22,7 +22,7 @@ interface RetirementCalculatorFormProps {
     onSubmit: (params: RetirementCalculatorInputs) => void
 }
 
-export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps): JSX.Element {
+export default function RetirementCalculatorForm(props: RetirementCalculatorFormProps) {
     const { register, handleSubmit, formState: { errors }, watch } = useForm<RetirementCalculatorInputs>({ defaultValues: {
         age: 20,
         annualIncome: 70_000,

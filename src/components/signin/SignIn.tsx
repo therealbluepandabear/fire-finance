@@ -1,7 +1,7 @@
 import { Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react'
 import { MdArrowForward } from 'react-icons/md'
 
-export default function SignIn(): JSX.Element {
+export default function SignIn() {
     const inputStyle = {
         height: '56px'
     }

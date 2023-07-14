@@ -4,6 +4,7 @@ import {
     Flex, 
     FormControl, 
     FormLabel, 
+    HTMLChakraProps, 
     Input, 
     InputGroup, 
     InputLeftElement, 
@@ -15,20 +16,19 @@ import {
     ModalFooter, 
     ModalHeader, 
     ModalOverlay,
-    Tooltip,
-    Text,
-    useDisclosure
+    Tooltip
 } from '@chakra-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { PropsWithChildren, useState } from 'react'
-import { MdArrowForwardIos, MdArrowRight, MdAttachMoney, MdFace, MdHelp } from 'react-icons/md'
+import { useEffect, useState } from 'react'
+import { MdAttachMoney, MdFace, MdHelp, MdPercent } from 'react-icons/md'
+import { RetirementCalculatorInputs } from '../../../models/retirement-calculator'
+import { Controller, RegisterOptions, useForm } from 'react-hook-form'
 
 interface StepBarProps {
     step: number
     totalSteps: number
 }
 
-function StepBar(props: StepBarProps): JSX.Element {
+function StepBar(props: StepBarProps) {
     return (
         <Flex
             width='100%'
@@ -44,25 +44,25 @@ function StepBar(props: StepBarProps): JSX.Element {
     )
 }
 
-interface FormInputProps {
+interface FormInputProps extends Pick<HTMLChakraProps<'input'>, 'onChange' | 'onBlur' | 'value'> {
     inputLeftElement: JSX.Element
     placeholder: string
 }
 
-function FormInput(props: FormInputProps): JSX.Element {
+function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps) {
     return (
         <FormControl variant='floating'>
             <InputGroup>
                 <InputLeftElement>
-                    {props.inputLeftElement}
+                    {inputLeftElement}
                 </InputLeftElement>
 
-                <Input placeholder=' ' tabIndex={-1} />
+                <Input placeholder=' ' tabIndex={-1} {...props} />
 
                 <FormLabel
                     style={{ marginLeft: '32px' }}
                     color='gray'
-                >{props.placeholder}</FormLabel>
+                >{placeholder}</FormLabel>
 
                 <Tooltip textAlign='center' fontSize='12px'>
                     <InputRightElement>
@@ -74,136 +74,92 @@ function FormInput(props: FormInputProps): JSX.Element {
     )
 }
 
-function FormRoot(props: PropsWithChildren): JSX.Element {
-    return (
-        <Flex marginTop='16px' gap='16px' flexDirection='column'>
-            {props.children}
-        </Flex>
-    )
-}
-
 const iconColor = 'lightgray'
 
-interface StepPageZeroProps {
-    onSelectIndex: (index: number) => void
+interface InputModel {
+    key: keyof RetirementCalculatorInputs
+    placeholder: string
+    defaultValue: string
+    icon: JSX.Element
 }
 
-function StepPageZero(props: StepPageZeroProps): JSX.Element {
+interface StepPageProps {
+    inputs: InputModel[]
+    onInputsChange: (data: Partial<RetirementCalculatorInputs>) => void 
+}
 
-    const [hoverIndex, setHoverIndex] = useState(0)
+function StepPage(props: StepPageProps) {
+    
+    const { control, watch } = useForm<Partial<RetirementCalculatorInputs>>({ 
+        defaultValues: Object.fromEntries(
+            props.inputs.map((inputModel) => [inputModel.key, inputModel.defaultValue])
+        )
+    })
+
+    watch(inputs => {
+        props.onInputsChange(inputs)
+
+        console.log(inputs)
+    })
 
     return (
-        <Flex flexDirection='column' gap='12px' marginTop='16px' marginBottom='16px'>
-            <Button 
-                variant='outline'
-                height='65px'
-                onClick={() => props.onSelectIndex(0)}
-                onMouseOver={() => setHoverIndex(0)}
-                _hover={{ background: 'gray.100' }}
-                _active={{ }}
-                color='gray.700'
-            >
-                Simple Walkthrough
-            </Button>
-
-            <Button
-                variant='outline'
-                height='65px'
-                onClick={() => props.onSelectIndex(0)}
-                onMouseOver={() => setHoverIndex(1)}
-                _hover={{ background: 'gray.100' }}
-                _active={{ }}
-                color='gray.700'
-                position='relative'
-            >
-                Full Walkthrough
-            </Button>
+        <Flex marginTop='16px' gap='16px' flexDirection='column'>
+            {props.inputs.map(inputModel => (
+                <Controller
+                    key={inputModel.key}
+                    name={inputModel.key}
+                    control={control}
+                    render={({ field: { onChange, onBlur, value }  }) => (
+                        <FormInput
+                            placeholder={inputModel.placeholder}
+                            inputLeftElement={inputModel.icon}
+                            onChange={(e) => onChange(parseInt(e.target.value))}
+                            onBlur={onBlur}
+                            value={value}
+                        />
+                    )}
+                />
+            ))}
         </Flex>
     )
 }
 
-function StepPageOne(): JSX.Element {
-    return (
-        <FormRoot>
-            <FormInput 
-                placeholder='Age' 
-                inputLeftElement={<MdFace color={iconColor} />} 
-            />
+const stepInputModel: InputModel[][] = [
+    [
+        { key: 'age', defaultValue: '20', placeholder: 'Age', icon: <MdFace color={iconColor} /> },
+        { key: 'annualIncome', defaultValue: '70000', placeholder: 'Annual Income', icon: <MdAttachMoney color={iconColor} /> },
+        { key: 'annualSpending', defaultValue: '30000', placeholder: 'Annual Spending', icon: <MdAttachMoney color={iconColor} /> },
+        { key: 'networth', defaultValue: '0', placeholder: 'Networth', icon: <MdAttachMoney color={iconColor} /> }
+    ],
 
-            <FormInput 
-                placeholder='Annual Income' 
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-        </FormRoot>
-    )
-}
+    [
+        { key: 'safeWithdrawalRate', defaultValue: '4', placeholder: 'Safe Withdrawal Rate', icon: <MdPercent color={iconColor} /> },
+        { key: 'inflationRate', defaultValue: '0', placeholder: 'Inflation Rate', icon: <MdPercent color={iconColor} /> }
+    ],
 
-function StepPageTwo(): JSX.Element {
-    return (
-        <FormRoot>
-            <FormInput 
-                placeholder='Annual Spending' 
-                inputLeftElement={<MdAttachMoney color={iconColor} />} 
-            />
+    [
+        { key: 'stocksAllocationRate', defaultValue: '100', placeholder: 'Stocks Allocation Rate', icon: <MdPercent color={iconColor} /> },
+        { key: 'bondsAllocationRate', defaultValue: '0', placeholder: 'Bonds Allocation Rate', icon: <MdPercent color={iconColor} /> }, 
+        { key: 'cashAllocationRate', defaultValue: '0', placeholder: 'Cash Allocation Rate', icon: <MdPercent color={iconColor} /> }
+    ],
 
-            <FormInput 
-                placeholder='Networth' 
-                inputLeftElement={<MdAttachMoney color={iconColor} />} 
-            />
-        </FormRoot>
-    )
-}
-
-function StepPageThree(): JSX.Element {
-    return (
-        <FormRoot>
-            <FormInput
-                placeholder='Stocks Return Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-
-            <FormInput
-                placeholder='Bonds Return Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-
-            <FormInput
-                placeholder='Gold Return Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-        </FormRoot>
-    )
-}
-
-function StepPageFour(): JSX.Element {
-    return (
-        <FormRoot>
-            <FormInput
-                placeholder='Stocks Allocation Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-
-            <FormInput
-                placeholder='Bonds Allocation Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-
-            <FormInput
-                placeholder='Gold Allocation Rate'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-            />
-        </FormRoot>
-    )
-}
+    [
+        { key: 'stocksReturnRate', defaultValue: '7', placeholder: 'Stocks Return Rate', icon: <MdPercent color={iconColor} /> },
+        { key: 'bondsReturnRate', defaultValue: '0', placeholder: 'Bonds Return Rate', icon: <MdPercent color={iconColor} /> },
+        { key: 'cashReturnRate', defaultValue: '0', placeholder: 'Cash Return Rate', icon: <MdPercent color={iconColor} /> }
+    ]
+]
 
 interface PlanStepDialogProps {
-    onClose: () => void
+    onClose: (inputs: Partial<RetirementCalculatorInputs>) => void
 }
 
-export default function PlanStepDialog(props: PlanStepDialogProps): JSX.Element {
-    const totalSteps = 4
+export default function PlanStepDialog(props: PlanStepDialogProps) {
+
+    const totalSteps = stepInputModel.length
 
     const [step, setStep] = useState(1)
+    const [inputs, setInputs] = useState<Partial<RetirementCalculatorInputs>>()
 
     function updateStep(): void {
         setStep(prevStep => prevStep + 1)
@@ -217,9 +173,18 @@ export default function PlanStepDialog(props: PlanStepDialogProps): JSX.Element 
         updateStep()
     }
 
+    function inputsChangeHandler(data: Partial<RetirementCalculatorInputs>): void {
+        setInputs(prevInputs => ({ ...prevInputs, ...data }))
+    }
+
+    function closeHandler(): void {
+        props.onClose(inputs ?? {})
+    }
+
     return (
-        <Modal isOpen={true} onClose={props.onClose} isCentered={true}>
+        <Modal isOpen={true} onClose={closeHandler} isCentered={true}>
             <ModalOverlay />
+
             <ModalContent overflow='hidden'>
                 <ModalHeader 
                     fontWeight='normal' 
@@ -233,50 +198,47 @@ export default function PlanStepDialog(props: PlanStepDialogProps): JSX.Element 
                 <input type='text' style={{ display: 'none' }} />
 
                 <ModalBody>
-                    {step === 1 && <StepPageZero onSelectIndex={(index) => updateStep()} />}
-                    {step === 2 && <StepPageTwo />}
-                    {step === 3 && <StepPageThree />}
-                    {step === 4 && <StepPageFour />}
+                    {stepInputModel.map((inputs, index) => (
+                        step === (index + 1) && <StepPage inputs={inputs} onInputsChange={inputsChangeHandler} />
+                    ))}
                 </ModalBody>
 
-                <ModalCloseButton marginTop='8px' onClick={props.onClose} />
+                <ModalCloseButton marginTop='8px' onClick={closeHandler} />
 
-                {step > 1 && (
-                    <ModalFooter>
-                        <Flex gap='12px'>
-                            {step > 0 && (
-                                <Button 
-                                    variant='ghost' 
-                                    height='36px' 
-                                    onClick={() => {
-                                        if (step > 1) {
-                                            revertStep()
-                                        } else {
-                                            props.onClose()
-                                        }
-                                    }}
-                                >
-                                    {step === 1 ? 'Cancel' : 'Back'}
-                                </Button>
-                            )}
-
+                <ModalFooter>
+                    <Flex gap='12px'>
+                        {step > 0 && (
                             <Button 
-                                color='white' 
-                                background='buttonPrimary' 
+                                variant='ghost' 
                                 height='36px' 
                                 onClick={() => {
-                                    if (step < totalSteps) {
-                                        nextClickHandler()
+                                    if (step > 1) {
+                                        revertStep()
                                     } else {
-                                        props.onClose()
+                                        closeHandler()
                                     }
                                 }}
                             >
-                                {step === totalSteps ? 'Done' : 'Next'}
+                                {step === 1 ? 'Cancel' : 'Back'}
                             </Button>
-                        </Flex>
-                    </ModalFooter>
-                )}
+                        )}
+
+                        <Button 
+                            color='white' 
+                            background='buttonPrimary' 
+                            height='36px' 
+                            onClick={() => {
+                                if (step < totalSteps) {
+                                    nextClickHandler()
+                                } else {
+                                    closeHandler()
+                                }
+                            }}
+                        >
+                            {step === totalSteps ? 'Done' : 'Next'}
+                        </Button>
+                    </Flex>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     )

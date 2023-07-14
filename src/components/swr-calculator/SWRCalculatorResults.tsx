@@ -17,7 +17,7 @@ interface EzTabProps {
     content: JSX.Element[]
 }
 
-function EzTab(props: EzTabProps): JSX.Element {
+function EzTab(props: EzTabProps) {
     const [isDragging, setIsDragging] = useState(false)
     const [startX, setStartX] = useState<number | null>(null)
     const [scrollLeft, setScrollLeft] = useState(0)
@@ -109,7 +109,7 @@ interface SWRCalculatorResultsProps {
     cycleInfo: CycleInfo
 }
 
-export default function SWRCalculatorResults(props: SWRCalculatorResultsProps): JSX.Element {
+export default function SWRCalculatorResults(props: SWRCalculatorResultsProps) {
     const [chartType, setChartType] = useState<ChartType>('area')
     const [chartFocus, setChartFocus] = useState<ChartFocus>('averageNetworth')
 

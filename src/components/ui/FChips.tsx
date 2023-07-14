@@ -7,7 +7,7 @@ interface FChipsProps extends PropsWithChildren {
     defaultIndex?: number
 }
 
-export default function FChips({ onIndexChange, children, defaultIndex }: FChipsProps): JSX.Element {
+export default function FChips({ onIndexChange, children, defaultIndex }: FChipsProps) {
     const [index, setIndex] = useState(defaultIndex ?? 0)
 
     function chipClickHandler(localIndex: number) {

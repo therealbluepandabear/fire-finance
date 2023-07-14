@@ -9,7 +9,7 @@ interface SWRCalculatorFormProps {
     onSubmit: (params: SWRCalculatorInputs) => void
 }
 
-export default function SWRCalculatorForm(props: SWRCalculatorFormProps): JSX.Element {
+export default function SWRCalculatorForm(props: SWRCalculatorFormProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<SWRCalculatorInputs>({
         defaultValues: {
             networth: 1_000,

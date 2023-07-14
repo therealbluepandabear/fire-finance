@@ -8,7 +8,7 @@ interface SWRCalculatorResultTableProps {
     timelineData: InvestmentTimelinePoint[]
 }
 
-export default function SWRCalculatorResultTable(props: SWRCalculatorResultTableProps): JSX.Element {
+export default function SWRCalculatorResultTable(props: SWRCalculatorResultTableProps) {
     const columnHelper = createColumnHelper<InvestmentTimelinePoint>()
 
     const columns = [

@@ -70,7 +70,7 @@ interface RetirementCalculatorProps {
     outputs: RetirementCalculatorOutputs
 }
 
-export default function RetirementCalculatorChart(props: RetirementCalculatorProps): JSX.Element {
+export default function RetirementCalculatorChart(props: RetirementCalculatorProps) {
     const data = props.outputs.data
 
     const [fiCx, setFiCx] = useState(0)
@@ -95,7 +95,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
 
     // We have to use a bad hack to get the cx and cy values, this includes creating a nested component, which isn't a good
     // practice but I don't have much choice in this scenario, it's very (hackish) but it is what is lol
-    function FinancialIndependenceRef(props: { cx: number, cy: number }): JSX.Element {
+    function FinancialIndependenceRef(props: { cx: number, cy: number }) {
         useEffect(() => {
             setFiCx(props.cx)
             setFiCy(props.cy)
@@ -104,7 +104,7 @@ export default function RetirementCalculatorChart(props: RetirementCalculatorPro
         return <></>
     }
 
-    function RetirementAgeRef(props: { cx: number, cy: number }): JSX.Element {
+    function RetirementAgeRef(props: { cx: number, cy: number }) {
         useEffect(() => {
             setRetirementCx(props.cx)
             setRetirementCy(props.cy)

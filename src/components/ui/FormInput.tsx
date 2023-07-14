@@ -25,7 +25,7 @@ interface FormInputProps {
     tooltipText: string
 }
 
-export default function FormInput(props: FormInputProps): JSX.Element {
+export default function FormInput(props: FormInputProps) {
     return (
         <FormControl isInvalid={props.isInvalid} variant='floating'>
             <InputGroup>

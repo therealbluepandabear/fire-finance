@@ -68,7 +68,7 @@ interface PlanDescriptionBadgeProps {
     description: string
 }
 
-function PlanDescriptionBadge(props: PlanDescriptionBadgeProps): JSX.Element {
+function PlanDescriptionBadge(props: PlanDescriptionBadgeProps) {
 
     const { onOpen, onClose, isOpen } = useDisclosure()
 
@@ -162,7 +162,7 @@ interface PlanPopoverButtonProps extends PropsWithChildren {
     onClick: () => void
 }
 
-function PlanPopoverButton(props: PlanPopoverButtonProps): JSX.Element {
+function PlanPopoverButton(props: PlanPopoverButtonProps) {
     return (
         <Button
             background='white'
@@ -181,7 +181,7 @@ interface PlanOptionsBadgeProps {
     onDelete: () => void
 }
 
-function PlanOptionsBadge(props: PlanOptionsBadgeProps): JSX.Element {
+function PlanOptionsBadge(props: PlanOptionsBadgeProps) {
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     return (
@@ -245,7 +245,7 @@ function PlanOptionsBadge(props: PlanOptionsBadgeProps): JSX.Element {
     )
 }
 
-function PlanChart(): JSX.Element {
+function PlanChart() {
     return (
         <ResponsiveContainer>
             <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
@@ -269,7 +269,7 @@ interface FModalProps extends PropsWithChildren {
     onClose: () => void
 }
 
-function FModal(props: FModalProps): JSX.Element {
+function FModal(props: FModalProps) {
     return (
         <Modal isOpen={true} onClose={props.onClose} isCentered={true}>
             <ModalOverlay />
@@ -305,7 +305,7 @@ interface ModalProps {
     onClose: () => void
 }
 
-function RenamePlanModal(props: ModalProps): JSX.Element {  
+function RenamePlanModal(props: ModalProps) {  
     const dispatch = useAppDispatch()
       
     const { register, watch } = useForm<{ inputValue: string }>(
@@ -326,7 +326,7 @@ function RenamePlanModal(props: ModalProps): JSX.Element {
     )
 }
 
-function EditDescriptionModal(props: ModalProps): JSX.Element {
+function EditDescriptionModal(props: ModalProps) {
     const dispatch = useAppDispatch()
 
     const planDescription = props.plan.description ?? ''
@@ -349,7 +349,7 @@ function EditDescriptionModal(props: ModalProps): JSX.Element {
     )
 }
 
-function DeletePlanModal(props: ModalProps): JSX.Element {
+function DeletePlanModal(props: ModalProps) {
     const dispatch = useAppDispatch()
 
     function OKClickHandler(): void {
@@ -370,7 +370,7 @@ interface PlanFavoriteButtonProps {
     plan: Plan
 }
 
-function PlanFavoriteButton(props: PlanFavoriteButtonProps): JSX.Element {
+function PlanFavoriteButton(props: PlanFavoriteButtonProps) {
 
     const dispatch = useAppDispatch()
 
@@ -410,7 +410,7 @@ interface PlanCardProps {
     onDelete: (plan: Plan) => void
 }
 
-function PlanCard(props: PlanCardProps): JSX.Element {
+function PlanCard(props: PlanCardProps) {
 
     const options: Intl.DateTimeFormatOptions = { 
         month: 'short',
@@ -484,7 +484,7 @@ interface PlansPageProps {
     onAddPlanClick: () => void
 }
 
-export default function PlansPage(props: PlansPageProps): JSX.Element {
+export default function PlansPage(props: PlansPageProps) {
     const dispatch = useAppDispatch()
 
     const [context, setContext] = useState<Context | null>()
@@ -594,12 +594,12 @@ export default function PlansPage(props: PlansPageProps): JSX.Element {
                             display={{ base: 'none', md: 'flex' }}
                         >   
                             <Button
-                                leftIcon={<MdAdd color='white' size={20} />}
+                                leftIcon={<MdAdd size={20} />}
                                 marginLeft='auto'
                                 color='white'
-                                onClick={addPlanClickHandler}
                                 background='buttonPrimary'
-                            >Add</Button>
+                                onClick={props.onAddPlanClick}
+                            >New</Button>
                         </Flex>
                     </Flex>
 
@@ -674,14 +674,16 @@ export default function PlansPage(props: PlansPageProps): JSX.Element {
                 
             <IconButton
                 visibility={{ base: 'visible', md: 'collapse' }}
-                width='50px'
-                height='50px'
+                width='56px'
+                height='56px'
+                shadow='lg'
                 right='0'
                 bottom='0'
                 background='buttonPrimary'
                 position='absolute'
                 icon={<MdAdd color='white' size={20} />}
                 aria-label='Add Plan'
+                borderRadius='999px'
                 onClick={addPlanClickHandler}
                 margin='16px'
             />

@@ -5,7 +5,7 @@ type FAppBarProps =
     { isMenu: true, onMenuClick: () => void, contentRight: JSX.Element } | 
     { isMenu: false, contentRight: JSX.Element }
 
-export default function FAppBar(props: FAppBarProps): JSX.Element {
+export default function FAppBar(props: FAppBarProps) {
     const height = '76px'
 
     return (

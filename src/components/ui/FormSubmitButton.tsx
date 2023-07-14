@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
-export default function FormSubmitButton(props: PropsWithChildren): JSX.Element {
+export default function FormSubmitButton(props: PropsWithChildren) {
     return (
         <Button 
             fontWeight="normal"
