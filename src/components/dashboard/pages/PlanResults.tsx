@@ -1,13 +1,15 @@
-import { Box, Button, Divider, Flex, Grid, IconButton, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, FocusLock, Grid, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps } from 'recharts'
 import FDivider from '../../ui/FDivider'
-import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdDelete, MdDeleteOutline, MdDownload, MdEdit, MdExpand, MdFace, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
+import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
 import FScrollableBox from '../../ui/FScrollableBox'
-import { RetirementCalculatorOutputs, RetirementProjectionPoint } from '../../../models/retirement-calculator'
-import { formatCurrency } from '../../../utils'
+import { RetirementCalculatorOutputs, RetirementProjectionPoint, getExcelWorkbook } from '../../../models/retirement-calculator'
+import { formatCurrency, saveToFile } from '../../../utils'
 import DataTable from '../../ui/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState } from 'react'
+import { GrDocumentCsv, GrDocumentExcel } from 'react-icons/gr'
+import { forwardRef } from '@chakra-ui/react'
 
 interface ResultCardProps {
     label: string
@@ -24,6 +26,7 @@ function ResultCard(props: ResultCardProps) {
             _hover={{ shadow: 'md' }}
             alignItems='center'
             borderRadius='lg'
+            background='white'
         >
             <Flex flexDirection='column'>
                 <Flex gap='6px' alignItems='center'>
@@ -61,21 +64,22 @@ function SectionHeader(props: SectionHeaderProps) {
 }
 
 interface SectionHeaderButtonProps {
+    ariaLabel: string
     icon: JSX.Element
     onClick: () => void
 }
 
-function SectionHeaderButton(props: SectionHeaderButtonProps) {
+const SectionHeaderButton = forwardRef((props: SectionHeaderButtonProps, ref) => {
     return (
         <IconButton
-            aria-label='Export'
+            ref={ref}
+            aria-label={props.ariaLabel}
             icon={props.icon}
             borderRadius='999px'
-            marginLeft='auto'
             onClick={props.onClick}
         />
     )
-}
+})
 
 function ResultTable(props: PlanFormProps) {
     const columnHelper = createColumnHelper<RetirementProjectionPoint>()
@@ -268,6 +272,30 @@ export default function PlanResultsPage(props: PlanFormProps) {
 
     const [chartExpanded, setChartExpanded] = useState(false)
 
+    const showChartExpandIcon = useBreakpointValue({ base: false, lg: true })
+
+    const { onOpen, onClose, isOpen } = useDisclosure()
+
+    async function downloadExcelClickHandler(): Promise<void> {
+        const workbook = getExcelWorkbook(props.outputs)
+
+        const xlsxId = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+        const buffer = await workbook.xlsx.writeBuffer()
+        const xlsxBlob = new Blob([buffer], { type: xlsxId })
+
+        saveToFile('fire_outlook.xlsx', URL.createObjectURL(xlsxBlob))
+    }
+
+    async function downloadCommaSeparatedValuesClickHandler(): Promise<void> {
+        const workbook = getExcelWorkbook(props.outputs)
+
+        const buffer = await workbook.csv.writeBuffer()
+        const csvBlob = new Blob([buffer])
+
+        saveToFile('fire_outlook.csv', URL.createObjectURL(csvBlob))
+    }
+
     return (
         <FScrollableBox 
             height='100%'
@@ -294,7 +322,12 @@ export default function PlanResultsPage(props: PlanFormProps) {
                 marginRight={{ base: '-32px', md: '0px' }} 
                 gap='32px'
             >
-                <Flex width='100%' maxWidth='100%' gap='32px' flexDirection={!chartExpanded ? 'row' : 'column'}>
+                <Flex 
+                    width='100%' 
+                    maxWidth='100%' 
+                    gap='32px' 
+                    flexDirection={{ base: 'column', lg: !chartExpanded ? 'row' : 'column' }}
+                >
                     <Flex 
                         flexDirection='column'
                         border='1px solid #e1e1dc'
@@ -305,7 +338,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     >      
                         <SectionHeader title='Chart' contentRight={[<IconButton
                             aria-label='Add'
-                            icon={!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />}
+                            icon={showChartExpandIcon ? (!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />) : <></> }
                             onClick={() => setChartExpanded(prevChartExpanded => !prevChartExpanded)}
                             borderRadius='999px'
                             marginLeft='auto'
@@ -317,8 +350,8 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     </Flex>
 
                     <Flex 
-                        width={!chartExpanded ? '300px' : '100%' }
-                        minWidth={!chartExpanded ? '300px' : '100%'}
+                        width={{ base: '100%', lg: !chartExpanded ? '300px' : '100%' }}
+                        minWidth={{ base: '100%', lg: !chartExpanded ? '300px' : '100%' }}
                         overflow='hidden'
                         border='1px solid #e1e1dc'
                         background='white'
@@ -352,7 +385,46 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     borderRadius='2xl' 
                     marginBottom='24px'
                 >
-                    <SectionHeader title='Table' contentRight={[<h1>Hi</h1>, <SectionHeaderButton onClick={() => { }} icon={<MdOutlineFileDownload size={22} />} />]} />
+                    <SectionHeader 
+                        title='Table' 
+                        contentRight={[
+                            <Popover
+                                variant='responsive'
+                                placement='left-start'
+                                isOpen={isOpen}
+                                onOpen={onOpen}
+                                onClose={onClose}
+                            >
+                                <PopoverTrigger>
+                                    <SectionHeaderButton
+                                        ariaLabel='Download'
+                                        icon={<MdOutlineFileDownload size={22} />}
+                                        onClick={() => { }}
+                                    />
+                                </PopoverTrigger>
+                                
+                                <PopoverContent>
+                                    <PopoverBody padding='0px'>
+                                        <FocusLock persistentFocus={false}>
+                                            <Flex flexDirection='column' width='300px'>
+                                                <Button 
+                                                    borderRadius='0'
+                                                    onClick={downloadExcelClickHandler}
+                                                >Microsoft Excel (.xlsx)</Button>
+
+                                                <Divider />
+
+                                                <Button 
+                                                    borderRadius='0'
+                                                    onClick={downloadCommaSeparatedValuesClickHandler}
+                                                >Comma Separated Values (.csv)</Button>
+                                            </Flex>
+                                        </FocusLock>
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Popover>
+                        ]} 
+                    />
 
                     <FScrollableBox 
                         height='600px' 

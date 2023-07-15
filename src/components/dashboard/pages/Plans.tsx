@@ -182,6 +182,7 @@ interface PlanOptionsBadgeProps {
 }
 
 function PlanOptionsBadge(props: PlanOptionsBadgeProps) {
+    
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     return (

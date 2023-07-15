@@ -153,22 +153,9 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
         { header: 'Networth', key: 'networth' }
     ]
 
-    outputs.data.forEach((value, index) => {
+    outputs.data.forEach(value => {
         worksheet.addRow({ age: value.age, year: value.year, networth: formatCurrency(value.networth) })
     })
-
-    const retirementAgeRowIndex = outputs.fireAge - (outputs.data[0].age) + 2
-
-    const row = worksheet.getRow(retirementAgeRowIndex)
-    const cellsToHighlight = [row.getCell(1), row.getCell(2), row.getCell(3)]
-
-    for (const cell of cellsToHighlight) {
-        cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'ffd700' }
-        }
-    }
 
     return workbook
 }
