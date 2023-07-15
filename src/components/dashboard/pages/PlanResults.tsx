@@ -1,9 +1,9 @@
 import { Box, Button, Divider, Flex, FocusLock, Grid, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps } from 'recharts'
 import FDivider from '../../ui/FDivider'
-import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
+import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
 import FScrollableBox from '../../ui/FScrollableBox'
-import { RetirementCalculatorOutputs, RetirementProjectionPoint, getExcelWorkbook } from '../../../models/retirement-calculator'
+import { RetirementCalculatorOutputs, RetirementProjectionPoint, TimeRangeFilter, filterTimeRange, getExcelWorkbook } from '../../../models/retirement-calculator'
 import { formatCurrency, saveToFile } from '../../../utils'
 import DataTable from '../../ui/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -140,14 +140,14 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     return null
 }
 
-function Chart(props: PlanFormProps) {
+function Chart(props: PlanFormProps & { filter: TimeRangeFilter }) {
     return (
         <ResponsiveContainer>
-            <AreaChart data={props.outputs.data} {...{ overflow: 'visible' }} margin={{ top: 16, right: 0, bottom: 12, left: 16 }}>
+            <AreaChart data={filterTimeRange(props.outputs, props.filter)} {...{ overflow: 'visible' }} margin={{ top: 16, right: 0, bottom: 12, left: 16 }}>
                 <CartesianGrid vertical={false} strokeWidth={0.6} stroke='#bdbcbc' />
 
                 <Area
-                isAnimationActive={false}
+                    isAnimationActive={false}
                     dataKey='networth'
                     stroke='#50C878'
                     fill='#a1e7b2'
@@ -264,6 +264,41 @@ function GoalListItem(props: GoalListItemProps) {
     )
 }
 
+interface TimeRangeFilterOptionsProps {
+    onSelectOption: (filter: TimeRangeFilter) => void
+}
+
+function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
+
+    const options: TimeRangeFilter[] = ['1Y', '4Y', '12Y', 'Max']
+
+    const [selectedOption, setSelectedOption] = useState<TimeRangeFilter>('Max')
+
+    return (
+        <Flex>
+            {options.map((value, index) => (
+                <Button
+                    key={index}
+                    color={value === selectedOption ? 'buttonPrimary' : 'gray.400'}
+                    fontFamily='Manrope'
+                    _hover={{ }}
+                    _active={{ background: 'gray.50' }}
+                    height='30px'
+                    background={value === selectedOption ? 'pastelPrimary' : ''}
+                    padding='12px'
+                    onClick={() => {
+                        console.log('ok')
+                        setSelectedOption(value)
+                        props.onSelectOption(value)
+                    }}
+                    borderRadius='999px'
+                >{value}</Button>
+            ))}
+        </Flex>
+
+    )
+}
+
 interface PlanFormProps {
     outputs: RetirementCalculatorOutputs
 }
@@ -271,8 +306,7 @@ interface PlanFormProps {
 export default function PlanResultsPage(props: PlanFormProps) {
 
     const [chartExpanded, setChartExpanded] = useState(false)
-
-    const showChartExpandIcon = useBreakpointValue({ base: false, lg: true })
+    const [timeRangeFilter, setTimeRangeFilter] = useState<TimeRangeFilter>('Max')
 
     const { onOpen, onClose, isOpen } = useDisclosure()
 
@@ -336,16 +370,25 @@ export default function PlanResultsPage(props: PlanFormProps) {
                         flexGrow={1}
                         minWidth='0'
                     >      
-                        <SectionHeader title='Chart' contentRight={[<IconButton
-                            aria-label='Add'
-                            icon={showChartExpandIcon ? (!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />) : <></> }
-                            onClick={() => setChartExpanded(prevChartExpanded => !prevChartExpanded)}
-                            borderRadius='999px'
-                            marginLeft='auto'
-                        />]} />
+                        <SectionHeader 
+                            title='Chart' 
+                            contentRight={[
+                                <TimeRangeFilterOptions onSelectOption={filter => setTimeRangeFilter(filter)} />,
+
+                                <Divider orientation='vertical' height='20px' display={{ base: 'none', lg: 'flex' }} />,
+
+                                <Flex display={{ base: 'none', lg: 'flex' }}>
+                                    <SectionHeaderButton
+                                        ariaLabel='Add'
+                                        icon={!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />}
+                                        onClick={() => setChartExpanded(prevChartExpanded => !prevChartExpanded)}
+                                    />
+                                </Flex>
+                            ]} 
+                        />
 
                         <Flex height={{ base: '320px', md: '580px' }} width='100%'>
-                            <Chart {...props} />
+                            <Chart {...props} filter={timeRangeFilter} />
                         </Flex>
                     </Flex>
 

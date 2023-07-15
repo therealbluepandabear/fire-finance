@@ -160,6 +160,25 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
     return workbook
 }
 
+export type TimeRangeFilter = '1Y' | '4Y' | '12Y' | 'Max'
+
+export function filterTimeRange(outputs: RetirementCalculatorOutputs, filter: TimeRangeFilter): RetirementProjectionPoint[] {
+    if (filter === 'Max') {
+        return outputs.data
+    }
+
+    return outputs.data.filter(projectionPoint => {
+        switch (filter) {
+            case '1Y':
+                return projectionPoint.year <= outputs.data[0].year + 1
+            case '4Y':
+                return projectionPoint.year <= outputs.data[0].year + 4
+            case '12Y':
+                return projectionPoint.year <= outputs.data[0].year + 12
+        }
+    })
+}
+
 export interface RetirementProjectionPoint {
     age: number
     year: number
