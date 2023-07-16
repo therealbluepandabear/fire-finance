@@ -1,8 +1,8 @@
 import { Box, Button, Divider, Flex, FocusLock, Grid, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps, ReferenceDot } from 'recharts'
-import FDivider from '../../ui/FDivider'
+import FDivider from '../../ui/Divider'
 import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
-import FScrollableBox from '../../ui/FScrollableBox'
+import FScrollableBox from '../../ui/ScrollableBox'
 import { RetirementCalculatorOutputs, RetirementProjectionPoint, TimeRangeFilter, filterTimeRange, getExcelWorkbook } from '../../../models/retirement-calculator'
 import { formatCurrency, saveToFile } from '../../../utils'
 import DataTable from '../../ui/DataTable'
@@ -53,7 +53,7 @@ function SectionHeader(props: SectionHeaderProps) {
         >
             <Text fontWeight='bold' fontSize='xl'>{props.title}</Text>
 
-            <Flex marginLeft='auto' gap='12px' height='100%' alignItems='center'>
+            <Flex marginLeft='auto' gap='12px' alignItems='center'>
                 {props.contentEnd.map(content => content)}
             </Flex>
         </Flex>
@@ -137,15 +137,25 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     return null
 }
 
+function findIndexClosestToValue(array: number[], value: number): number {
+    const arr = array.map(element => Math.abs(element - value))
+    const min = Math.min(...arr)
+
+    return arr.indexOf(min)
+}
+
 interface ChartProps extends PlanFormProps {
     filter: TimeRangeFilter
     goals: Goal[]
 }
 
 function Chart(props: ChartProps) {
+
+    const data = filterTimeRange(props.outputs, props.filter)
+
     return (
         <ResponsiveContainer>
-            <AreaChart data={filterTimeRange(props.outputs, props.filter)} {...{ overflow: 'visible' }} margin={{ top: 16, right: 0, bottom: 12, left: 16 }}>
+            <AreaChart data={data} {...{ overflow: 'visible' }} margin={{ top: 16, right: 0, bottom: 12, left: 16 }}>
                 <CartesianGrid vertical={false} strokeWidth={0.6} stroke='#bdbcbc' />
 
                 <Area
@@ -162,7 +172,7 @@ function Chart(props: ChartProps) {
                     tickLine={false}
                     stroke='#9e9f9f'
                     strokeWidth={0.6}
-                    interval={Math.floor(props.outputs.data.length / 5)}
+                    interval={Math.floor(data.length / 5)}
                 />
 
                 <YAxis
@@ -183,7 +193,7 @@ function Chart(props: ChartProps) {
                         key={index}
                         label={goal.label}
                         r={10}
-                        x={props.outputs.data.find(point => point.networth === goal.targetNetworth)?.age}
+                        x={findIndexClosestToValue(data.map(point => point.networth), goal.targetNetworth)}
                         y={goal.targetNetworth}
                     />
                 ))}

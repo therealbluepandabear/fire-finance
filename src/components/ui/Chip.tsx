@@ -1,16 +1,14 @@
 import { Button, HTMLChakraProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
-interface FChipProps extends PropsWithChildren<HTMLChakraProps<'button'>> { }
-
-export default function FChip({ children, ...props }: FChipProps) {
+export default function Chip({ children, ...props }: PropsWithChildren<HTMLChakraProps<'button'>>) {
     return (
         <Button
             height='100%'
             borderRadius='999px'
             fontWeight='normal'
             _hover={{ }}
-            _active={{ backgroundImage: 'linear-gradient(rgb(0 0 0/2%) 0 0)' }}
+            _active={{ background: 'gray.50' }}
             {...props}
         >
             {children}

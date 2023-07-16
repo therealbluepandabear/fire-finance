@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { RegisterOptions, useForm } from 'react-hook-form'
 import { MdArrowForward, MdSearch, MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { useCreateUserMutation, User } from '../../api'
-import FAppBar from '../ui/FAppBar'
+import AppBar from '../ui/AppBar'
 
 interface SignUpProps {
     onUserCreated: (user: User) => void
@@ -50,7 +50,7 @@ export default function SignUp(props: SignUpProps) {
             overflowX='clip'
             flexDirection='column'
         >   
-            <FAppBar 
+            <AppBar 
                 isMenu={false} 
                 contentRight={
                     <Flex gap='16px'>

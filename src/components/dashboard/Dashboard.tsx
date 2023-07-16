@@ -1,8 +1,8 @@
 import { Flex, Button, useBreakpointValue, Box, IconButton } from '@chakra-ui/react'
 import { MdAutoGraph, MdChecklist, MdHelpOutline, MdOutlineCalculate, MdOutlineSchool, MdPerson, MdSettings, MdSupportAgent } from 'react-icons/md'
-import FMenu, { MenuItem, MenuOverlay } from '../ui/FMenu'
+import FMenu, { MenuItem, MenuOverlay } from '../ui/Menu'
 import { User } from '../../api'
-import FAppBar from '../ui/FAppBar'
+import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/Plans'
 import PlanStepDialog from './pages/PlanStepDialog'
@@ -165,7 +165,7 @@ export default function Dashboard(props: DashboardProps) {
                 height='100vh' 
                 maxHeight='100vh'
             >
-                <FAppBar 
+                <AppBar 
                     isMenu={true} 
                     onMenuClick={menuClickHandler}
                     contentRight={

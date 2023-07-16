@@ -8,8 +8,8 @@ import SWRCalculatorResultTable from './SWRCalculatorTable'
 import SWRCalculatorNetworthChart, { ChartFocus, ChartType } from './charts/SWRCalculatorNetworthChart'
 import { useEffect, useRef, useState } from 'react'
 import { MdAreaChart, MdBarChart } from 'react-icons/md'
-import Chips from '../ui/FChips'
-import Chip from '../ui/FChip'
+import Chips from '../ui/Chips'
+import Chip from '../ui/Chip'
 
 
 interface EzTabProps {

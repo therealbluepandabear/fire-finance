@@ -1,11 +1,11 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react'
 import { MdMenu } from 'react-icons/md'
 
-type FAppBarProps = 
+type AppBarProps = 
     { isMenu: true, onMenuClick: () => void, contentRight: JSX.Element } | 
     { isMenu: false, contentRight: JSX.Element }
 
-export default function FAppBar(props: FAppBarProps) {
+export default function AppBar(props: AppBarProps) {
     const height = '76px'
 
     return (

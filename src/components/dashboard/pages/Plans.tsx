@@ -53,15 +53,15 @@ import {
     MdStarOutline, 
     MdViewList
 } from 'react-icons/md'
-import Divider from '../../ui/FDivider'
+import Divider from '../../ui/Divider'
 import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions, Plan } from '../../../store/plans-slice'
 import { generatePlanId } from '../../../utils'
-import FScrollableBox from '../../ui/FScrollableBox'
-import FChip from '../../ui/FChip'
-import FChips from '../../ui/FChips'
+import FScrollableBox from '../../ui/ScrollableBox'
+import Chip from '../../ui/Chip'
+import Chips from '../../ui/Chips'
 import { GenIcon } from 'react-icons'
 import Card from '../../ui/Card'
 
@@ -602,10 +602,10 @@ export default function PlansPage(props: PlansPageProps) {
                 </Flex>
 
                 <Flex marginTop='-16px' height='35px' minHeight='35px' marginBottom='32px' display={{ base: 'none', md: 'flex' }}>
-                    <FChips onIndexChange={chipIndexChangeHandler}>
-                        <FChip>All Plans</FChip>
-                        <FChip>Starred</FChip>
-                    </FChips>
+                    <Chips onIndexChange={chipIndexChangeHandler}>
+                        <Chip>All Plans</Chip>
+                        <Chip>Starred</Chip>
+                    </Chips>
                 </Flex>
 
                 {plans.length > 0 ? (

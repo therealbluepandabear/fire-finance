@@ -1,6 +1,6 @@
 import { Box, Button, Flex, HTMLChakraProps, Text, Popover, PopoverTrigger, PopoverContent, PopoverBody, useBreakpointValue } from '@chakra-ui/react';
 import {  useState } from 'react'
-import FScrollableBox from './FScrollableBox'
+import FScrollableBox from './ScrollableBox'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface DisplayProps { 

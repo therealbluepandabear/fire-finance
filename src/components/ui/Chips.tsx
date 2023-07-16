@@ -2,12 +2,12 @@ import { Flex, HTMLChakraProps, useColorModeValue } from '@chakra-ui/react'
 import { Children, PropsWithChildren, cloneElement, useState } from 'react'
 import { MdCheck } from 'react-icons/md'
 
-interface FChipsProps extends PropsWithChildren {
+interface ChipsProps extends PropsWithChildren {
     onIndexChange: (index: number) => void
     defaultIndex?: number
 }
 
-export default function FChips({ onIndexChange, children, defaultIndex }: FChipsProps) {
+export default function Chips({ onIndexChange, children, defaultIndex }: ChipsProps) {
     const [index, setIndex] = useState(defaultIndex ?? 0)
 
     function chipClickHandler(localIndex: number) {
@@ -16,9 +16,7 @@ export default function FChips({ onIndexChange, children, defaultIndex }: FChips
     }
 
     return (
-        <Flex
-            overflow='hidden'
-        >
+        <Flex overflow='hidden'>
             {children && Children.map(children, (child: any, itrIndex) => {
                 return cloneElement(child, {
                     key: itrIndex,
