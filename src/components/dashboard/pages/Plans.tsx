@@ -63,6 +63,7 @@ import FScrollableBox from '../../ui/ScrollableBox'
 import Chip from '../../ui/Chip'
 import Chips from '../../ui/Chips'
 import Card from '../../ui/Card'
+import SimpleModal from '../../ui/SimpleModal'
 
 interface PlanDescriptionBadgeProps {
     description: string
@@ -262,43 +263,6 @@ function PlanChart() {
     )
 }
 
-interface FModalProps extends PropsWithChildren {
-    title: string
-    onOKClick: () => void
-    onClose: () => void
-}
-
-function FModal(props: FModalProps) {
-    return (
-        <Modal isOpen={true} onClose={props.onClose} isCentered={true}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader 
-                    fontWeight='normal' 
-                    fontFamily='Manrope' 
-                    fontSize='2xl'
-                >{props.title}</ModalHeader>
-
-                <ModalBody>
-                    {props.children}
-                </ModalBody>
-
-                <ModalCloseButton onClick={props.onClose} />
-
-                <ModalFooter>
-                    <Flex gap='12px'>
-                        <Button variant='ghost' height='36px' onClick={props.onClose}>Cancel</Button>
-
-                        <Button color='white' background='buttonPrimary' height='36px' onClick={props.onOKClick}>
-                            OK
-                        </Button>
-                    </Flex>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    )
-}
-
 interface ModalProps {
     plan: Plan
     onClose: () => void
@@ -319,9 +283,9 @@ function RenamePlanModal(props: ModalProps) {
     }
 
     return (
-        <FModal title='Rename' onOKClick={OKClickHandler} onClose={props.onClose}>
+        <SimpleModal title='Rename' onOKClick={OKClickHandler} onClose={props.onClose}>
             <Input {...register('inputValue', { required: true })} />
-        </FModal>
+        </SimpleModal>
     )
 }
 
@@ -342,9 +306,9 @@ function EditDescriptionModal(props: ModalProps) {
     }
 
     return (
-        <FModal title='Edit Description' onOKClick={OKClickHandler} onClose={props.onClose}>
+        <SimpleModal title='Edit Description' onOKClick={OKClickHandler} onClose={props.onClose}>
             <Input {...register('description', { required: true })} />
-        </FModal>
+        </SimpleModal>
     )
 }
 
@@ -358,9 +322,9 @@ function DeletePlanModal(props: ModalProps) {
     }
 
     return (
-        <FModal title='Delete Plan' onOKClick={OKClickHandler} onClose={props.onClose}>
+        <SimpleModal title='Delete Plan' onOKClick={OKClickHandler} onClose={props.onClose}>
             <Text>{`Are you sure you want to delete ${props.plan.name}? This cannot be undone.`}</Text>
-        </FModal>
+        </SimpleModal>
     )
 }
 

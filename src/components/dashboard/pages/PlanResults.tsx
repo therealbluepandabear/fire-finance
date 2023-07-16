@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, FocusLock, Grid, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, FocusLock, Grid, HTMLChakraProps, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps, ReferenceDot } from 'recharts'
 import FDivider from '../../ui/Divider'
 import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
@@ -7,7 +7,7 @@ import { RetirementCalculatorOutputs, RetirementProjectionPoint, TimeRangeFilter
 import { formatCurrency, saveToFile, findIndexClosestToValue } from '../../../utils'
 import DataTable from '../../ui/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useState } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { GrDocumentCsv, GrDocumentExcel } from 'react-icons/gr'
 import { forwardRef } from '@chakra-ui/react'
 import Card from '../../ui/Card'
@@ -299,7 +299,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
     const [selectedOption, setSelectedOption] = useState<TimeRangeFilter>('Max')
 
     return (
-        <Flex>
+        <Flex gap='12px'>
             {options.map((value, index) => (
                 <Button
                     key={index}
@@ -308,18 +308,38 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
                     _hover={{ }}
                     _active={{ background: 'gray.50' }}
                     height='30px'
+                    padding='15px'
                     background={value === selectedOption ? 'pastelPrimary' : ''}
-                    padding='12px'
                     onClick={() => {
-                        console.log('ok')
                         setSelectedOption(value)
                         props.onSelectOption(value)
                     }}
-                    borderRadius='999px'
+                    borderRadius='lg'
                 >{value}</Button>
             ))}
         </Flex>
 
+    )
+}
+
+
+type SectionProps = SectionHeaderProps & PropsWithChildren & HTMLChakraProps<'div'>
+
+function Section({ title, contentEnd, children, ...props }: SectionProps) {
+    return (
+        <Flex
+            flexDirection='column'
+            border='1px solid #e1e1dc'
+            borderRadius='2xl'
+            {...props}
+        >
+            <SectionHeader
+                title={title}
+                contentEnd={contentEnd}
+            />
+
+            {children}
+        </Flex>
     )
 }
 
@@ -391,52 +411,42 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     gap='32px' 
                     flexDirection={{ base: 'column', lg: !chartExpanded ? 'row' : 'column' }}
                 >
-                    <Flex 
-                        flexDirection='column'
-                        border='1px solid #e1e1dc'
-                        background='white'
-                        borderRadius='2xl'
+                    <Section 
+                        title='Chart'
+                        contentEnd={[
+                            <Flex display={{ base: 'none', lg: 'flex' }}>
+                                <SectionHeaderButton
+                                    ariaLabel='Add'
+                                    icon={!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />}
+                                    onClick={() => setChartExpanded(prevChartExpanded => !prevChartExpanded)}
+                                />
+                            </Flex>
+                        ]}
                         flexGrow={1}
                         minWidth='0'
                     >      
-                        <SectionHeader 
-                            title='Chart' 
-                            contentEnd={[
-                                <TimeRangeFilterOptions onSelectOption={filter => setTimeRangeFilter(filter)} />,
-
-                                <Divider orientation='vertical' height='20px' display={{ base: 'none', lg: 'flex' }} />,
-
-                                <Flex display={{ base: 'none', lg: 'flex' }}>
-                                    <SectionHeaderButton
-                                        ariaLabel='Add'
-                                        icon={!chartExpanded ? <MdOutlineOpenInFull size={22} /> : <MdCloseFullscreen size={22} />}
-                                        onClick={() => setChartExpanded(prevChartExpanded => !prevChartExpanded)}
-                                    />
-                                </Flex>
-                            ]} 
-                        />
+                        <Box paddingLeft='24px' marginBottom='32px'>
+                            <TimeRangeFilterOptions onSelectOption={filter => setTimeRangeFilter(filter)} />
+                        </Box>
 
                         <Flex height={{ base: '320px', md: '580px' }} width='100%'>
                             <Chart {...props} goals={goals} filter={timeRangeFilter} />
                         </Flex>
-                    </Flex>
+                    </Section>
 
-                    <Flex 
+                    <Section 
+                        title='Goals'
+                        contentEnd={[
+                            <IconButton
+                                aria-label='Add'
+                                icon={<MdAdd size={22} />}
+                                borderRadius='999px'
+                                marginLeft='auto'
+                            />
+                        ]}
                         width={{ base: '100%', lg: !chartExpanded ? '300px' : '100%' }}
                         minWidth={{ base: '100%', lg: !chartExpanded ? '300px' : '100%' }}
-                        overflow='hidden'
-                        border='1px solid #e1e1dc'
-                        background='white'
-                        borderRadius='2xl'
-                        flexDirection='column'
                     >
-                        <SectionHeader title='Goals' contentEnd={[<IconButton
-                            aria-label='Add'
-                            icon={<MdAdd size={22} />}
-                            borderRadius='999px'
-                            marginLeft='auto'
-                        />]} />
-
                         <Flex flexDirection='column'>
                             {goals.map((goal, index) => (
                                 <Box key={index}>
@@ -446,58 +456,50 @@ export default function PlanResultsPage(props: PlanFormProps) {
                                 </Box>
                             ))}
                         </Flex>
-                    </Flex>
+                    </Section>
                 </Flex>
 
+                <Section 
+                    marginBottom='24px' 
+                    title='Table' 
+                    contentEnd={[
+                        <Popover
+                            variant='responsive'
+                            placement='left-start'
+                            isOpen={isOpen}
+                            onOpen={onOpen}
+                            onClose={onClose}
+                        >
+                            <PopoverTrigger>
+                                <SectionHeaderButton
+                                    ariaLabel='Download'
+                                    icon={<MdOutlineFileDownload size={22} />}
+                                    onClick={() => { }}
+                                />
+                            </PopoverTrigger>
 
-                <Flex 
-                    flexDirection='column' 
-                    border='1px solid #e1e1dc'
-                    background='white'
-                    borderRadius='2xl' 
-                    marginBottom='24px'
+                            <PopoverContent>
+                                <PopoverBody padding='0px'>
+                                    <FocusLock persistentFocus={false}>
+                                        <Flex flexDirection='column' width='300px'>
+                                            <Button
+                                                borderRadius='0'
+                                                onClick={downloadExcelClickHandler}
+                                            >Microsoft Excel (.xlsx)</Button>
+
+                                            <Divider />
+
+                                            <Button
+                                                borderRadius='0'
+                                                onClick={downloadCommaSeparatedValuesClickHandler}
+                                            >Comma Separated Values (.csv)</Button>
+                                        </Flex>
+                                    </FocusLock>
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
+                    ]}
                 >
-                    <SectionHeader 
-                        title='Table' 
-                        contentEnd={[
-                            <Popover
-                                variant='responsive'
-                                placement='left-start'
-                                isOpen={isOpen}
-                                onOpen={onOpen}
-                                onClose={onClose}
-                            >
-                                <PopoverTrigger>
-                                    <SectionHeaderButton
-                                        ariaLabel='Download'
-                                        icon={<MdOutlineFileDownload size={22} />}
-                                        onClick={() => { }}
-                                    />
-                                </PopoverTrigger>
-                                
-                                <PopoverContent>
-                                    <PopoverBody padding='0px'>
-                                        <FocusLock persistentFocus={false}>
-                                            <Flex flexDirection='column' width='300px'>
-                                                <Button 
-                                                    borderRadius='0'
-                                                    onClick={downloadExcelClickHandler}
-                                                >Microsoft Excel (.xlsx)</Button>
-
-                                                <Divider />
-
-                                                <Button 
-                                                    borderRadius='0'
-                                                    onClick={downloadCommaSeparatedValuesClickHandler}
-                                                >Comma Separated Values (.csv)</Button>
-                                            </Flex>
-                                        </FocusLock>
-                                    </PopoverBody>
-                                </PopoverContent>
-                            </Popover>
-                        ]} 
-                    />
-
                     <FScrollableBox 
                         height='600px' 
                         minHeight='600px' 
@@ -506,7 +508,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     >
                         <ResultTable {...props} />
                     </FScrollableBox>
-                </Flex>
+                </Section>
             </Flex>
         </FScrollableBox>
     )
