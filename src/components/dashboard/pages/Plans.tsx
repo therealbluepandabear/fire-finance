@@ -58,11 +58,10 @@ import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions, Plan } from '../../../store/plans-slice'
-import { generatePlanId } from '../../../utils'
+import { generateId } from '../../../utils'
 import FScrollableBox from '../../ui/ScrollableBox'
 import Chip from '../../ui/Chip'
 import Chips from '../../ui/Chips'
-import { GenIcon } from 'react-icons'
 import Card from '../../ui/Card'
 
 interface PlanDescriptionBadgeProps {
@@ -490,7 +489,7 @@ export default function PlansPage(props: PlansPageProps) {
 
     function addPlanClickHandler(): void {
         const plan: Plan = {
-            id: generatePlanId(),
+            id: generateId(),
             name: `Plan ${plans.length}`,
             creationDate: new Date(2002, 0, 9).toISOString(),
             isFavorite: false

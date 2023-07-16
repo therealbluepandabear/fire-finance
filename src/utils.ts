@@ -37,6 +37,13 @@ export function saveToFile(fileName: string, url: string): void {
     a.remove()
 }
 
-export function generatePlanId(): string {
+export function generateId(): string {
     return URL.createObjectURL(new Blob([])).slice(-36)
+}
+
+export function findIndexClosestToValue(array: number[], value: number): number {
+    const arr = array.map(element => Math.abs(element - value))
+    const min = Math.min(...arr)
+
+    return arr.indexOf(min)
 }

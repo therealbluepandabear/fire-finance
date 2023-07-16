@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { generatePlanId } from '../utils'
+import { generateId } from '../utils'
 
 export interface Plan {
     id: string
@@ -42,7 +42,7 @@ const plansSlice = createSlice({
             
             if (index !== -1) {
                 const plan = state.plans[index]
-                const duplicatedPlan: Plan = { ...plan, name: `Duplicate of ${plan.name}`, id: generatePlanId() }
+                const duplicatedPlan: Plan = { ...plan, name: `Duplicate of ${plan.name}`, id: generateId() }
                 
                 state.plans.push(duplicatedPlan)
             }

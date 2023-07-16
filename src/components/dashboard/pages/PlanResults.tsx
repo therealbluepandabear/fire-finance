@@ -4,7 +4,7 @@ import FDivider from '../../ui/Divider'
 import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
 import FScrollableBox from '../../ui/ScrollableBox'
 import { RetirementCalculatorOutputs, RetirementProjectionPoint, TimeRangeFilter, filterTimeRange, getExcelWorkbook } from '../../../models/retirement-calculator'
-import { formatCurrency, saveToFile } from '../../../utils'
+import { formatCurrency, saveToFile, findIndexClosestToValue } from '../../../utils'
 import DataTable from '../../ui/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState } from 'react'
@@ -135,13 +135,6 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     }
 
     return null
-}
-
-function findIndexClosestToValue(array: number[], value: number): number {
-    const arr = array.map(element => Math.abs(element - value))
-    const min = Math.min(...arr)
-
-    return arr.indexOf(min)
 }
 
 interface ChartProps extends PlanFormProps {
@@ -446,11 +439,11 @@ export default function PlanResultsPage(props: PlanFormProps) {
 
                         <Flex flexDirection='column'>
                             {goals.map((goal, index) => (
-                                <>
-                                    <GoalListItem key={index} goal={goal} />
+                                <Box key={index}>
+                                    <GoalListItem goal={goal} />
 
-                                    <Divider key={index} />
-                                </>
+                                    <Divider />
+                                </Box>
                             ))}
                         </Flex>
                     </Flex>
