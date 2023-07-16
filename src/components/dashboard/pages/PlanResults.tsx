@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Flex, FocusLock, Grid, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
-import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps } from 'recharts'
+import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps, ReferenceDot } from 'recharts'
 import FDivider from '../../ui/FDivider'
 import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
 import FScrollableBox from '../../ui/FScrollableBox'
@@ -10,6 +10,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useState } from 'react'
 import { GrDocumentCsv, GrDocumentExcel } from 'react-icons/gr'
 import { forwardRef } from '@chakra-ui/react'
+import Card from '../../ui/Card'
 
 interface ResultCardProps {
     label: string
@@ -19,14 +20,10 @@ interface ResultCardProps {
 
 function ResultCard(props: ResultCardProps) {
     return (
-        <Flex 
+        <Card 
             height='120px' 
             paddingStart='24px' 
-            border='1px solid #e1e1dc'
-            _hover={{ shadow: 'md' }}
             alignItems='center'
-            borderRadius='lg'
-            background='white'
         >
             <Flex flexDirection='column'>
                 <Flex gap='6px' alignItems='center'>
@@ -36,13 +33,13 @@ function ResultCard(props: ResultCardProps) {
 
                 <Text fontSize='4xl' fontFamily='Manrope'>{props.content}</Text>
             </Flex>
-        </Flex>
+        </Card>
     )
 }
 
 interface SectionHeaderProps {
     title: string
-    contentRight: JSX.Element[]
+    contentEnd: JSX.Element[]
 }
 
 function SectionHeader(props: SectionHeaderProps) {
@@ -57,7 +54,7 @@ function SectionHeader(props: SectionHeaderProps) {
             <Text fontWeight='bold' fontSize='xl'>{props.title}</Text>
 
             <Flex marginLeft='auto' gap='12px' height='100%' alignItems='center'>
-                {props.contentRight.map(content => content)}
+                {props.contentEnd.map(content => content)}
             </Flex>
         </Flex>
     )
@@ -140,7 +137,12 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     return null
 }
 
-function Chart(props: PlanFormProps & { filter: TimeRangeFilter }) {
+interface ChartProps extends PlanFormProps {
+    filter: TimeRangeFilter
+    goals: Goal[]
+}
+
+function Chart(props: ChartProps) {
     return (
         <ResponsiveContainer>
             <AreaChart data={filterTimeRange(props.outputs, props.filter)} {...{ overflow: 'visible' }} margin={{ top: 16, right: 0, bottom: 12, left: 16 }}>
@@ -170,7 +172,21 @@ function Chart(props: PlanFormProps & { filter: TimeRangeFilter }) {
                     tickFormatter={(value) => formatCurrency(value, true)}
                 />
 
-                <Tooltip animationDuration={200} wrapperStyle={{ outline: 'none' }} content={<ChartTooltip />} />
+                <Tooltip 
+                    animationDuration={200}
+                    wrapperStyle={{ outline: 'none' }} 
+                    content={<ChartTooltip />} 
+                />
+
+                {goals.map((goal, index) => (
+                    <ReferenceDot
+                        key={index}
+                        label={goal.label}
+                        r={10}
+                        x={props.outputs.data.find(point => point.networth === goal.targetNetworth)?.age}
+                        y={goal.targetNetworth}
+                    />
+                ))}
             </AreaChart>
         </ResponsiveContainer>
     )
@@ -214,9 +230,14 @@ function ResultsGrid(props: PlanFormProps) {
     )
 }
 
-interface GoalListItemProps {
+interface Goal {
     label: string
     icon: JSX.Element
+    targetNetworth: number
+}
+
+interface GoalListItemProps {
+    goal: Goal
 }
 
 function GoalListItem(props: GoalListItemProps) {
@@ -249,12 +270,12 @@ function GoalListItem(props: GoalListItemProps) {
                 padding='12px'
                 borderRadius='999px'
             >
-                {props.icon}
+                {props.goal.icon}
             </Flex>
 
             <Flex flexDirection='column'>
-                <Text fontWeight='bold'>{props.label}</Text>
-                <Text>$55.5</Text>
+                <Text fontWeight='bold'>{props.goal.label}</Text>
+                <Text>{formatCurrency(props.goal.targetNetworth, false)}</Text>
             </Flex>
 
             <Flex marginLeft='auto' display={showDeleteIcon ? 'flex' : 'none'} color='red'>
@@ -279,7 +300,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
             {options.map((value, index) => (
                 <Button
                     key={index}
-                    color={value === selectedOption ? 'buttonPrimary' : 'gray.400'}
+                    color={value === selectedOption ? 'pastelForeground' : 'gray.400'}
                     fontFamily='Manrope'
                     _hover={{ }}
                     _active={{ background: 'gray.50' }}
@@ -298,6 +319,11 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
 
     )
 }
+
+const goals: Goal[] = [
+    { label: 'Retirement', icon: <MdBeachAccess />, targetNetworth: 24_000_000.5 },
+    { label: 'Financial Independence', icon: <MdFlag />, targetNetworth: 55_000_000.5 }
+]
 
 interface PlanFormProps {
     outputs: RetirementCalculatorOutputs
@@ -372,7 +398,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                     >      
                         <SectionHeader 
                             title='Chart' 
-                            contentRight={[
+                            contentEnd={[
                                 <TimeRangeFilterOptions onSelectOption={filter => setTimeRangeFilter(filter)} />,
 
                                 <Divider orientation='vertical' height='20px' display={{ base: 'none', lg: 'flex' }} />,
@@ -388,7 +414,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                         />
 
                         <Flex height={{ base: '320px', md: '580px' }} width='100%'>
-                            <Chart {...props} filter={timeRangeFilter} />
+                            <Chart {...props} goals={goals} filter={timeRangeFilter} />
                         </Flex>
                     </Flex>
 
@@ -401,7 +427,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                         borderRadius='2xl'
                         flexDirection='column'
                     >
-                        <SectionHeader title='Goals' contentRight={[<IconButton
+                        <SectionHeader title='Goals' contentEnd={[<IconButton
                             aria-label='Add'
                             icon={<MdAdd size={22} />}
                             borderRadius='999px'
@@ -409,13 +435,13 @@ export default function PlanResultsPage(props: PlanFormProps) {
                         />]} />
 
                         <Flex flexDirection='column'>
-                            <GoalListItem label='Retirement' icon={<MdBeachAccess />} />
+                            {goals.map((goal, index) => (
+                                <>
+                                    <GoalListItem key={index} goal={goal} />
 
-                            <Divider />
-
-                            <GoalListItem label='Financial Independence' icon={<MdFlag />} />
-
-                            <Divider />
+                                    <Divider key={index} />
+                                </>
+                            ))}
                         </Flex>
                     </Flex>
                 </Flex>
@@ -430,7 +456,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                 >
                     <SectionHeader 
                         title='Table' 
-                        contentRight={[
+                        contentEnd={[
                             <Popover
                                 variant='responsive'
                                 placement='left-start'

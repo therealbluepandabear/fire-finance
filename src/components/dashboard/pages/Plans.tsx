@@ -59,10 +59,11 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { plansActions, Plan } from '../../../store/plans-slice'
 import { generatePlanId } from '../../../utils'
-import FScrollableBox, { ScrollbarThumbThickness } from '../../ui/FScrollableBox'
+import FScrollableBox from '../../ui/FScrollableBox'
 import FChip from '../../ui/FChip'
 import FChips from '../../ui/FChips'
 import { GenIcon } from 'react-icons'
+import Card from '../../ui/Card'
 
 interface PlanDescriptionBadgeProps {
     description: string
@@ -83,7 +84,6 @@ function PlanDescriptionBadge(props: PlanDescriptionBadgeProps) {
         >
             <PopoverTrigger>
                 <IconButton
-                    background='white'
                     icon={<MdDescription size={20} />}
                     aria-label='Description'
                     width='30px'
@@ -98,8 +98,8 @@ function PlanDescriptionBadge(props: PlanDescriptionBadgeProps) {
                     <FocusLock persistentFocus={false}>
                         <FScrollableBox 
                             padding='8px' 
-                            maxWidth='300px' 
-                            maxHeight='300px' 
+                            maxWidth='200px' 
+                            maxHeight='200px' 
                             overflowY='scroll'
                         >
                             {props.description}
@@ -195,7 +195,6 @@ function PlanOptionsBadge(props: PlanOptionsBadgeProps) {
         >
             <PopoverTrigger>
                 <IconButton
-                    background='white'
                     icon={<MdMoreVert size={20} />}
                     aria-label='Options'
                     width='30px'
@@ -393,7 +392,6 @@ function PlanFavoriteButton(props: PlanFavoriteButtonProps) {
     return (
         <IconButton
             aria-label='Favorite'
-            background='white'
             _hover={{ background: 'gray.100' }}
             _active={{ background: 'gray.200' }}
             icon={hasFavorited ? hasFavoritedIcon : yetToFavoriteIcon}
@@ -424,13 +422,10 @@ function PlanCard(props: PlanCardProps) {
     const showDescriptionBadge = props.plan.description && props.plan.description.trim().length > 0 
 
     return (
-        <Box
+        <Card
             alignSelf='flex-start'
-            borderRadius='md'
+            flexDirection='column'
             overflow='clip'
-            border='1px solid #e1e1dc'
-            _hover={{ shadow: 'md' }}
-            width='100%'
             minWidth='0px'
         >
             <Box height='240px' position='relative'>         
@@ -475,7 +470,7 @@ function PlanCard(props: PlanCardProps) {
 
                 <PlanFavoriteButton key={props.plan.id} plan={props.plan} />
             </Flex>
-        </Box>
+        </Card>
     )
 }
 
@@ -490,8 +485,6 @@ export default function PlansPage(props: PlansPageProps) {
 
     const [context, setContext] = useState<Context | null>()
     const [viewStarred, setViewStarred] = useState(false)
-
-    const thumbThickness = useBreakpointValue<ScrollbarThumbThickness>({ base: 'normal', md: 'thick' })
 
     const plans = useAppSelector(state => viewStarred ? state.plans.plans.filter(plan => plan.isFavorite) : state.plans.plans)
 
@@ -534,7 +527,6 @@ export default function PlansPage(props: PlansPageProps) {
 
     return (
         <FScrollableBox
-            thickness={thumbThickness}
             flexGrow={1}
             minHeight='0'
             overflowY='auto'

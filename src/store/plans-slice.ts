@@ -14,7 +14,7 @@ interface PlansState {
 }
 
 const initialPlansState: PlansState = {
-    plans: []
+    plans: [{ id: '0', name: 'Plan 1', creationDate: '2023-07-16T08:08:02.872Z', isFavorite: false, description: 'ETC' }]
 }
 
 const plansSlice = createSlice({
