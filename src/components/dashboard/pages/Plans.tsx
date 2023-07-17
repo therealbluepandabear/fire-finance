@@ -100,6 +100,7 @@ function PlanDescriptionBadge(props: PlanDescriptionBadgeProps) {
                             padding='8px' 
                             maxWidth='200px' 
                             maxHeight='200px' 
+                            wordBreak='break-word'
                             overflowY='scroll'
                         >
                             {props.description}

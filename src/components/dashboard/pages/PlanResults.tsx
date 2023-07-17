@@ -39,7 +39,6 @@ function ResultCard(props: ResultCardProps) {
 
 interface SectionHeaderProps {
     title: string
-    contentStart?: JSX.Element[]
     contentEnd: JSX.Element[]
 }
 
@@ -54,8 +53,6 @@ function SectionHeader(props: SectionHeaderProps) {
             gap='16px'
         >
             <Text fontWeight='bold' fontSize='xl'>{props.title}</Text>
-
-            {props.contentStart}
 
             <Flex marginLeft='auto' gap='12px' alignItems='center'>
                 {props.contentEnd.map(content => content)}
@@ -343,7 +340,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
                     _hover={{ }}
                     _active={{ background: 'gray.50' }}
                     height='30px'
-                    padding='15px'
+                    padding='10px'
                     background={value === selectedOption ? 'pastelPrimary' : ''}
                     onClick={() => {
                         setSelectedOption(value)
@@ -360,7 +357,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
 
 type SectionProps = SectionHeaderProps & PropsWithChildren & HTMLChakraProps<'div'>
 
-function Section({ title, contentStart, contentEnd, children, ...props }: SectionProps) {
+function Section({ title, contentEnd, children, ...props }: SectionProps) {
     return (
         <Flex
             flexDirection='column'
@@ -370,7 +367,6 @@ function Section({ title, contentStart, contentEnd, children, ...props }: Sectio
         >
             <SectionHeader
                 title={title}
-                contentStart={contentStart}
                 contentEnd={contentEnd}
             />
 
@@ -380,7 +376,7 @@ function Section({ title, contentStart, contentEnd, children, ...props }: Sectio
 }
 
 const goals: Goal[] = [
-    { label: 'Retirement', icon: <MdBeachAccess />, targetNetworth: 24_000_000.5 },
+    { label: 'Retirement', icon: <MdBeachAccess />, targetNetworth: 1_000_000.5 },
     { label: 'Financial Independence', icon: <MdFlag />, targetNetworth: 55_000_000.5 }
 ]
 
@@ -449,22 +445,6 @@ export default function PlanResultsPage(props: PlanFormProps) {
                 >
                     <Section 
                         title='Chart'
-                        contentStart={[
-                            <Flex 
-                                alignItems='center' 
-                                fontFamily='Manrope' 
-                                color='#50C878' 
-                                background='#d9f5e0' 
-                                padding='4px' 
-                                paddingStart='10px' 
-                                paddingEnd='10px' 
-                                gap='4px'
-                                borderRadius='md'
-                            >
-                                <MdArrowUpward />
-                                100%
-                            </Flex>
-                        ]}
                         contentEnd={[
                             <Flex display={{ base: 'none', lg: 'flex' }}>
                                 <SectionHeaderButton
@@ -504,7 +484,7 @@ export default function PlanResultsPage(props: PlanFormProps) {
                                 <Box key={index}>
                                     <GoalListItem goal={goal} />
 
-                                    <Divider />
+                                    {index < goals.length - 1 && <Divider />}
                                 </Box>
                             ))}
                         </Flex>
