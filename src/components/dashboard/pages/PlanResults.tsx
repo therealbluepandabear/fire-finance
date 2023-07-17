@@ -1,16 +1,16 @@
-import { Box, Button, Divider, Flex, FocusLock, Grid, HTMLChakraProps, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Circle, Divider, Flex, FocusLock, Grid, HTMLChakraProps, IconButton, Input, Popover, PopoverBody, PopoverContent, PopoverTrigger, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useColorMode, useDisclosure, useStyleConfig } from '@chakra-ui/react'
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, TooltipProps, ReferenceDot } from 'recharts'
-import FDivider from '../../ui/Divider'
-import { MdAdd, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
+import { MdAdd, MdArrowUpward, MdBeachAccess, MdCalendarMonth, MdCheck, MdChecklist, MdClose, MdCloseFullscreen, MdContentCopy, MdDelete, MdDeleteOutline, MdDescription, MdDownload, MdEdit, MdExpand, MdFace, MdFilter, MdFilterList, MdFlag, MdImportExport, MdInfo, MdIosShare, MdLocalFireDepartment, MdMoreVert, MdNotes, MdOpenInFull, MdOutlineAutoGraph, MdOutlineDownload, MdOutlineFileDownload, MdOutlineOpenInFull, MdOutlineStickyNote2, MdPageview, MdPerson, MdSchedule, MdStarOutline, MdStickyNote2, MdUpload } from 'react-icons/md'
 import FScrollableBox from '../../ui/ScrollableBox'
 import { RetirementCalculatorOutputs, RetirementProjectionPoint, TimeRangeFilter, filterTimeRange, getExcelWorkbook } from '../../../models/retirement-calculator'
 import { formatCurrency, saveToFile, findIndexClosestToValue } from '../../../utils'
 import DataTable from '../../ui/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PropsWithChildren, useState } from 'react'
-import { GrDocumentCsv, GrDocumentExcel } from 'react-icons/gr'
 import { forwardRef } from '@chakra-ui/react'
 import Card from '../../ui/Card'
+import React from 'react'
+import { useTheme } from '@emotion/react'
 
 interface ResultCardProps {
     label: string
@@ -39,6 +39,7 @@ function ResultCard(props: ResultCardProps) {
 
 interface SectionHeaderProps {
     title: string
+    contentStart?: JSX.Element[]
     contentEnd: JSX.Element[]
 }
 
@@ -50,8 +51,11 @@ function SectionHeader(props: SectionHeaderProps) {
             padding='16px'
             paddingLeft='28px'
             width='100%'
+            gap='16px'
         >
             <Text fontWeight='bold' fontSize='xl'>{props.title}</Text>
+
+            {props.contentStart}
 
             <Flex marginLeft='auto' gap='12px' alignItems='center'>
                 {props.contentEnd.map(content => content)}
@@ -137,6 +141,38 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
     return null
 }
 
+interface GoalReferenceDotShape {
+    cx: number
+    cy: number
+    icon: JSX.Element
+}
+
+function GoalReferenceDotShape(props: GoalReferenceDotShape) {
+
+    const fill = (useTheme() as any).colors.buttonPrimary
+
+    return (
+        <g>
+            <circle
+                cx={props.cx}
+                cy={props.cy - 40}
+                r={18}
+                stroke='transparent'
+                fill={fill}
+            />
+            
+            {React.cloneElement(
+                props.icon, { 
+                    fill: 'white', 
+                    size: 20, 
+                    x: props.cx - 10, 
+                    y: props.cy - 50
+                }
+            )}
+        </g>
+    )
+}
+
 interface ChartProps extends PlanFormProps {
     filter: TimeRangeFilter
     goals: Goal[]
@@ -184,8 +220,7 @@ function Chart(props: ChartProps) {
                 {goals.map((goal, index) => (
                     <ReferenceDot
                         key={index}
-                        label={goal.label}
-                        r={10}
+                        shape={obj => <GoalReferenceDotShape icon={goal.icon} cx={obj.cx} cy={obj.cy} />}
                         x={findIndexClosestToValue(data.map(point => point.networth), goal.targetNetworth)}
                         y={goal.targetNetworth}
                     />
@@ -325,7 +360,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
 
 type SectionProps = SectionHeaderProps & PropsWithChildren & HTMLChakraProps<'div'>
 
-function Section({ title, contentEnd, children, ...props }: SectionProps) {
+function Section({ title, contentStart, contentEnd, children, ...props }: SectionProps) {
     return (
         <Flex
             flexDirection='column'
@@ -335,6 +370,7 @@ function Section({ title, contentEnd, children, ...props }: SectionProps) {
         >
             <SectionHeader
                 title={title}
+                contentStart={contentStart}
                 contentEnd={contentEnd}
             />
 
@@ -413,6 +449,22 @@ export default function PlanResultsPage(props: PlanFormProps) {
                 >
                     <Section 
                         title='Chart'
+                        contentStart={[
+                            <Flex 
+                                alignItems='center' 
+                                fontFamily='Manrope' 
+                                color='#50C878' 
+                                background='#d9f5e0' 
+                                padding='4px' 
+                                paddingStart='10px' 
+                                paddingEnd='10px' 
+                                gap='4px'
+                                borderRadius='md'
+                            >
+                                <MdArrowUpward />
+                                100%
+                            </Flex>
+                        ]}
                         contentEnd={[
                             <Flex display={{ base: 'none', lg: 'flex' }}>
                                 <SectionHeaderButton
