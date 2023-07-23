@@ -5,9 +5,9 @@ import { adjustForInflation } from './calculator-utils'
 // Calculates the adjusted return rates by factoring in inflation using a specialized formula
 function calculateAdjustedReturnRate(params: RetirementCalculatorInputs) {
     return {
-        adjustedStocksReturnRate: adjustForInflation(params.stocksReturnRate, params.inflationRate),
-        adjustedBondsReturnRate: adjustForInflation(params.bondsReturnRate, params.inflationRate),
-        adjustedCashReturnRate: adjustForInflation(params.cashReturnRate, params.inflationRate)
+        adjStocksReturnRate: adjustForInflation(params.stocksReturnRate, params.inflationRate),
+        adjBondsReturnRate: adjustForInflation(params.bondsReturnRate, params.inflationRate),
+        adjCashReturnRate: adjustForInflation(params.cashReturnRate, params.inflationRate)
     }
 }
 
@@ -20,14 +20,14 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     let annualSavings = calculateAnnualSavings()
 
     const total = { 
-        networth: 0, 
+        networth: params.networth, 
         stocks: 0, 
         bonds: 0, 
         cash: 0
     }
 
     // Calculates the adjusted return RATE by factoring in inflation
-    const { adjustedStocksReturnRate, adjustedBondsReturnRate, adjustedCashReturnRate } = calculateAdjustedReturnRate(params)
+    const { adjStocksReturnRate, adjBondsReturnRate, adjCashReturnRate } = calculateAdjustedReturnRate(params)
 
     // Starting age and year which will be incrementally updated in the loop
     let age = params.age
@@ -38,9 +38,9 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
         let totalAmount = total[type] + (total[type] * returnRate) + savingsContribution
 
-        // Take away the safe withdrawal amount as the user is retired
+        // Take away the expenses amount each year as the user is retired
         if (hasRetired) {
-            totalAmount = totalAmount * (1 - params.safeWithdrawalRate)
+            totalAmount -= params.annualSpending
         }
 
         return totalAmount
@@ -52,13 +52,13 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     function updateTotal(): void {
         // Update total stocks
-        total.stocks = calculateTotal('stocks', params.stocksAllocationRate, adjustedStocksReturnRate)
+        total.stocks = calculateTotal('stocks', params.stocksAllocationRate, adjStocksReturnRate)
         
         // Update total bonds
-        total.bonds = calculateTotal('bonds', params.bondsAllocationRate, adjustedBondsReturnRate)
+        total.bonds = calculateTotal('bonds', params.bondsAllocationRate, adjBondsReturnRate)
 
         // Update total cash
-        total.cash = calculateTotal('cash', params.cashAllocationRate, adjustedCashReturnRate)
+        total.cash = calculateTotal('cash', params.cashAllocationRate, adjCashReturnRate)
 
         // Update total networth
         total.networth = calculateTotalNetworth()
@@ -134,10 +134,13 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     const fireNumber = params.annualSpending / params.safeWithdrawalRate
 
     return { 
-        fireAge: age,
-        fireNumber: fireNumber,
+        summary: { 
+            fireAge: age,
+            fireNumber: fireNumber,
+            retirementAge: params.retirementAge ?? age,
+            yearsTillRetirement: (params.retirementAge ?? age) - params.age
+        },
         data: data,
-        retirementAge: params.retirementAge
     }
 }
 
@@ -162,19 +165,19 @@ export function getExcelWorkbook(outputs: RetirementCalculatorOutputs): Workbook
 
 export type TimeRangeFilter = '1Y' | '4Y' | '12Y' | 'Max'
 
-export function filterTimeRange(outputs: RetirementCalculatorOutputs, filter: TimeRangeFilter): RetirementProjectionPoint[] {
+export function filterTimeRange(data: RetirementProjectionPoint[], filter: TimeRangeFilter): RetirementProjectionPoint[] {
     if (filter === 'Max') {
-        return outputs.data
+        return data
     }
 
-    return outputs.data.filter(projectionPoint => {
+    return data.filter(projectionPoint => {
         switch (filter) {
             case '1Y':
-                return projectionPoint.year <= outputs.data[0].year + 1
+                return projectionPoint.year <= data[0].year + 1
             case '4Y':
-                return projectionPoint.year <= outputs.data[0].year + 4
+                return projectionPoint.year <= data[0].year + 4
             case '12Y':
-                return projectionPoint.year <= outputs.data[0].year + 12
+                return projectionPoint.year <= data[0].year + 12
         }
     })
 }
@@ -185,11 +188,16 @@ export interface RetirementProjectionPoint {
     networth: number
 }
 
-export interface RetirementCalculatorOutputs {
+export interface FIRESummary {
     fireAge: number
     fireNumber: number
+    retirementAge: number
+    yearsTillRetirement: number
+}
+
+export interface RetirementCalculatorOutputs {
+    summary: FIRESummary
     data: RetirementProjectionPoint[]
-    retirementAge?: number
 }
 
 export interface RetirementCalculatorInputs {

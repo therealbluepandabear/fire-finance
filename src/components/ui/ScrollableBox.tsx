@@ -8,6 +8,7 @@ export default function FScrollableBox({ children, ...props }: PropsWithChildren
             sx={{
                 '::-webkit-scrollbar': {
                     width: '9px',
+                    height: '9px',
                     overflowY: 'auto'
                 },
                 '::-webkit-scrollbar-thumb:hover': {

@@ -438,7 +438,7 @@ function PlanCard(props: PlanCardProps) {
     )
 }
 
-type Context = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
+type DialogContext = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
 
 interface PlansPageProps {
     onAddPlanClick: () => void
@@ -447,21 +447,12 @@ interface PlansPageProps {
 export default function PlansPage(props: PlansPageProps) {
     const dispatch = useAppDispatch()
 
-    const [context, setContext] = useState<Context | null>()
+    const [context, setContext] = useState<DialogContext | null>()
     const [viewStarred, setViewStarred] = useState(false)
 
     const plans = useAppSelector(state => viewStarred ? state.plans.plans.filter(plan => plan.isFavorite) : state.plans.plans)
 
     function addPlanClickHandler(): void {
-        const plan: Plan = {
-            id: generateId(),
-            name: `Plan ${plans.length}`,
-            creationDate: new Date(2002, 0, 9).toISOString(),
-            isFavorite: false
-        }
-
-        dispatch(plansActions.addPlan(plan))
-
         props.onAddPlanClick()
     }
 

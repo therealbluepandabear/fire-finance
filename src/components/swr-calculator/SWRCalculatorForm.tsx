@@ -32,107 +32,108 @@ export default function SWRCalculatorForm(props: SWRCalculatorFormProps) {
     }
     
     return (
-        <form onSubmit={handleSubmit(props.onSubmit)} style={{ width: '100%' }}>
-            <Flex width='100%' height='100%'>
-                <Flex width='100%' justifyContent='center' alignItems='center'>
-                    <Flex
-                        flexDirection='column'
-                        gap='13px'
-                        width='50%'
-                    >
-                        <Text fontSize='3xl'>Safe Withdrawal Rate Calculator</Text>
+        // <form onSubmit={handleSubmit(props.onSubmit)} style={{ width: '100%' }}>
+        //     <Flex width='100%' height='100%'>
+        //         <Flex width='100%' justifyContent='center' alignItems='center'>
+        //             <Flex
+        //                 flexDirection='column'
+        //                 gap='13px'
+        //                 width='50%'
+        //             >
+        //                 <Text fontSize='3xl'>Safe Withdrawal Rate Calculator</Text>
 
-                        <FormInput
-                            placeholder='Networth'
-                            inputLeftElement={<MdAttachMoney color='lightgray' />}
-                            isInvalid={!!errors.networth}
-                            register={register('networth', numberRegisterOptions)}
-                            tooltipText='Your current networth.'
-                        />
+        //                 <FormInput
+        //                     placeholder='Networth'
+        //                     inputLeftElement={<MdAttachMoney color='lightgray' />}
+        //                     isInvalid={!!errors.networth}
+        //                     register={register('networth', numberRegisterOptions)}
+        //                     tooltipText='Your current networth.'
+        //                 />
 
-                        <FormInput
-                            placeholder='Duration (years)'
-                            inputLeftElement={<MdSchedule color='lightgray' />}
-                            isInvalid={!!errors.duration}
-                            register={register('duration', numberRegisterOptions)}
-                            tooltipText='Duration (years).'
-                        />
+        //                 <FormInput
+        //                     placeholder='Duration (years)'
+        //                     inputLeftElement={<MdSchedule color='lightgray' />}
+        //                     isInvalid={!!errors.duration}
+        //                     register={register('duration', numberRegisterOptions)}
+        //                     tooltipText='Duration (years).'
+        //                 />
 
-                        <FormInput
-                            placeholder='Safe Withdrawal Rate'
-                            inputLeftElement={<MdPercent color='lightgray' />}
-                            isInvalid={!!errors.safeWithdrawalRate}
-                            register={register('safeWithdrawalRate', percentageRegisterOptions)}
-                            tooltipText='Percentage of retirement savings to withdraw yearly.'
-                        />
+        //                 <FormInput
+        //                     placeholder='Safe Withdrawal Rate'
+        //                     inputLeftElement={<MdPercent color='lightgray' />}
+        //                     isInvalid={!!errors.safeWithdrawalRate}
+        //                     register={register('safeWithdrawalRate', percentageRegisterOptions)}
+        //                     tooltipText='Percentage of retirement savings to withdraw yearly.'
+        //                 />
 
-                        <Text>Asset Allocation</Text>
+        //                 <Text>Asset Allocation</Text>
 
-                        <Flex
-                            flexDirection={{ base: 'column', xl: 'row' }}
-                            gap='13px'
-                        >
-                            <FormInput
-                                placeholder='Stocks'
-                                inputLeftElement={<MdPercent color='lightgray' />}
-                                isInvalid={!!errors.stocksAllocationRate}
-                                register={register('stocksAllocationRate', percentageRegisterOptions)}
-                                tooltipText='Percentage of starting networth to invest in stocks.'
-                            />
+        //                 <Flex
+        //                     flexDirection={{ base: 'column', xl: 'row' }}
+        //                     gap='13px'
+        //                 >
+        //                     <FormInput
+        //                         placeholder='Stocks'
+        //                         inputLeftElement={<MdPercent color='lightgray' />}
+        //                         isInvalid={!!errors.stocksAllocationRate}
+        //                         register={register('stocksAllocationRate', percentageRegisterOptions)}
+        //                         tooltipText='Percentage of starting networth to invest in stocks.'
+        //                     />
 
-                            <FormInput
-                                placeholder='Gold'
-                                inputLeftElement={<MdPercent color='lightgray' />}
-                                isInvalid={!!errors.goldAllocationRate}
-                                register={register('goldAllocationRate', percentageRegisterOptions)}
-                                tooltipText='Percentage of starting networth to invest in gold.'
-                            />
+        //                     <FormInput
+        //                         placeholder='Gold'
+        //                         inputLeftElement={<MdPercent color='lightgray' />}
+        //                         isInvalid={!!errors.goldAllocationRate}
+        //                         register={register('goldAllocationRate', percentageRegisterOptions)}
+        //                         tooltipText='Percentage of starting networth to invest in gold.'
+        //                     />
 
-                            <FormInput
-                                placeholder='Bonds'
-                                inputLeftElement={<MdPercent color='lightgray' />}
-                                isInvalid={!!errors.bondsAllocationRate}
-                                register={register('bondsAllocationRate', percentageRegisterOptions)}
-                                tooltipText='Percentage of starting networth to invest in bonds.'
-                            />
-                        </Flex>
+        //                     <FormInput
+        //                         placeholder='Bonds'
+        //                         inputLeftElement={<MdPercent color='lightgray' />}
+        //                         isInvalid={!!errors.bondsAllocationRate}
+        //                         register={register('bondsAllocationRate', percentageRegisterOptions)}
+        //                         tooltipText='Percentage of starting networth to invest in bonds.'
+        //                     />
+        //                 </Flex>
 
-                        <Accordion allowToggle>
-                            <AccordionItem>
-                                <AccordionButton>
-                                    <Flex width='100%'>
-                                        Advanced
-                                        <AccordionIcon marginLeft='auto' />
-                                    </Flex>
-                                </AccordionButton>
-                                <AccordionPanel pb={4}>
-                                    <Flex
-                                        flexDirection='column'
-                                        gap='13px'
-                                    >
-                                        <Flex flexDirection='row'>
-                                            <FormLabel htmlFor='loopSwitch'>Loop</FormLabel>
-                                            <Switch id='loopSwitch' {...register('shouldLoop')} />
-                                        </Flex>
+        //                 <Accordion allowToggle>
+        //                     <AccordionItem>
+        //                         <AccordionButton>
+        //                             <Flex width='100%'>
+        //                                 Advanced
+        //                                 <AccordionIcon marginLeft='auto' />
+        //                             </Flex>
+        //                         </AccordionButton>
+        //                         <AccordionPanel pb={4}>
+        //                             <Flex
+        //                                 flexDirection='column'
+        //                                 gap='13px'
+        //                             >
+        //                                 <Flex flexDirection='row'>
+        //                                     <FormLabel htmlFor='loopSwitch'>Loop</FormLabel>
+        //                                     <Switch id='loopSwitch' {...register('shouldLoop')} />
+        //                                 </Flex>
 
-                                        <Flex flexDirection='row'>
-                                            <FormLabel htmlFor='adjustForInflation'>Adjust for Inflation</FormLabel>
-                                            <Switch id='adjustForInflation' {...register('adjustForInflation')} />
-                                        </Flex>
+        //                                 <Flex flexDirection='row'>
+        //                                     <FormLabel htmlFor='adjustForInflation'>Adjust for Inflation</FormLabel>
+        //                                     <Switch id='adjustForInflation' {...register('adjustForInflation')} />
+        //                                 </Flex>
 
-                                        <Select placeholder='Withdrawal strategy' {...register('strategy')}>
-                                            <option value='fixed-percentage'>Fixed percentage</option>
-                                            <option value='initial-percentage'>Initial percentage</option>
-                                        </Select>
-                                    </Flex>
-                                </AccordionPanel>
-                            </AccordionItem>
-                        </Accordion>
+        //                                 <Select placeholder='Withdrawal strategy' {...register('strategy')}>
+        //                                     <option value='fixed-percentage'>Fixed percentage</option>
+        //                                     <option value='initial-percentage'>Initial percentage</option>
+        //                                 </Select>
+        //                             </Flex>
+        //                         </AccordionPanel>
+        //                     </AccordionItem>
+        //                 </Accordion>
 
-                        <FormSubmitButton>Calculate</FormSubmitButton>
-                    </Flex>
-                </Flex>
-            </Flex>
-        </form>
+        //                 <FormSubmitButton>Calculate</FormSubmitButton>
+        //             </Flex>
+        //         </Flex>
+        //     </Flex>
+        // </form>
+        <></>
     )
 }

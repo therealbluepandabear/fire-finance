@@ -1,59 +1,32 @@
-import { 
-    FormControl, 
-    InputGroup, 
-    InputLeftElement,
-    Input, 
-    InputRightElement, 
-    Tooltip, 
-    FormErrorMessage, 
-    FormLabel, 
-    useColorModeValue 
-} from '@chakra-ui/react'
-import { UseFormRegisterReturn } from 'react-hook-form'
+import { HTMLChakraProps, FormControl, InputGroup, InputLeftElement, Input, FormLabel, InputRightElement, Tooltip } from '@chakra-ui/react'
 import { MdHelp } from 'react-icons/md'
 
-
-// This component represents the default form input component that is used in the calculator forms throughout
-// the app. Adding this component greatly reduces code duplication.
-
-
-interface FormInputProps {
-    isInvalid: boolean
-    placeholder: string
+interface FormInputProps extends Pick<HTMLChakraProps<'input'>, 'onChange' | 'onBlur' | 'value'> {
     inputLeftElement: JSX.Element
-    register: UseFormRegisterReturn
-    tooltipText: string
+    placeholder: string
 }
 
-export default function FormInput(props: FormInputProps) {
+export default function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps) {
     return (
-        <FormControl isInvalid={props.isInvalid} variant='floating'>
+        <FormControl variant='floating'>
             <InputGroup>
                 <InputLeftElement>
-                    {props.inputLeftElement}
+                    {inputLeftElement}
                 </InputLeftElement>
 
-                <Input 
-                    size='md'
-                    errorBorderColor='red.500'
-                    placeholder=' '
-                    type='number'
-                    {...props.register}
-                />
+                <Input placeholder=' ' tabIndex={-1} {...props} />
 
-                <FormLabel 
-                    style={{ marginLeft: '32px' }} 
+                <FormLabel
+                    style={{ marginLeft: '32px' }}
                     color='gray'
-                    backgroundColor={useColorModeValue('white', 'gray.800')}
-                >{props.placeholder}</FormLabel>
+                >{placeholder}</FormLabel>
 
-                <Tooltip label={props.tooltipText} textAlign='center' fontSize='12px'>
+                <Tooltip textAlign='center' fontSize='12px'>
                     <InputRightElement>
                         <MdHelp color='lightgray' />
                     </InputRightElement>
                 </Tooltip>
             </InputGroup>
-            <FormErrorMessage>{props.placeholder} is required.</FormErrorMessage>
         </FormControl>
     )
 }

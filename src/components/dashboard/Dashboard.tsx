@@ -6,7 +6,7 @@ import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/Plans'
 import PlanStepDialog from './pages/PlanStepDialog'
-import PlanResultsPage from './pages/PlanResults'
+import PlanResultsPage from './pages/plan-results/PlanResults'
 import { RetirementCalculatorInputs, calculateRetirementAge } from '../../models/retirement-calculator'
 
 interface DashboardMenuProps {
@@ -60,29 +60,10 @@ export interface DashboardProps {
 
 export default function Dashboard(props: DashboardProps) {
 
-    const [showPlanFormDialog, setShowPlanFormDialog] = useState(false)
-
-    const [currentPage, setCurrentPage] = useState<JSX.Element>(<PlansPage onAddPlanClick={() => setCurrentPage(<PlanResultsPage outputs={calculateRetirementAge({
-        age: 20,
-        annualIncome: 70_000,
-        annualSpending: 30_000,
-
-        networth: 0,
-        safeWithdrawalRate: 0.02,
-        inflationRate: 0,
-
-        stocksAllocationRate: 1,
-        bondsAllocationRate: 0,
-        cashAllocationRate: 0,
-
-        stocksReturnRate: 0.07,
-        bondsReturnRate: 0,
-        cashReturnRate: 0,
-
-        retirementAge: 50,
-        incomeGrowthRate: 0.09,
-        maximumAge: 100
-    })} />)} />
+    const [currentPage, setCurrentPage] = useState<JSX.Element>(
+        <PlansPage onAddPlanClick={() => {
+            setCurrentPage(<PlanResultsPage planId='0' />)
+        }} />
     )
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -136,29 +117,6 @@ export default function Dashboard(props: DashboardProps) {
         <>
             <MenuOverlay isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
 
-            {showPlanFormDialog && <PlanStepDialog onClose={(inputs) => {
-                setShowPlanFormDialog(false)
-                setCurrentPage(<PlanResultsPage outputs={calculateRetirementAge({
-                    age: 20,
-                    annualIncome: 70_000,
-                    annualSpending: 30_000,
-
-                    networth: 0,
-                    safeWithdrawalRate: 2,
-                    inflationRate: 0,
-
-                    stocksAllocationRate: 1,
-                    bondsAllocationRate: 0,
-                    cashAllocationRate: 0,
-
-                    stocksReturnRate: 0.07,
-                    bondsReturnRate: 0,
-                    cashReturnRate: 0,
-
-                    maximumAge: 50
-                })} />)
-            }} />}
-
             <Flex 
                 flexDirection='column' 
                 width='100%' 
@@ -183,30 +141,7 @@ export default function Dashboard(props: DashboardProps) {
                 >
                     <DashboardMenu isOpen={isMenuOpen} />
 
-                    {currentPage}
-                     
-                    {/* <PlanResultsPage outputs={calculateRetirementAge({
-                        age: 20,
-                        annualIncome: 70_000,
-                        annualSpending: 30_000,
-
-                        networth: 0,
-                        safeWithdrawalRate: 0.02,
-                        inflationRate: 0,
-
-                        stocksAllocationRate: 1,
-                        bondsAllocationRate: 0,
-                        cashAllocationRate: 0,
-
-                        stocksReturnRate: 0.07,
-                        bondsReturnRate: 0,
-                        cashReturnRate: 0,
-
-                        retirementAge: 50,
-                        incomeGrowthRate: 0.09,
-                        maximumAge: 100
-                    })} /> */}
-            
+                    {currentPage}                
                 </Flex>
             </Flex>
         </>

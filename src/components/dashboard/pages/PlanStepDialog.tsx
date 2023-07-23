@@ -18,6 +18,7 @@ import {
     ModalOverlay,
     Tooltip
 } from '@chakra-ui/react'
+import FormInput from '../../ui/FormInput'
 import { useState } from 'react'
 import { MdAttachMoney, MdFace, MdHelp, MdPercent } from 'react-icons/md'
 import { RetirementCalculatorInputs } from '../../../models/retirement-calculator'
@@ -41,36 +42,6 @@ function StepBar(props: StepBarProps) {
                 transition='width 0.2s ease-in-out'
             />
         </Flex>
-    )
-}
-
-interface FormInputProps extends Pick<HTMLChakraProps<'input'>, 'onChange' | 'onBlur' | 'value'> {
-    inputLeftElement: JSX.Element
-    placeholder: string
-}
-
-function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps) {
-    return (
-        <FormControl variant='floating'>
-            <InputGroup>
-                <InputLeftElement>
-                    {inputLeftElement}
-                </InputLeftElement>
-
-                <Input placeholder=' ' tabIndex={-1} {...props} />
-
-                <FormLabel
-                    style={{ marginLeft: '32px' }}
-                    color='gray'
-                >{placeholder}</FormLabel>
-
-                <Tooltip textAlign='center' fontSize='12px'>
-                    <InputRightElement>
-                        <MdHelp color='lightgray' />
-                    </InputRightElement>
-                </Tooltip>
-            </InputGroup>
-        </FormControl>
     )
 }
 

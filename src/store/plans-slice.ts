@@ -1,5 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { generateId } from '../utils'
+import { RetirementCalculatorInputs } from '../models/retirement-calculator'
+
+export interface Goal {
+    label: string
+    icon: JSX.Element
+    targetNetworth: number
+}
 
 export interface Plan {
     id: string
@@ -7,6 +14,7 @@ export interface Plan {
     creationDate: string
     isFavorite: boolean
     description?: string
+    inputs: RetirementCalculatorInputs
 }
 
 interface PlansState {
@@ -14,7 +22,34 @@ interface PlansState {
 }
 
 const initialPlansState: PlansState = {
-    plans: [{ id: '0', name: 'Plan 1', creationDate: '2023-07-16T08:08:02.872Z', isFavorite: false, description: 'ETC' }]
+    plans: [{ 
+        id: '0', 
+        name: 'Plan 1', 
+        creationDate: '2023-07-16T08:08:02.872Z', 
+        isFavorite: false, 
+        description: 'ETC',
+        inputs: {
+            age: 20,
+            annualIncome: 70_000,
+            annualSpending: 30_000,
+
+            retirementAge: 50,
+
+            networth: 30_000,
+            safeWithdrawalRate: 4,
+            inflationRate: 0,
+
+            stocksAllocationRate: 1,
+            bondsAllocationRate: 0,
+            cashAllocationRate: 0,
+
+            stocksReturnRate: 0.07,
+            bondsReturnRate: 0,
+            cashReturnRate: 0,
+
+            maximumAge: 100
+        }
+    }]
 }
 
 const plansSlice = createSlice({

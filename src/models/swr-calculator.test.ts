@@ -66,8 +66,6 @@ test('outputs are correct (2)', async () => {
 
     expect(queriableData[0].networth).toBe(startingNetworth)
 
-
-
     const stocksAmount = startingNetworth * stocksAllocationRate
     const goldAmount = startingNetworth * goldAllocationRate
     const bondsAmount = startingNetworth * bondsAllocationRate
@@ -83,8 +81,6 @@ test('outputs are correct (2)', async () => {
     const totalV1 = stocksAmountV2 + goldAmountV2 + bondsAmountV2
 
     expect(queriableData[1].networth).toBe(totalV1)
-
-
 
     const stocksAmountV3 = stocksAmountV2 + (stocksAmountV2 * data[1].stocksReturnRate)
     const goldAmountV3 = goldAmountV2 + (goldAmountV2 * data[1].goldReturnRate)
