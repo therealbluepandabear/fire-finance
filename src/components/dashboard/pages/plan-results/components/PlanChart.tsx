@@ -1,9 +1,10 @@
-import { ResponsiveContainer, AreaChart, CartesianGrid, Area, XAxis, YAxis, Tooltip, ReferenceDot, TooltipProps } from 'recharts'
-import { RetirementProjectionPoint, TimeRangeFilter, filterTimeRange } from '../../../../models/retirement-calculator'
-import { Goal } from '../../../../store/plans-slice'
-import { formatCurrency, findIndexClosestToValue } from '../../../../utils'
-import { Box, Flex, Text, useTheme } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import { TooltipProps, ResponsiveContainer, AreaChart, CartesianGrid, Area, XAxis, YAxis, Tooltip, ReferenceDot } from 'recharts'
+import { RetirementProjectionPoint, TimeRangeFilter, filterTimeRange } from '../../../../../models/retirement-calculator'
+import { Goal } from '../../../../../store/plans-slice'
+import { formatCurrency, findIndexClosestToValue } from '../../../../../utils'
 import GoalIndicator from './GoalIndicator'
+
 
 interface TooltipRowProps {
     label: string

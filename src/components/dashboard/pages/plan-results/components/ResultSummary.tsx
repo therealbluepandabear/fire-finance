@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react'
 import { MdBeachAccess, MdSchedule, MdLocalFireDepartment } from 'react-icons/md'
-import { FIRESummary } from '../../../../models/retirement-calculator'
-import { formatCurrency } from '../../../../utils'
+import { FIRESummary } from '../../../../../models/retirement-calculator'
+import { formatCurrency } from '../../../../../utils'
 import SummaryCard from './SummaryCard'
 
 interface ResultSummaryProps {

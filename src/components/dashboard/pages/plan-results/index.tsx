@@ -1,19 +1,17 @@
-import { Box, Button, Divider, Flex, FocusLock, Grid, HTMLChakraProps, IconButton, Popover, PopoverBody, PopoverContent, PopoverTrigger, Text, useDisclosure } from '@chakra-ui/react'
-import { MdAdd, MdBeachAccess, MdCloseFullscreen, MdFlag, MdLocalFireDepartment, MdOutlineFileDownload, MdOutlineOpenInFull, MdSchedule } from 'react-icons/md'
-import FScrollableBox from '../../../ui/ScrollableBox'
-import { RetirementCalculatorOutputs, TimeRangeFilter, calculateRetirementAge, getExcelWorkbook } from '../../../../models/retirement-calculator'
-import { formatCurrency, saveToFile } from '../../../../utils'
-import { PropsWithChildren, useState } from 'react'
-import { forwardRef } from '@chakra-ui/react'
-import Card from '../../../ui/Card'
-import { Goal } from '../../../../store/plans-slice'
+import { Flex, Text, forwardRef, Button, HTMLChakraProps, useDisclosure, Divider, Popover, PopoverTrigger, PopoverContent, PopoverBody, FocusLock, Box, IconButton } from '@chakra-ui/react'
+import { useState, PropsWithChildren } from 'react'
+import { MdBeachAccess, MdFlag, MdOutlineOpenInFull, MdCloseFullscreen, MdAdd, MdOutlineFileDownload } from 'react-icons/md'
+import { TimeRangeFilter, RetirementCalculatorOutputs, calculateRetirementAge, getExcelWorkbook } from '../../../../models/retirement-calculator'
 import { useAppSelector } from '../../../../store'
-import NewGoalModal from './NewGoalModal'
-import ResultTable from './ResultTable'
-import SummaryCard from './SummaryCard'
-import ResultSummary from './ResultSummary'
-import PlanChart from './PlanChart'
-import GoalListItem from './GoalListItem'
+import { Goal } from '../../../../store/plans-slice'
+import { saveToFile } from '../../../../utils'
+import FScrollableBox from '../../../ui/ScrollableBox'
+import GoalListItem from './components/GoalListItem'
+import NewGoalModal from './components/NewGoalModal'
+import PlanChart from './components/PlanChart'
+import ResultSummary from './components/ResultSummary'
+import ResultTable from './components/ResultTable'
+
 
 interface SectionHeaderProps {
     title: string
@@ -22,9 +20,9 @@ interface SectionHeaderProps {
 
 function SectionHeader(props: SectionHeaderProps) {
     return (
-        <Flex 
-            borderTopRadius='33px' 
-            alignItems='center' 
+        <Flex
+            borderTopRadius='33px'
+            alignItems='center'
             padding='16px'
             paddingLeft='28px'
             width='100%'
@@ -73,7 +71,7 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
                     key={index}
                     color={value === selectedOption ? 'pastelForeground' : 'gray.400'}
                     fontFamily='Manrope'
-                    _hover={{ }}
+                    _hover={{}}
                     _active={{ background: 'gray.50' }}
                     height='30px'
                     padding='10px'
@@ -89,7 +87,6 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
 
     )
 }
-
 
 type SectionProps = SectionHeaderProps & PropsWithChildren & HTMLChakraProps<'div'>
 
@@ -125,7 +122,6 @@ interface PlanResultsPageProps {
 }
 
 export default function PlanResultsPage(props: PlanResultsPageProps) {
-
     const plan = useAppSelector(state => state.plans.plans.find(plan => plan.id === props.planId))!!
 
     const outputs = calculateRetirementAge(plan.inputs)
@@ -165,38 +161,38 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
         <>
             {showNewGoalDialog && <NewGoalModal onClose={() => setShowNewGoalDialog(false)} />}
 
-            <FScrollableBox 
+            <FScrollableBox
                 height='100%'
                 width='100%'
                 overflowY='scroll'
-                flexDirection='column' 
-                minWidth='0' 
-                alignItems='center' 
-                padding={{ base: '0px', md: '64px' }} 
-            >  
-                <Flex 
-                    alignSelf='flex-start' 
-                    width='100%' 
-                    marginBottom={{ base: '0px', md: '32px' }} 
+                flexDirection='column'
+                minWidth='0'
+                alignItems='center'
+                padding={{ base: '0px', md: '64px' }}
+            >
+                <Flex
+                    alignSelf='flex-start'
+                    width='100%'
+                    marginBottom={{ base: '0px', md: '32px' }}
                     padding={{ base: '16px', md: '0px' }}
                 >
                     <ResultSummary summary={outputs.summary} />
                 </Flex>
 
-                <Flex 
-                    width='100%' 
-                    flexDirection='column' 
-                    marginLeft={{ base: '-32px', md: '0px' }} 
-                    marginRight={{ base: '-32px', md: '0px' }} 
+                <Flex
+                    width='100%'
+                    flexDirection='column'
+                    marginLeft={{ base: '-32px', md: '0px' }}
+                    marginRight={{ base: '-32px', md: '0px' }}
                     gap='32px'
                 >
-                    <Flex 
-                        width='100%' 
-                        maxWidth='100%' 
-                        gap='32px' 
+                    <Flex
+                        width='100%'
+                        maxWidth='100%'
+                        gap='32px'
                         flexDirection={{ base: 'column', lg: !chartExpanded ? 'row' : 'column' }}
                     >
-                        <Section 
+                        <Section
                             title='Chart'
                             contentEnd={[
                                 <Flex display={{ base: 'none', lg: 'flex' }}>
@@ -209,7 +205,7 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                             ]}
                             flexGrow={1}
                             minWidth='0'
-                        >      
+                        >
                             <Box paddingLeft='24px' marginBottom='32px'>
                                 <TimeRangeFilterOptions onSelectOption={filter => setTimeRangeFilter(filter)} />
                             </Box>
@@ -219,7 +215,7 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                             </Flex>
                         </Section>
 
-                        <Section 
+                        <Section
                             title='Goals'
                             contentEnd={[
                                 <IconButton
@@ -245,9 +241,9 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                         </Section>
                     </Flex>
 
-                    <Section 
-                        marginBottom='24px' 
-                        title='Table' 
+                    <Section
+                        marginBottom='24px'
+                        title='Table'
                         contentEnd={[
                             <Popover
                                 variant='responsive'
@@ -286,11 +282,11 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                             </Popover>
                         ]}
                     >
-                        <FScrollableBox 
-                            height='600px' 
-                            minHeight='600px' 
-                            overflowY='scroll' 
-                            width='100%' 
+                        <FScrollableBox
+                            height='600px'
+                            minHeight='600px'
+                            overflowY='scroll'
+                            width='100%'
                         >
                             <ResultTable data={outputs.data} />
                         </FScrollableBox>

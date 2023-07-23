@@ -1,5 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react'
-import Card from '../../../ui/Card'
+import { Card, Flex, Text } from '@chakra-ui/react'
 
 interface SummaryCardProps {
     label: string

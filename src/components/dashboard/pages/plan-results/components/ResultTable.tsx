@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { RetirementProjectionPoint } from '../../../../models/retirement-calculator'
-import { formatCurrency } from '../../../../utils'
-import DataTable from '../../../ui/DataTable'
+import { RetirementProjectionPoint } from '../../../../../models/retirement-calculator'
+import { formatCurrency } from '../../../../../utils'
+import DataTable from '../../../../ui/DataTable'
 
 interface ResultTableProps {
     data: RetirementProjectionPoint[]
