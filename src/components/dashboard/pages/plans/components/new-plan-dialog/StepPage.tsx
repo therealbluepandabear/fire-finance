@@ -1,0 +1,49 @@
+import { Flex } from '@chakra-ui/react'
+import { Controller, useForm } from 'react-hook-form'
+import { RetirementCalculatorInputs } from '../../../../../../models/retirement-calculator'
+import FormInput from '../../../../../ui/FormInput'
+
+export interface InputModel {
+    key: keyof RetirementCalculatorInputs
+    placeholder: string
+    defaultValue: string
+    icon: JSX.Element
+}
+
+interface StepPageProps {
+    inputs: InputModel[]
+    onInputsChange: (data: Partial<RetirementCalculatorInputs>) => void
+}
+
+export default function StepPage(props: StepPageProps) {
+    const { control, watch } = useForm<Partial<RetirementCalculatorInputs>>({
+        defaultValues: Object.fromEntries(
+            props.inputs.map((inputModel) => [inputModel.key, inputModel.defaultValue])
+        )
+    })
+
+    watch(inputs => {
+        props.onInputsChange(inputs)
+    })
+
+    return (
+        <Flex marginTop='16px' gap='16px' flexDirection='column'>
+            {props.inputs.map(inputModel => (
+                <Controller
+                    key={inputModel.key}
+                    name={inputModel.key}
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <FormInput
+                            placeholder={inputModel.placeholder}
+                            inputLeftElement={inputModel.icon}
+                            onChange={(e) => onChange(parseInt(e.target.value))}
+                            onBlur={onBlur}
+                            value={value}
+                        />
+                    )}
+                />
+            ))}
+        </Flex>
+    )
+}

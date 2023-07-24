@@ -1,97 +1,21 @@
-import { 
-    Box, 
-    Button, 
-    Flex, 
-    FormControl, 
-    FormLabel, 
-    HTMLChakraProps, 
-    Input, 
-    InputGroup, 
-    InputLeftElement, 
-    InputRightElement, 
-    Modal, 
-    ModalBody, 
+import {
+    Button,
+    Flex,
+    Modal,
+    ModalBody,
     ModalCloseButton,
-    ModalContent, 
-    ModalFooter, 
-    ModalHeader, 
-    ModalOverlay,
-    Tooltip
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay
 } from '@chakra-ui/react'
-import FormInput from '../../ui/FormInput'
 import { useState } from 'react'
-import { MdAttachMoney, MdFace, MdHelp, MdPercent } from 'react-icons/md'
-import { RetirementCalculatorInputs } from '../../../models/retirement-calculator'
-import { Controller, RegisterOptions, useForm } from 'react-hook-form'
-
-interface StepBarProps {
-    step: number
-    totalSteps: number
-}
-
-function StepBar(props: StepBarProps) {
-    return (
-        <Flex
-            width='100%'
-            height='4px'
-            background='pastelPrimary'
-        >
-            <Box 
-                width={`${(props.step / props.totalSteps) * 100}%`} 
-                background='buttonPrimary' 
-                transition='width 0.2s ease-in-out'
-            />
-        </Flex>
-    )
-}
+import { MdAttachMoney, MdFace, MdPercent } from 'react-icons/md'
+import { RetirementCalculatorInputs } from '../../../../../../models/retirement-calculator'
+import StepBar from './StepBar'
+import StepPage, { InputModel } from './StepPage'
 
 const iconColor = 'lightgray'
-
-interface InputModel {
-    key: keyof RetirementCalculatorInputs
-    placeholder: string
-    defaultValue: string
-    icon: JSX.Element
-}
-
-interface StepPageProps {
-    inputs: InputModel[]
-    onInputsChange: (data: Partial<RetirementCalculatorInputs>) => void 
-}
-
-function StepPage(props: StepPageProps) {
-    
-    const { control, watch } = useForm<Partial<RetirementCalculatorInputs>>({ 
-        defaultValues: Object.fromEntries(
-            props.inputs.map((inputModel) => [inputModel.key, inputModel.defaultValue])
-        )
-    })
-
-    watch(inputs => {
-        props.onInputsChange(inputs)
-    })
-
-    return (
-        <Flex marginTop='16px' gap='16px' flexDirection='column'>
-            {props.inputs.map(inputModel => (
-                <Controller
-                    key={inputModel.key}
-                    name={inputModel.key}
-                    control={control}
-                    render={({ field: { onChange, onBlur, value }  }) => (
-                        <FormInput
-                            placeholder={inputModel.placeholder}
-                            inputLeftElement={inputModel.icon}
-                            onChange={(e) => onChange(parseInt(e.target.value))}
-                            onBlur={onBlur}
-                            value={value}
-                        />
-                    )}
-                />
-            ))}
-        </Flex>
-    )
-}
 
 const stepInputModel: InputModel[][] = [
     [
@@ -108,10 +32,10 @@ const stepInputModel: InputModel[][] = [
 
     [
         { key: 'stocksAllocationRate', defaultValue: '100', placeholder: 'Stocks Allocation Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'bondsAllocationRate', defaultValue: '0', placeholder: 'Bonds Allocation Rate', icon: <MdPercent color={iconColor} /> }, 
+        { key: 'bondsAllocationRate', defaultValue: '0', placeholder: 'Bonds Allocation Rate', icon: <MdPercent color={iconColor} /> },
         { key: 'cashAllocationRate', defaultValue: '0', placeholder: 'Cash Allocation Rate', icon: <MdPercent color={iconColor} /> }
     ],
-
+    
     [
         { key: 'stocksReturnRate', defaultValue: '7', placeholder: 'Stocks Return Rate', icon: <MdPercent color={iconColor} /> },
         { key: 'bondsReturnRate', defaultValue: '0', placeholder: 'Bonds Return Rate', icon: <MdPercent color={iconColor} /> },
@@ -124,7 +48,6 @@ interface PlanStepDialogProps {
 }
 
 export default function PlanStepDialog(props: PlanStepDialogProps) {
-
     const totalSteps = stepInputModel.length
 
     const [step, setStep] = useState(1)
@@ -155,9 +78,9 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
             <ModalOverlay />
 
             <ModalContent overflow='hidden'>
-                <ModalHeader 
-                    fontWeight='normal' 
-                    fontFamily='Manrope' 
+                <ModalHeader
+                    fontWeight='normal'
+                    fontFamily='Manrope'
                     fontSize='2xl'
                     alignItems='center'
                 >New Plan</ModalHeader>
@@ -177,9 +100,9 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
                 <ModalFooter>
                     <Flex gap='12px'>
                         {step > 0 && (
-                            <Button 
-                                variant='ghost' 
-                                height='36px' 
+                            <Button
+                                variant='ghost'
+                                height='36px'
                                 onClick={() => {
                                     if (step > 1) {
                                         revertStep()
@@ -192,10 +115,10 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
                             </Button>
                         )}
 
-                        <Button 
-                            color='white' 
-                            background='buttonPrimary' 
-                            height='36px' 
+                        <Button
+                            color='white'
+                            background='buttonPrimary'
+                            height='36px'
                             onClick={() => {
                                 if (step < totalSteps) {
                                     nextClickHandler()

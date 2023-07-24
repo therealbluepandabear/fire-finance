@@ -1,20 +1,18 @@
-import { Flex, Button, useBreakpointValue, Box, IconButton } from '@chakra-ui/react'
+import { Flex, Button, useBreakpointValue, IconButton } from '@chakra-ui/react'
 import { MdAutoGraph, MdChecklist, MdHelpOutline, MdOutlineCalculate, MdOutlineSchool, MdPerson, MdSettings, MdSupportAgent } from 'react-icons/md'
 import FMenu, { MenuItem, MenuOverlay } from '../ui/Menu'
 import { User } from '../../api'
 import AppBar from '../ui/AppBar'
 import { useState } from 'react'
-import PlansPage from './pages/Plans'
-import PlanStepDialog from './pages/PlanStepDialog'
+import PlansPage from './pages/plans'
 import PlanResultsPage from './pages/plan-results/index'
-import { RetirementCalculatorInputs, calculateRetirementAge } from '../../models/retirement-calculator'
+import PlanStepDialog from './pages/plans/components/new-plan-dialog/NewPlanDialog'
 
 interface DashboardMenuProps {
     isOpen: boolean
 }
 
 function DashboardMenu(props: DashboardMenuProps) {
-
     const planMenuItem: MenuItem = {
         leftContent: <MdChecklist size={20} />,
         label: 'Plans'
@@ -59,10 +57,9 @@ export interface DashboardProps {
 }
 
 export default function Dashboard(props: DashboardProps) {
-
     const [currentPage, setCurrentPage] = useState<JSX.Element>(
         <PlansPage onAddPlanClick={() => {
-            setCurrentPage(<PlanResultsPage planId='0' />)
+            setCurrentPage(<PlanStepDialog onClose={() => { }} />)
         }} />
     )
 
