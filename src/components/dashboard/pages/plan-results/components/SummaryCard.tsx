@@ -1,26 +1,32 @@
 import { Flex, Text } from '@chakra-ui/react'
 import Card from '../../../../ui/Card'
+import { cloneElement, useState } from 'react'
 
 interface SummaryCardProps {
     label: string
     content: string
-    icon: JSX.Element
+    showSeparator?: boolean
 }
 
 export default function SummaryCard(props: SummaryCardProps) {
     return (
         <Card
-            padding='22px'
-            alignItems='center'
+            paddingEnd='0'
+            border=''
+            borderRadius='0'
+            flexDirection={{ base: 'column', md: 'row' }}
         >
-            <Flex flexDirection='column'>
+            <Flex flexDirection='column' padding='22px'>
                 <Flex gap='6px' alignItems='center'>
-                    {props.icon}
-                    <Text fontSize='sm'>{props.label}</Text>
+                    <Text fontSize='sm' color='gray'>{props.label}</Text>
                 </Flex>
 
                 <Text fontSize='4xl' fontFamily='Manrope'>{props.content}</Text>
             </Flex>
+
+            {props.showSeparator === undefined && (
+                <Flex marginLeft='auto' width={{ base: '100%', md: '1px' }} height={{ base: '1px', md: '100%' }} background='#e1e1dc' />
+            )}
         </Card>
     )
 }

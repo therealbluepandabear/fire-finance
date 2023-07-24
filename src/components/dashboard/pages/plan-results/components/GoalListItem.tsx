@@ -34,7 +34,7 @@ export default function GoalListItem(props: GoalListItemProps) {
             <Flex
                 background='buttonPrimary'
                 color='white'
-                padding='12px'
+                padding='8px'
                 borderRadius='999px'
             >
                 {props.goal.icon}

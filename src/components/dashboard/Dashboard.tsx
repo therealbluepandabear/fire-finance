@@ -58,8 +58,8 @@ export interface DashboardProps {
 
 export default function Dashboard(props: DashboardProps) {
     const [currentPage, setCurrentPage] = useState<JSX.Element>(
-        <PlansPage onAddPlanClick={() => {
-            setCurrentPage(<PlanStepDialog onClose={() => { }} />)
+        <PlansPage onPlanCreated={() => {
+            setCurrentPage(<PlanResultsPage planId='0' />)
         }} />
     )
 

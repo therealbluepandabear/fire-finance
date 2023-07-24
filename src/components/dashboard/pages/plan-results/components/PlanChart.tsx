@@ -5,7 +5,6 @@ import { Goal } from '../../../../../store/plans-slice'
 import { formatCurrency, findIndexClosestToValue } from '../../../../../utils'
 import GoalIndicator from './GoalIndicator'
 
-
 interface TooltipRowProps {
     label: string
     data: string
@@ -29,7 +28,7 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
 
         return (
             <Box padding='12px' border='1px solid #e1e1dc' borderRadius='md' background='white'>
-                <TooltipRow label='Age' data={tooltipData.payload.age} /> { /* FIX SO THAT IT SHOWS ACTUAL AGE */ }
+                <TooltipRow label='Age' data={tooltipData.payload.age} /> 
                 <TooltipRow label='Year' data={tooltipData.payload.year} />
                 <TooltipRow label='Networth' data={formatCurrency(tooltipData.value ?? 0)} />
             </Box>

@@ -23,8 +23,8 @@ function SectionHeader(props: SectionHeaderProps) {
         <Flex
             borderTopRadius='33px'
             alignItems='center'
-            padding='16px'
-            paddingLeft='28px'
+            padding='12px'
+            paddingLeft='24px'
             width='100%'
             gap='16px'
         >
@@ -93,6 +93,7 @@ type SectionProps = SectionHeaderProps & PropsWithChildren & HTMLChakraProps<'di
 function Section({ title, contentEnd, children, ...props }: SectionProps) {
     return (
         <Flex
+            background='white'
             flexDirection='column'
             border='1px solid #e1e1dc'
             borderRadius='2xl'
@@ -173,7 +174,7 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                 <Flex
                     alignSelf='flex-start'
                     width='100%'
-                    marginBottom={{ base: '0px', md: '32px' }}
+                    marginBottom={{ base: '0px', md: '18px' }}
                     padding={{ base: '16px', md: '0px' }}
                 >
                     <ResultSummary summary={outputs.summary} />
@@ -184,12 +185,12 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                     flexDirection='column'
                     marginLeft={{ base: '-32px', md: '0px' }}
                     marginRight={{ base: '-32px', md: '0px' }}
-                    gap='32px'
+                    gap='18px'
                 >
                     <Flex
                         width='100%'
                         maxWidth='100%'
-                        gap='32px'
+                        gap='18px'
                         flexDirection={{ base: 'column', lg: !chartExpanded ? 'row' : 'column' }}
                     >
                         <Section

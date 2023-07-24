@@ -26,28 +26,29 @@ import PlanCard from './components/PlanCard'
 import DeletePlanModal from './components/DeletePlanModal'
 import EditDescriptionModal from './components/EditDescriptionModal'
 import RenamePlanModal from './components/RenamePlanModal'
+import NewPlanDialog from './components/new-plan-dialog/NewPlanDialog'
 
 export interface ModalProps {
     plan: Plan
     onClose: () => void
 }
 
-type DialogContext = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
+type DialogContext = { data?: Plan, type: 'rename' | 'editDescription' | 'delete' | 'new-plan' }
 
 interface PlansPageProps {
-    onAddPlanClick: () => void
+    onPlanCreated: () => void
 }
 
 export default function PlansPage(props: PlansPageProps) {
     const dispatch = useAppDispatch()
 
-    const [context, setContext] = useState<DialogContext | null>()
+    const [dialogContext, setDialogContext] = useState<DialogContext | null>()
     const [viewStarred, setViewStarred] = useState(false)
 
     const plans = useAppSelector(state => viewStarred ? state.plans.plans.filter(plan => plan.isFavorite) : state.plans.plans)
 
     function addPlanClickHandler(): void {
-        props.onAddPlanClick()
+        setDialogContext({ type: 'new-plan' })
     }
 
     function duplicatePlanClickHandler(plan: Plan): void {
@@ -55,19 +56,19 @@ export default function PlansPage(props: PlansPageProps) {
     }
 
     function renamePlanClickHandler(plan: Plan): void {
-        setContext({ data: plan, type: 'rename' })
+        setDialogContext({ data: plan, type: 'rename' })
     }
 
     function editDescriptionPlanClickHandler(plan: Plan): void {
-        setContext({ data: plan, type: 'editDescription' })
+        setDialogContext({ data: plan, type: 'editDescription' })
     }
 
     function deletePlanClickHandler(plan: Plan): void {
-        setContext({ data: plan, type: 'delete' })
+        setDialogContext({ data: plan, type: 'delete' })
     }
 
     function onContextModalClose(): void {
-        setContext(null)
+        setDialogContext(null)
     }
 
     function chipIndexChangeHandler(index: number): void {
@@ -80,9 +81,13 @@ export default function PlansPage(props: PlansPageProps) {
             minHeight='0'
             overflowY='auto'
         >
-            {context && context.type === 'rename' && <RenamePlanModal plan={context.data} onClose={onContextModalClose} />}
-            {context && context.type === 'editDescription' && <EditDescriptionModal plan={context.data} onClose={onContextModalClose} />}
-            {context && context.type === 'delete' && <DeletePlanModal plan={context.data} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'rename' && <RenamePlanModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'editDescription' && <EditDescriptionModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'delete' && <DeletePlanModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'new-plan' && <NewPlanDialog onClose={() => {
+                onContextModalClose()
+                props.onPlanCreated()
+            }} />}
 
             <Flex 
                 padding={{ base: '24px', md: '48px' }}
@@ -140,7 +145,7 @@ export default function PlansPage(props: PlansPageProps) {
                                 marginLeft='auto'
                                 color='white'
                                 background='buttonPrimary'
-                                onClick={props.onAddPlanClick}
+                                onClick={addPlanClickHandler}
                             >New</Button>
                         </Flex>
                     </Flex>
