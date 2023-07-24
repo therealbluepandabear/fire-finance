@@ -24,11 +24,11 @@ function SectionHeader(props: SectionHeaderProps) {
             borderTopRadius='33px'
             alignItems='center'
             padding='12px'
-            paddingLeft='24px'
+            paddingLeft='22px'
             width='100%'
             gap='16px'
         >
-            <Text fontWeight='bold' fontSize='xl'>{props.title}</Text>
+            <Text fontWeight='bold' fontSize='18px'>{props.title}</Text>
 
             <Flex marginLeft='auto' gap='12px' alignItems='center'>
                 {props.contentEnd.map(content => content)}

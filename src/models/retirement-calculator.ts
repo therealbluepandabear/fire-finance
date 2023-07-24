@@ -88,14 +88,14 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     }
 
     while ((total.networth * params.safeWithdrawalRate) < params.annualSpending) {
-        data.push({ age: age, year: year, networth: total.networth })
+        data.push({ age: age, year: year, yearsElapsed: age - params.age, networth: total.networth })
         update()
 
         ++age
         ++year
     }
 
-    data.push({ age: age, year: year, networth: total.networth })
+    data.push({ age: age, year: year, yearsElapsed: age - params.age, networth: total.networth })
 
     // Calculate for the extra years after financial independence (if the user has specified a maximum age)
     if (params.retirementAge || params.maximumAge) {
@@ -111,7 +111,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
         while (extraAge < ageToQuery) {
             update()
-            data.push({ age: ++extraAge, year: ++year, networth: total.networth })
+            data.push({ age: ++extraAge, year: ++year, yearsElapsed: extraAge - params.age, networth: total.networth })
         }
     }
 
@@ -126,7 +126,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     if (params.maximumAge && params.retirementAge) {
         for (let i = 1; i <= (params.maximumAge - params.retirementAge); ++i) {
             update()      
-            data.push({ age: params.retirementAge + i, year: ++year, networth: total.networth })
+            data.push({ age: params.retirementAge + i, year: ++year, yearsElapsed: params.retirementAge + i - params.age, networth: total.networth })
         }
     }
 
@@ -185,6 +185,7 @@ export function filterTimeRange(data: RetirementProjectionPoint[], filter: TimeR
 export interface RetirementProjectionPoint {
     age: number
     year: number
+    yearsElapsed: number
     networth: number
 }
 

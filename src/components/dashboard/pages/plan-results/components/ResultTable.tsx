@@ -21,6 +21,11 @@ export default function ResultTable(props: ResultTableProps) {
             id: 'year'
         }),
 
+        columnHelper.accessor('yearsElapsed', {
+            header: 'Years Elapsed',
+            id: 'yearElapsed'
+        }),
+
         columnHelper.accessor('networth', {
             header: 'Networth',
             cell: (info) => formatCurrency(info.getValue()),
