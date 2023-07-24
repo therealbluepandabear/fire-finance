@@ -69,8 +69,6 @@ function StepPage(props: StepPageProps) {
 
     watch(inputs => {
         props.onInputsChange(inputs)
-
-        console.log(inputs)
     })
 
     return (

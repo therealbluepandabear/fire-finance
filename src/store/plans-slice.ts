@@ -36,7 +36,7 @@ const initialPlansState: PlansState = {
             retirementAge: 50,
 
             networth: 30_000,
-            safeWithdrawalRate: 4,
+            safeWithdrawalRate: 0.04,
             inflationRate: 0,
 
             stocksAllocationRate: 1,

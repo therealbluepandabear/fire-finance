@@ -21,9 +21,9 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     const total = { 
         networth: params.networth, 
-        stocks: 0, 
-        bonds: 0, 
-        cash: 0
+        stocks: params.networth * params.stocksAllocationRate, 
+        bonds: params.networth * params.bondsAllocationRate, 
+        cash: params.networth * params.cashAllocationRate
     }
 
     // Calculates the adjusted return RATE by factoring in inflation
@@ -34,7 +34,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
     let year = new Date().getFullYear()
 
     function calculateTotal(type: 'stocks' | 'bonds' | 'cash', allocationRate: number, returnRate: number): number {
-        const savingsContribution = (annualSavings * allocationRate)
+        const savingsContribution = annualSavings * allocationRate
 
         let totalAmount = total[type] + (total[type] * returnRate) + savingsContribution
 
