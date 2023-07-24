@@ -5,130 +5,31 @@ import {
     IconButton,
     Grid, 
     Image, 
-    Popover, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverTrigger, 
-    useDisclosure, 
-    FocusLock,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Input,
-    ModalCloseButton,
     Tab,
     TabList,
-    TabPanel,
-    TabPanels,
-    Select,
     Tabs,
-    Text,
-    useBreakpointValue,
-    Tooltip
+    Text
 } from '@chakra-ui/react'
-import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { 
     MdAdd, 
-    MdArrowBack, 
-    MdArrowLeft, 
     MdChecklist, 
-    MdContentCopy, 
-    MdDelete, 
-    MdDescription, 
-    MdEdit, 
-    MdGrid4X4, 
-    MdGridView, 
-    MdInfo, 
-    MdInfoOutline, 
-    MdList, 
-    MdMoreVert, 
-    MdOutlineGridView, 
-    MdOutlineViewList, 
-    MdOutlineViewModule, 
-    MdSearch, 
-    MdStar, 
-    MdStarOutline, 
-    MdViewList
+    MdStarOutline
 } from 'react-icons/md'
 import Divider from '../../../ui/Divider'
-import { Area, AreaChart, ResponsiveContainer } from 'recharts'
-import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import { plansActions, Plan } from '../../../../store/plans-slice'
-import { generateId } from '../../../../utils'
 import FScrollableBox from '../../../ui/ScrollableBox'
 import Chip from '../../../ui/Chip'
 import Chips from '../../../ui/Chips'
-import Card from '../../../ui/Card'
-import SimpleModal from '../../../ui/SimpleModal'
 import PlanCard from './components/PlanCard'
+import DeletePlanModal from './components/DeletePlanModal'
+import EditDescriptionModal from './components/EditDescriptionModal'
+import RenamePlanModal from './components/RenamePlanModal'
 
-interface ModalProps {
+export interface ModalProps {
     plan: Plan
     onClose: () => void
-}
-
-function RenamePlanModal(props: ModalProps) {  
-    const dispatch = useAppDispatch()
-      
-    const { register, watch } = useForm<{ inputValue: string }>(
-        { defaultValues: { inputValue: props.plan.name } }
-    )
-
-    function OKClickHandler(): void {
-        const newName = watch('inputValue')
-        dispatch(plansActions.renamePlan({ id: props.plan.id, newName: newName }))
-
-        props.onClose()
-    }
-
-    return (
-        <SimpleModal title='Rename' onOKClick={OKClickHandler} onClose={props.onClose}>
-            <Input {...register('inputValue', { required: true })} />
-        </SimpleModal>
-    )
-}
-
-function EditDescriptionModal(props: ModalProps) {
-    const dispatch = useAppDispatch()
-
-    const planDescription = props.plan.description ?? ''
-
-    const { register, watch } = useForm<{ description: string }>(
-        { defaultValues: { description: planDescription } }
-    )
-
-    function OKClickHandler(): void {
-        const description = watch('description')
-        dispatch(plansActions.editPlan({ id: props.plan.id, partialState: { description: description } }))
-    
-        props.onClose()
-    }
-
-    return (
-        <SimpleModal title='Edit Description' onOKClick={OKClickHandler} onClose={props.onClose}>
-            <Input {...register('description', { required: true })} />
-        </SimpleModal>
-    )
-}
-
-function DeletePlanModal(props: ModalProps) {
-    const dispatch = useAppDispatch()
-
-    function OKClickHandler(): void {
-        dispatch(plansActions.removePlan(props.plan.id))
-
-        props.onClose()
-    }
-
-    return (
-        <SimpleModal title='Delete Plan' onOKClick={OKClickHandler} onClose={props.onClose}>
-            <Text>{`Are you sure you want to delete ${props.plan.name}? This cannot be undone.`}</Text>
-        </SimpleModal>
-    )
 }
 
 type DialogContext = { data: Plan, type: 'rename' | 'editDescription' | 'delete' }
