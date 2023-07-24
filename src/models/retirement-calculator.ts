@@ -40,7 +40,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
         // Take away the expenses amount each year as the user is retired
         if (hasRetired) {
-            totalAmount -= params.annualSpending
+            totalAmount = (total[type] + (total[type] * returnRate)) - (params.annualSpending * allocationRate)
         }
 
         return totalAmount
@@ -99,7 +99,7 @@ export function calculateRetirementAge(params: RetirementCalculatorInputs): Reti
 
     // Calculate for the extra years after financial independence (if the user has specified a maximum age)
     if (params.retirementAge || params.maximumAge) {
-        let ageToQuery: number = 0
+        let ageToQuery = 0
 
         if (params.maximumAge && !params.retirementAge) {
             ageToQuery = params.maximumAge
