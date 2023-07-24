@@ -6,7 +6,7 @@ import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/Plans'
 import PlanStepDialog from './pages/PlanStepDialog'
-import PlanResultsPage from './pages/plan-results/PlanResults'
+import PlanResultsPage from './pages/plan-results/index'
 import { RetirementCalculatorInputs, calculateRetirementAge } from '../../models/retirement-calculator'
 
 interface DashboardMenuProps {

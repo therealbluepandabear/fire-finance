@@ -25,12 +25,11 @@ function TooltipRow(props: TooltipRowProps) {
 
 function ChartTooltip({ active, payload, label }: TooltipProps<number, number>): JSX.Element | null {
     if (active && payload && payload[0]) {
-
         const tooltipData = payload[0]
 
         return (
             <Box padding='12px' border='1px solid #e1e1dc' borderRadius='md' background='white'>
-                <TooltipRow label='Age' data={label} />
+                <TooltipRow label='Age' data={tooltipData.payload.age} /> { /* FIX SO THAT IT SHOWS ACTUAL AGE */ }
                 <TooltipRow label='Year' data={tooltipData.payload.year} />
                 <TooltipRow label='Networth' data={formatCurrency(tooltipData.value ?? 0)} />
             </Box>

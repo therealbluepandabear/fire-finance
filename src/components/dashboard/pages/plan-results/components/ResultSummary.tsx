@@ -17,12 +17,12 @@ export default function ResultSummary(props: ResultSummaryProps) {
                 xl: 'repeat(4, 1fr)'
             }}
             width='100%'
-            gap='16px'
+            gap='13px'
         >
             <SummaryCard
                 icon={<MdBeachAccess />}
                 label='Retirement Age'
-                content={props.summary.retirementAge!!.toString()}
+                content={props.summary.retirementAge.toString()}
             />
 
             <SummaryCard

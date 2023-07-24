@@ -126,6 +126,8 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
 
     const outputs = calculateRetirementAge(plan.inputs)
 
+    console.log(outputs)
+
     const [chartExpanded, setChartExpanded] = useState(false)
     const [timeRangeFilter, setTimeRangeFilter] = useState<TimeRangeFilter>('Max')
 
