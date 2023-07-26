@@ -169,7 +169,7 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                 flexDirection='column'
                 minWidth='0'
                 alignItems='center'
-                padding={{ base: '0px', md: '64px' }}
+                padding={{ base: '0px', md: '52px' }}
             >
                 <Flex
                     alignSelf='flex-start'

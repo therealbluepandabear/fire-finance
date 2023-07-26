@@ -5,6 +5,7 @@ import PlanOptionsBadge from './PlanOptionsBadge'
 import PlanDescriptionBadge from './PlanDescriptionBadge'
 import PlanFavoriteButton from './PlanFavoriteButton'
 import Card from '../../../../ui/Card'
+import { calculateRetirementAge } from '../../../../../models/retirement-calculator'
 
 interface PlanCardProps {
     plan: Plan
@@ -33,7 +34,7 @@ export default function PlanCard(props: PlanCardProps) {
             minWidth='0px'
         >
             <Box height='240px' position='relative'>
-                <PlanChart />
+                <PlanChart data={calculateRetirementAge(props.plan.inputs).data} />
 
                 <Flex
                     position='absolute'

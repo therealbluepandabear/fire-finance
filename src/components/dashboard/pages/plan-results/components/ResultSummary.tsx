@@ -11,7 +11,13 @@ interface ResultSummaryProps {
 
 export default function ResultSummary(props: ResultSummaryProps) {
     return (
-        <Card width='100%' _active={{}} _hover={{}} background='white'>
+        <Card 
+            width='100%' 
+            _active={{}} 
+            _hover={{}} 
+            borderRadius='2xl' 
+            background='white'
+        >
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 1fr)',
@@ -23,6 +29,7 @@ export default function ResultSummary(props: ResultSummaryProps) {
                 <SummaryCard
                     label='Retirement Age'
                     content={props.summary.retirementAge.toString()}
+                    start={true}
                 />
 
                 <SummaryCard
@@ -31,14 +38,14 @@ export default function ResultSummary(props: ResultSummaryProps) {
                 />
 
                 <SummaryCard
-                    label='Fire Age'
+                    label='FIRE Age'
                     content={props.summary.fireAge.toString()}
                 />
 
                 <SummaryCard
-                    label='Fire Number'
+                    label='FIRE Number'
                     content={formatCurrency(props.summary.fireNumber, true)}
-                    showSeparator={false}
+                    end={true}
                 />
             </Grid>
         </Card>

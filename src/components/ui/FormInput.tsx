@@ -1,12 +1,12 @@
-import { HTMLChakraProps, FormControl, InputGroup, InputLeftElement, Input, FormLabel, InputRightElement, Tooltip } from '@chakra-ui/react'
+import { HTMLChakraProps, FormControl, InputGroup, InputLeftElement, Input, FormLabel, InputRightElement, Tooltip, InputProps } from '@chakra-ui/react'
 import { MdHelp } from 'react-icons/md'
 
-interface FormInputProps extends Pick<HTMLChakraProps<'input'>, 'onChange' | 'onBlur' | 'value'> {
+interface FormInputProps {
     inputLeftElement: JSX.Element
     placeholder: string
 }
 
-export default function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps) {
+export default function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps & InputProps) {
     return (
         <FormControl variant='floating'>
             <InputGroup>
@@ -21,11 +21,11 @@ export default function FormInput({ inputLeftElement, placeholder, ...props }: F
                     color='gray'
                 >{placeholder}</FormLabel>
 
-                <Tooltip textAlign='center' fontSize='12px'>
+                {/* <Tooltip textAlign='center' fontSize='12px' opacity={0}>
                     <InputRightElement>
                         <MdHelp color='lightgray' />
                     </InputRightElement>
-                </Tooltip>
+                </Tooltip> */}
             </InputGroup>
         </FormControl>
     )
