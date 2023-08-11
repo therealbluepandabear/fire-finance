@@ -1,8 +1,8 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { MdDeleteOutline } from 'react-icons/md'
-import { Goal } from '../../../../../store/plans-slice'
-import { formatCurrency } from '../../../../../utils'
+import { Goal } from '../../../../../../../store/plans-slice'
+import { formatCurrency } from '../../../../../../../utils'
 
 interface GoalListItemProps {
     goal: Goal

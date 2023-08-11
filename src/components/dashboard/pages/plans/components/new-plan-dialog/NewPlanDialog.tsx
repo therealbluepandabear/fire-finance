@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { MdAttachMoney, MdFace, MdPercent } from 'react-icons/md'
-import { RetirementCalculatorInputs } from '../../../../../../models/retirement-calculator'
+import { PlanEngineInputs } from '../../../../../../models/retirement-calculator'
 import StepBar from './StepBar'
 import StepPage, { InputModel } from './StepPage'
 
@@ -44,14 +44,14 @@ const stepInputModel: InputModel[][] = [
 ]
 
 interface PlanStepDialogProps {
-    onClose: (inputs: Partial<RetirementCalculatorInputs>) => void
+    onClose: (inputs: Partial<PlanEngineInputs>) => void
 }
 
 export default function PlanStepDialog(props: PlanStepDialogProps) {
     const totalSteps = stepInputModel.length
 
     const [step, setStep] = useState(1)
-    const [inputs, setInputs] = useState<Partial<RetirementCalculatorInputs>>()
+    const [inputs, setInputs] = useState<Partial<PlanEngineInputs>>()
 
     function updateStep(): void {
         setStep(prevStep => prevStep + 1)
@@ -65,7 +65,7 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
         updateStep()
     }
 
-    function inputsChangeHandler(data: Partial<RetirementCalculatorInputs>): void {
+    function inputsChangeHandler(data: Partial<PlanEngineInputs>): void {
         setInputs(prevInputs => ({ ...prevInputs, ...data }))
     }
 

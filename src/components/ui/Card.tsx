@@ -6,7 +6,7 @@ export default function Card({ children, ...props }: PropsWithChildren<HTMLChakr
         <Flex
             border='1px solid #e1e1dc'
             _hover={{ shadow: 'md' }}
-            _active={{ background: 'gray.50' }}
+            _active={{ background: 'gray.50', shadow: 'none' }}
             borderRadius='lg'
             {...props}
         >

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { generateId } from '../utils'
-import { RetirementCalculatorInputs } from '../models/retirement-calculator'
+import { PlanEngineInputs } from '../models/retirement-calculator'
 
 export interface Goal {
     label: string
@@ -14,7 +14,7 @@ export interface Plan {
     creationDate: string
     isFavorite: boolean
     description?: string
-    inputs: RetirementCalculatorInputs
+    inputs: PlanEngineInputs
 }
 
 interface PlansState {

@@ -5,8 +5,9 @@ import { User } from '../../api'
 import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/plans'
-import PlanResultsPage from './pages/plan-results/index'
+import DashboardPage from './pages/plan-results/pages/dashboard/index'
 import PlanStepDialog from './pages/plans/components/new-plan-dialog/NewPlanDialog'
+import PlanResultsPage from './pages/plan-results'
 
 interface DashboardMenuProps {
     isOpen: boolean
@@ -59,7 +60,7 @@ export interface DashboardProps {
 export default function Dashboard(props: DashboardProps) {
     const [currentPage, setCurrentPage] = useState<JSX.Element>(
         <PlansPage onPlanCreated={() => {
-            setCurrentPage(<PlanResultsPage planId='0' />)
+            setCurrentPage(<PlanResultsPage />)
         }} />
     )
 
@@ -112,7 +113,7 @@ export default function Dashboard(props: DashboardProps) {
 
     return (
         <>
-            <MenuOverlay isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
+            <MenuOverlay isOpen={isMenuOpen} background='blur(5px)' onClick={() => setIsMenuOpen(false)} />
 
             <Flex 
                 flexDirection='column' 

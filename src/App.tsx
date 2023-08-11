@@ -8,7 +8,8 @@ function App() {
 
     return (
         <>
-            {user ? <Dashboard user={user} /> : <LoginPage onLogin={(user) => setUser(user)} />}
+            {/* {user ? <Dashboard user={user} /> : <LoginPage onLogin={(user) => setUser(user)} />} */}
+            <Dashboard user={{ id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }} />
         </>
     )
 }

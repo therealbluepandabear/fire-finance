@@ -1,9 +1,9 @@
 import { Flex, Button, Grid } from '@chakra-ui/react'
 import { useState } from 'react'
-import FormInput from '../../../../ui/FormInput'
-import FScrollableBox from '../../../../ui/ScrollableBox'
-import SimpleModal from '../../../../ui/SimpleModal'
 import * as Icons from 'react-icons/md'
+import FormInput from '../../../../../../ui/FormInput'
+import FScrollableBox from '../../../../../../ui/ScrollableBox'
+import SimpleModal from '../../../../../../ui/SimpleModal'
 
 interface NewGoalModalProps {
     onClose: () => void

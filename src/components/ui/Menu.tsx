@@ -25,8 +25,6 @@ function MenuItemDisplay(props: FMenuProps & DisplayProps) {
         <Button
             flexDirection='row'
             justifyContent='flex-start'
-            paddingStart={{ base: '4px', md: '16px' }}
-            variant='foo'
             _hover={{ background: props.isOpen ? hoverColor : '' }}
             _active={{ background: props.isOpen ? activeColor : '' }}
             width='100%'
@@ -70,7 +68,6 @@ export function MenuOverlay(props: { isOpen: boolean } & HTMLChakraProps<'div'>)
             transition='opacity 0.3s, visibility 0.3s'
             position='absolute'
             top='0'
-            zIndex='998'
             visibility={{ base: props.isOpen ? 'visible' : 'collapse', md: 'collapse' }}
             {...props}
         />
@@ -110,8 +107,8 @@ export default function FMenu(props: FMenuProps) {
             overflowY='auto'
             overflowX='hidden'
             zIndex='999'
-            minWidth={{ base: '294px', md: props.isOpen ? '294px' : '68px' }}
-            width={{ base: '294px', md: props.isOpen ? '294px' : '68px' }}
+            minWidth={{ base: '310px', md: props.isOpen ? '310px' : '68px' }}
+            width={{ base: '310px', md: props.isOpen ? '310px' : '68px' }}
             flexDirection='column'
             position={{ base: 'absolute', md: 'static' }}
             height='100%'
@@ -120,6 +117,8 @@ export default function FMenu(props: FMenuProps) {
             top='0'
             transition={{ base: `transform 0.26s ease-out`, md: `width 0.25s, min-width 0.25s` }}
             transform={{ base: `translateX(${props.isOpen ? '0' : '-294'}px)`, md: 'translateX(0)' }}
+            borderRight='1px solid #e1e1dc'
+            
         >  
             <Flex 
                 height='76px' 
