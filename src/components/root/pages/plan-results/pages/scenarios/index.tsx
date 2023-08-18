@@ -10,12 +10,12 @@ export default function ScenariosPage() {
             width='100%'
             position='relative'
             padding={{ base: '16px', md: '48px' }}
+            gap='24px'
         >
-            <Flex width='100%' alignItems='center'>
+            <Flex display={{ base: 'none', md: 'flex' }}  width='100%' alignItems='center'>
                 <Text fontSize='xl' fontFamily='manrope'>Scenarios</Text>
 
                 <Button 
-                    visibility={{ base: 'collapse', md: 'visible' }}
                     marginLeft='auto' 
                     leftIcon={<MdAdd />} 
                     background='buttonPrimary' 
@@ -24,14 +24,14 @@ export default function ScenariosPage() {
                 >New</Button>
             </Flex>
 
-            <Flex flexDirection='column' gap='12px' marginTop='24px'>
+            <Flex flexDirection='column' gap='12px'>
                 <ScenarioListItem />
                 <ScenarioListItem />
             </Flex>
 
             <IconButton
                 variant='fab'
-                visibility={{ base: 'visible', md: 'collapse' }}
+                display={{ base: 'flex', md: 'none' }} 
                 icon={<MdAdd color='white' size={20} />}
                 aria-label='Add Scenario'
                 onClick={() => {}}

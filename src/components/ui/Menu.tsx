@@ -196,7 +196,7 @@ export default function Menu(props: MenuProps) {
                 paddingTop={{ base: '0px', md: '16px' }}
                 shadow={{ base: 'md', md: 'none' }}
                 top='0'
-                transition={{ base: `transform 0.26s ease-out`, md: `width 0.26s` }}
+                transition={{ base: `transform 0.26s ease-out`, md: `width 0.26s, min-width 0.26s` }}
                 transform={{ base: `translateX(${props.isOpen ? '0%' : '-100%'})`, md: 'translateX(0)' }}            
                 borderRight='1px solid #f0f0ed'
             >  
