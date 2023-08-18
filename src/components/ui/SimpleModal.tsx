@@ -11,18 +11,27 @@ export default function SimpleModal(props: SimpleModalProps) {
     return (
         <Modal isOpen={true} onClose={props.onClose} isCentered={true}>
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader
-                    fontWeight='normal'
-                    fontFamily='Manrope'
-                    fontSize='2xl'
-                >{props.title}</ModalHeader>
+
+            <ModalContent width={{ base: '90%', md: '' }}>
+                <Flex alignItems='center'>
+                    <ModalHeader
+                        fontWeight='normal'
+                        fontFamily='Manrope'
+                        fontSize='2xl'
+                        flexGrow={1}
+                    >{props.title}</ModalHeader>
+
+                    <ModalCloseButton
+                        position='static'
+                        marginEnd='16px'
+                        onClick={props.onClose}
+                    />
+                </Flex>
+
 
                 <ModalBody>
                     {props.children}
                 </ModalBody>
-
-                <ModalCloseButton onClick={props.onClose} />
 
                 <ModalFooter>
                     <Flex gap='12px'>

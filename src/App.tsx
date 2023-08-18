@@ -1,15 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { User } from './api'
-import LoginPage from './components/dashboard/pages/login'
-import Dashboard from './components/dashboard/Dashboard'
+import LoginPage from './components/root/pages/login'
+import RootPage from './components/root/index'
 
 function App() {
-    const [user, setUser] = useState<User | null>(null)
+    const [userId, setUserId] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (localStorage.getItem('loggedInUserId')) {
+            setUserId(localStorage.getItem('loggedInUserId')!!)
+        } 
+    }, [])
+
+    function loginClickHandler(id: string): void {
+        setUserId(id)
+        localStorage.setItem('loggedInUserId', id)
+    }
 
     return (
         <>
-            {/* {user ? <Dashboard user={user} /> : <LoginPage onLogin={(user) => setUser(user)} />} */}
-            <Dashboard user={{ id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }} />
+            {userId ? <RootPage userId={userId} /> : <LoginPage onLogin={loginClickHandler} />}
+            {/* <RootPage user={{ id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }} /> */}
         </>
     )
 }

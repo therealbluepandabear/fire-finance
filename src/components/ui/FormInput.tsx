@@ -20,12 +20,6 @@ export default function FormInput({ inputLeftElement, placeholder, ...props }: F
                     style={{ marginLeft: '32px' }}
                     color='gray'
                 >{placeholder}</FormLabel>
-
-                {/* <Tooltip textAlign='center' fontSize='12px' opacity={0}>
-                    <InputRightElement>
-                        <MdHelp color='lightgray' />
-                    </InputRightElement>
-                </Tooltip> */}
             </InputGroup>
         </FormControl>
     )

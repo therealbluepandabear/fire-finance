@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Plan } from '../store/plans-slice'
+import { PlanEngineInputs } from '../models/retirement-calculator'
 
 export interface User {
-    id: number
+    id: string
     email: string
     password: string 
 }
@@ -12,36 +12,70 @@ export interface UserLoginCredentials {
     password: string
 }
 
-export const userApi = createApi({
-    reducerPath: 'userApi',
+export interface NewPlan {
+    id: string
+    name: string
+    inputs: PlanEngineInputs
+    creationDate: string
+    isStarred: boolean
+}
+
+export type PlanRequest = Omit<NewPlan, 'id'>
+
+export const api = createApi({
+    reducerPath: 'api',
+
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8080/api/users'
+        baseUrl: 'http://192.168.1.107:8080/api'
     }),
+    
     endpoints: (builder) => ({
         createUser: builder.mutation<void, User>({
             query: (user) => ({
-                url: '/',
+                url: '/users',
                 method: 'POST',
                 body: user
             })
         }),
 
         getUserById: builder.query<User, number>({
-            query: (id) => `/${id}`
+            query: (id) => `/users/${id}`
         }),
 
         loginUser: builder.mutation<User, UserLoginCredentials>({
             query: ({ email, password }) => ({
-                url: `/login?email=${email}&password=${password}`,
+                url: `/users/login?email=${email}&password=${password}`,
                 method: 'POST'
             })
         }),
 
-        addPlanToUser: builder.mutation<void, { id: string, plan: Plan }>({
+        addPlanToUser: builder.mutation<void, { id: string, plan: PlanRequest }>({
             query: ({ id, plan }) => ({
-                url: `/${id}/plans`,
+                url: `/users/${id}/plans`,
                 method: 'POST',
                 body: plan
+            })
+        }),
+
+        getPlansOfUser: builder.query<NewPlan[], { userId: string, isStarred: boolean }>({
+            query: ({ userId, isStarred }) => ({
+                url: `/users/${userId}/plans`,
+                headers: { 'Filter-Starred': isStarred.toString() }
+            })
+        }),
+
+        deletePlan: builder.mutation<void, string>({
+            query: (planId) => ({
+                url: `/plans/${planId}`,
+                method: 'DELETE'
+            })
+        }),
+
+        patchPlan: builder.mutation<void, { planId: string, patch: Partial<PlanRequest> }>({
+            query: ({ planId, patch }) => ({
+                url: `/plans/${planId}`,
+                method: 'PATCH',
+                body: patch
             })
         })
     })
@@ -50,5 +84,9 @@ export const userApi = createApi({
 export const {
     useCreateUserMutation,
     useGetUserByIdQuery,
-    useLoginUserMutation
-} = userApi
+    useLoginUserMutation,
+    useAddPlanToUserMutation,
+    useGetPlansOfUserQuery,
+    useDeletePlanMutation,
+    usePatchPlanMutation
+} = api

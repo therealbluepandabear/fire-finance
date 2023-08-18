@@ -6,6 +6,8 @@ export class PlanEngine {
     private readonly inputs: PlanEngineInputs
     private engineState: PlanEngineState
 
+    private readonly scenarios: Scenario[] = [{ trigger: { property: 'age', value: 5 }, event: { property: 'income', value: 0 } }]
+
     constructor(inputs: PlanEngineInputs) {
         this.inputs = inputs
         this.engineState = this.initEngineState()
@@ -88,6 +90,18 @@ export class PlanEngine {
         this.engineState.annualSavings = this.calculateAnnualSavings()
     }
 
+    private applyScenarios(): void {
+        for (const scenario of this.scenarios) {
+            if (this.engineState.age === 77) {
+                this.engineState.total.stocks = scenario.event.value * this.inputs.stocksAllocationRate
+                this.engineState.total.bonds = scenario.event.value * this.inputs.bondsAllocationRate
+                this.engineState.total.cash = scenario.event.value * this.inputs.cashAllocationRate
+
+                this.engineState.total.networth = scenario.event.value
+            } 
+        }
+    }
+
     private calculatePreRetirement(): void {
         while ((this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.inputs.annualSpending) {
             this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
@@ -95,6 +109,8 @@ export class PlanEngine {
 
             ++this.engineState.age
             ++this.engineState.year
+
+            this.applyScenarios()
         }
 
         this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
@@ -123,10 +139,18 @@ export class PlanEngine {
         // capable of 'saving' anything as they are not working at a job
         this.engineState.annualSavings = 0
 
+        ++this.engineState.age
+        ++this.engineState.year
+
         if (this.inputs.maximumAge && this.inputs.retirementAge) {
             for (let i = 1; i <= (this.inputs.maximumAge - this.inputs.retirementAge); ++i) {
                 this.update()
-                this.engineState.data.push({ age: this.inputs.retirementAge + i, year: ++this.engineState.year, yearsElapsed: this.inputs.retirementAge + i - this.inputs.age, networth: this.engineState.total.networth })
+                this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.inputs.retirementAge + i - this.inputs.age, networth: this.engineState.total.networth })
+            
+                ++this.engineState.age
+                ++this.engineState.year
+
+                this.applyScenarios()
             }
         }
     }
@@ -160,6 +184,10 @@ export class PlanEngine {
         this.engineState = this.initEngineState()
 
         return outputs
+    }
+
+    addScenario(scenario: Scenario): void {
+        this.scenarios.push(scenario)
     }
 }
 
@@ -199,6 +227,21 @@ export function filterTimeRange(data: RetirementProjectionPoint[], filter: TimeR
                 return projectionPoint.year <= data[0].year + 12
         }
     })
+}
+
+interface ScenarioTrigger {
+    property: 'age' | 'networth'
+    value: number
+}
+
+interface ScenarioEvent {
+    property: 'income' | 'spending' | 'networth'
+    value: number
+}
+
+interface Scenario {
+    trigger: ScenarioTrigger
+    event: ScenarioEvent
 }
 
 interface Total {

@@ -1,15 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import plansSliceReducer from './plans-slice'
-import { userApi } from '../api'
+import { api } from '../api'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 export const store = configureStore({
     reducer: { 
         plans: plansSliceReducer,  
-        [userApi.reducerPath]: userApi.reducer,
+        [api.reducerPath]: api.reducer,
     },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(userApi.middleware)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

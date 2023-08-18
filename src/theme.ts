@@ -16,13 +16,27 @@ const theme = extendTheme({
             },
             variants: {
                 base: {
-                    _hover: {
-                        backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)'
+                    "@media (hover: hover)": {
+                        _hover: {
+                            backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)'
+                        },
                     },
                  
                     _active: {
                         backgroundImage: 'linear-gradient(rgb(0 0 0/25%) 0 0)'
-                    }
+                    },
+                    height: '35px'
+                },
+                fab: {
+                    width: '56px',
+                    height: '56px',
+                    right: '0',
+                    bottom: '0',
+                    background: 'buttonPrimary',
+                    position: 'fixed',
+                    borderRadius: '999px',
+                    margin: '16px',
+                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;'
                 }
             },
             defaultProps: {

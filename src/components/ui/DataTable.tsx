@@ -108,7 +108,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                                         shadow: 'md',
                                         height: '16px',
                                         background: 'white',
-                                        marginTop: '-16px'
+                                        marginTop: '-16px',
                                     }}
                                 >    
                                     <Flex 
