@@ -88,7 +88,7 @@ export default function PlansPage(props: PlansPageProps) {
         await refetchPlans()
     }
 
-    async function newPlanDialogCloseHandler(planName: string, inputs: Partial<PlanEngineInputs>): Promise<void> {
+    async function newPlanDialogCloseHandler(planName: string, inputs: PlanEngineInputs): Promise<void> {
         setDialogContext(null) 
 
         await addPlanToUser({ 
@@ -101,10 +101,11 @@ export default function PlansPage(props: PlansPageProps) {
             }
         })
         await refetchPlans()
+
+        props.onPlanCreated(new PlanEngine(inputs))
     }
 
     function planCardClickHandler(plan: NewPlan): void {
-        console.log('ok')
         props.onPlanCreated(new PlanEngine(plan.inputs))
     }
 

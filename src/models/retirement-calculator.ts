@@ -6,7 +6,7 @@ export class PlanEngine {
     private readonly inputs: PlanEngineInputs
     private engineState: PlanEngineState
 
-    private readonly scenarios: Scenario[] = [{ trigger: { property: 'age', value: 5 }, event: { property: 'income', value: 0 } }]
+    private readonly scenarios: Scenario[] = []
 
     constructor(inputs: PlanEngineInputs) {
         this.inputs = inputs

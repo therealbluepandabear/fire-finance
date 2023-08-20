@@ -14,10 +14,11 @@ import {
     Portal
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { MdAttachMoney, MdFace, MdPercent } from 'react-icons/md'
+import { MdAttachMoney, MdBeachAccess, MdFace, MdMonitorHeart, MdPercent } from 'react-icons/md'
 import { PlanEngineInputs } from '../../../../../../models/retirement-calculator'
 import StepBar from './StepBar'
 import StepPage, { InputModel } from './StepPage'
+import { FieldErrors } from 'react-hook-form'
 
 const iconColor = 'lightgray'
 
@@ -49,7 +50,7 @@ const stepInputModel: InputModel[][] = [
 
 interface PlanStepDialogProps {
     onCancel: () => void
-    onClose: (planName: string, inputs: Partial<PlanEngineInputs>) => void
+    onClose: (planName: string, inputs: PlanEngineInputs) => void
 }
 
 export default function PlanStepDialog(props: PlanStepDialogProps) {
@@ -70,15 +71,16 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
 
     function nextClickHandler(): void {
         updateStep()
+    
     }
 
-    function inputsChangeHandler(data: Partial<PlanEngineInputs>): void {
+    function inputsChangeHandler(data: Partial<PlanEngineInputs>, errors: FieldErrors<Partial<PlanEngineInputs>>): void {
         setInputs(prevInputs => ({ ...prevInputs, ...data }))
     }
 
     function closeHandler(): void {
         if (step === totalSteps) {
-            props.onClose(planName, inputs ?? {})
+            props.onClose(planName, inputs as PlanEngineInputs)
         } else {
             props.onCancel()
         }
@@ -131,7 +133,13 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
                     )}
 
                     {step > 1 && stepInputModel.map((inputs, index) => (
-                        step === (index + 2) && <StepPage inputModels={inputs} onInputsChange={inputsChangeHandler} />
+                        step === (index + 2) && (
+                            <StepPage 
+                                key={index}
+                                inputModels={inputs} 
+                                onInputsChange={inputsChangeHandler} 
+                            />
+                        )
                     ))}
                 </ModalBody>
                         
@@ -146,7 +154,7 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
                         <Button
                             color='white'
                             background='buttonPrimary'
-                            onClick={() => (step < totalSteps) ? nextClickHandler() : closeHandler()}                        >
+                            onClick={() => (step < totalSteps) ? nextClickHandler() : closeHandler()}>
                             {step === totalSteps ? 'Done' : 'Next'}
                         </Button>
                     </Flex>

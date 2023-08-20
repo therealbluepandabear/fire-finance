@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldErrors, useForm } from 'react-hook-form'
 import { PlanEngine, PlanEngineInputs } from '../../../../../../models/retirement-calculator'
 import FormInput from '../../../../../ui/FormInput'
 import { useEffect } from 'react'
@@ -14,7 +14,7 @@ export interface InputModel {
 
 interface StepPageProps {
     inputModels: InputModel[]
-    onInputsChange: (data: Partial<PlanEngineInputs>) => void
+    onInputsChange: (data: Partial<PlanEngineInputs>, errors: FieldErrors<Partial<PlanEngineInputs>>) => void
 }
 
 function adjustPercentageInputs(inputs: Partial<PlanEngineInputs>, inputModels: InputModel[]): Partial<PlanEngineInputs> { 
@@ -32,16 +32,17 @@ function adjustPercentageInputs(inputs: Partial<PlanEngineInputs>, inputModels: 
 export default function StepPage(props: StepPageProps) {
     const defaultValues: Partial<PlanEngineInputs> = Object.fromEntries(props.inputModels.map((inputModel) => [inputModel.key, inputModel.defaultValue]))
 
-    const { control, watch } = useForm<Partial<PlanEngineInputs>>({
-        defaultValues: defaultValues
+    const { control, watch, formState: { errors } } = useForm<Partial<PlanEngineInputs>>({
+        defaultValues: defaultValues,
+        mode: 'onChange'
     })
 
     useEffect(() => {
-        props.onInputsChange(adjustPercentageInputs(defaultValues, props.inputModels))
+        props.onInputsChange(adjustPercentageInputs(defaultValues, props.inputModels), errors)
     }, [])
 
     watch(inputs => {
-        props.onInputsChange(adjustPercentageInputs(inputs, props.inputModels))
+        props.onInputsChange(adjustPercentageInputs(inputs, props.inputModels), errors)
     })
 
     return (
@@ -51,7 +52,8 @@ export default function StepPage(props: StepPageProps) {
                     key={inputModel.key}
                     name={inputModel.key}
                     control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    rules={{ required: 'Please enter a value' }}
+                    render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                         <FormInput
                             placeholder={inputModel.placeholder}
                             inputLeftElement={inputModel.icon}
@@ -59,6 +61,8 @@ export default function StepPage(props: StepPageProps) {
                             onBlur={onBlur}
                             value={value}
                             type='number'
+                            isInvalid={error !== undefined}
+                            errorText={error?.message}
                         />
                     )}
                 />

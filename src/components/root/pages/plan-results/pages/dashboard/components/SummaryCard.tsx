@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, Tooltip } from '@chakra-ui/react'
 import { cloneElement, useState } from 'react'
 import { MdFlag, MdHelp, MdHelpOutline, MdOutlineFlag, MdReport } from 'react-icons/md'
 import Card from '../../../../../../ui/Card'
@@ -6,6 +6,7 @@ import Card from '../../../../../../ui/Card'
 interface SummaryCardProps {
     label: string
     content: string
+    tooltipLabel: string
 }
 
 export default function SummaryCard(props: SummaryCardProps) {
@@ -30,9 +31,11 @@ export default function SummaryCard(props: SummaryCardProps) {
                 <Flex fontSize={{ base: '3xl', md: '4xl' }} alignItems='center' gap='6px'>
                     <Text fontFamily='Manrope'>{props.content}</Text>
 
-                    <Box marginLeft='auto' fontSize='md' alignSelf='flex-end'>
-                        <MdHelpOutline color='lightgray' />
-                    </Box>
+                    <Tooltip label={props.tooltipLabel} placement='auto-start'>
+                        <Box marginLeft='auto' fontSize='md' alignSelf='flex-end'>
+                            <MdHelpOutline color='lightgray' />
+                        </Box>
+                    </Tooltip>
                 </Flex>
             </Flex>
         </Card>

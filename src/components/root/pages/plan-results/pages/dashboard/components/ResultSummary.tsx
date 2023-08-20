@@ -21,21 +21,25 @@ export default function ResultSummary(props: ResultSummaryProps) {
             <SummaryCard
                 label='Retirement Age'
                 content={props.summary.retirementAge.toString()}
+                tooltipLabel='The age at which you plan to retire'
             />
 
             <SummaryCard
                 label='Years Till Retirement'
                 content={(props.summary.yearsTillRetirement).toString()}
+                tooltipLabel='The number of years left until your planned retirement age'
             />
 
             <SummaryCard
                 label='FIRE Age'
                 content={props.summary.fireAge.toString()}
+                tooltipLabel={`The lowest age in which you will be able to achieve financial independence`}
             />
 
             <SummaryCard
                 label='FIRE Number'
                 content={formatCurrency(props.summary.fireNumber, true)}
+                tooltipLabel='The amount of savings you need to achieve financial independence'
             />
         </Grid>
     )
