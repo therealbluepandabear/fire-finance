@@ -95,7 +95,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
                                     color='black'
                                     paddingBottom='0px'
                                     paddingRight='0px'
-                                    fontWeight='normal'
+                                    fontWeight='bold'
                                     background='white'
                                     position='sticky'
                                     fontFamily='Manrope'

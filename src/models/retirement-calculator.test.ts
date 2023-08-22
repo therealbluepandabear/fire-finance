@@ -1,6 +1,6 @@
 import { PlanEngine } from './retirement-calculator'
 
-test('(1) retirement age, fire number, and data to be correct', () => {
+test('(1) data correct', () => {
     const planEngine = new PlanEngine({
         age: 20,
         annualIncome: 70_000,

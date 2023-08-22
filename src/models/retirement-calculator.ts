@@ -2,15 +2,90 @@ import { Workbook } from 'exceljs'
 import { formatCurrency } from '../utils'
 import { adjustForInflation } from './calculator-utils'
 
-export class PlanEngine {
-    private readonly inputs: PlanEngineInputs
-    private engineState: PlanEngineState
+interface PlanEngineObserver {
+    update(engineState: PlanEngineState): void
+}
 
-    private readonly scenarios: Scenario[] = []
+class ScenarioEngine implements PlanEngineObserver {
+    private inputs: PlanEngineInputs
+    private readonly scenarios: Scenario[] = [
+        { 
+            name: 'my scenario', 
+            trigger: { property: 'networth', value: 300_000 }, 
+            event: { property: 'networth', action: 'set', amount: 300_000 } 
+        }
+    ]
+
+    private readonly triggeredScenarios: Scenario[] = []
 
     constructor(inputs: PlanEngineInputs) {
         this.inputs = inputs
+    }
+
+    private adjustTotal(targetNetworth: number): Total {
+        return {
+            stocks: targetNetworth * this.inputs.stocksAllocationRate,
+            bonds: targetNetworth * this.inputs.bondsAllocationRate,
+            cash: targetNetworth * this.inputs.cashAllocationRate,
+            networth: targetNetworth 
+        }
+    }
+
+    update(engineState: PlanEngineState): void {
+        for (const scenario of this.scenarios) {
+            const isAgeMatch = scenario.trigger.property === 'age' && engineState.age === scenario.trigger.value
+            const isNetworthMatch = !this.triggeredScenarios.includes(scenario) && scenario.trigger.property === 'networth' && engineState.total.networth >= scenario.trigger.value
+
+            if (isAgeMatch || isNetworthMatch) {
+                if (scenario.event.property === 'networth') {
+                    let adjustedNetworth = scenario.event.amount
+
+                    if (scenario.event.action === 'increase') {
+                        adjustedNetworth = engineState.total.networth + scenario.event.amount
+                        console.log(`Networth: ${engineState.total.networth} Amount: ${scenario.event.amount}`)
+                    } else if (scenario.event.action === 'decrease') {
+                        adjustedNetworth = engineState.total.networth - scenario.event.amount
+                    }
+
+                    engineState.total = this.adjustTotal(adjustedNetworth)
+                } 
+
+                if (!this.triggeredScenarios.includes(scenario)) {
+                    this.triggeredScenarios.push(scenario)
+                }
+            } 
+        }
+    }
+
+    addScenario(scenario: Scenario): void {
+        this.scenarios.push(scenario)
+    }
+
+
+    getScenarios(): Scenario[] {
+        return this.scenarios
+    }
+}
+
+export class PlanEngine {
+    private inputs: PlanEngineInputs
+    private readonly scenarioEngine: ScenarioEngine
+    private readonly observers: PlanEngineObserver[] = [];
+    private engineState: PlanEngineState
+
+    constructor(inputs: PlanEngineInputs) {
+        this.inputs = inputs
+        this.scenarioEngine = new ScenarioEngine(this.inputs)
+
         this.engineState = this.initEngineState()
+        
+        this.observers.push(this.scenarioEngine)
+    }
+
+    private notifyObservers(): void {
+        for (const observer of this.observers) {
+            observer.update(this.engineState)
+        }
     }
 
     private initEngineState(): PlanEngineState {
@@ -90,18 +165,6 @@ export class PlanEngine {
         this.engineState.annualSavings = this.calculateAnnualSavings()
     }
 
-    private applyScenarios(): void {
-        for (const scenario of this.scenarios) {
-            if (this.engineState.age === 77) {
-                this.engineState.total.stocks = scenario.event.value * this.inputs.stocksAllocationRate
-                this.engineState.total.bonds = scenario.event.value * this.inputs.bondsAllocationRate
-                this.engineState.total.cash = scenario.event.value * this.inputs.cashAllocationRate
-
-                this.engineState.total.networth = scenario.event.value
-            } 
-        }
-    }
-
     private calculatePreRetirement(): void {
         while ((this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.inputs.annualSpending) {
             this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
@@ -110,7 +173,7 @@ export class PlanEngine {
             ++this.engineState.age
             ++this.engineState.year
 
-            this.applyScenarios()
+            this.notifyObservers()
         }
 
         this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
@@ -130,6 +193,7 @@ export class PlanEngine {
             while (extraAge < ageToQuery) {
                 this.update()
                 this.engineState.data.push({ age: ++extraAge, year: ++this.engineState.year, yearsElapsed: extraAge - this.inputs.age, networth: this.engineState.total.networth })
+                this.notifyObservers()
             }
         }
     }
@@ -150,7 +214,7 @@ export class PlanEngine {
                 ++this.engineState.age
                 ++this.engineState.year
 
-                this.applyScenarios()
+                this.notifyObservers()
             }
         }
     }
@@ -186,8 +250,8 @@ export class PlanEngine {
         return outputs
     }
 
-    addScenario(scenario: Scenario): void {
-        this.scenarios.push(scenario)
+    getScenarioEngine(): ScenarioEngine {
+        return this.scenarioEngine
     }
 }
 
@@ -236,10 +300,12 @@ interface ScenarioTrigger {
 
 interface ScenarioEvent {
     property: 'income' | 'spending' | 'networth'
-    value: number
+    action: 'set' | 'increase' | 'decrease'
+    amount: number
 }
 
-interface Scenario {
+export interface Scenario {
+    name: string
     trigger: ScenarioTrigger
     event: ScenarioEvent
 }

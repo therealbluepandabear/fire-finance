@@ -3,14 +3,24 @@ import { MdOutlineDashboard, MdAutoGraph } from 'react-icons/md'
 import ScrollableBox from '../../../ui/ScrollableBox'
 import ScenariosPage from './pages/scenarios'
 import DashboardPage from './pages/dashboard'
-import { PlanEngine } from '../../../../models/retirement-calculator'
+import { PlanEngine, PlanEngineInputs, PlanEngineOutputs, Scenario } from '../../../../models/retirement-calculator'
+import { useEffect, useMemo, useState } from 'react'
 
 export interface PlanResultsPageProps {
-    engine: PlanEngine
+    inputs: PlanEngineInputs
 }
 
 export default function PlanResultsPage(props: PlanResultsPageProps) {
+    const engine = useMemo(() => new PlanEngine(props.inputs), [])
+    
+    const [outputs, setOutputs] = useState<PlanEngineOutputs>(engine.calculate())
+    
     const isFitted = useBreakpointValue({ base: true, md: false })
+
+    function engineUpdateHandler(callback: (engine: PlanEngine) => void): void {
+        callback(engine)
+        setOutputs(engine.calculate())
+    }
 
     return (
         <ScrollableBox
@@ -21,11 +31,11 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
             minWidth='0'
             alignItems='center'
         >
-            <Tabs isLazy={true} isFitted={isFitted} marginBottom='16px' width='100%'>
+            <Tabs isFitted={isFitted} marginBottom='16px' width='100%'>
                 <TabList 
                     gap='12px' 
-                    paddingLeft={{ base: '16px', md: '48px' }} 
-                    paddingTop={{ base: '16px', md: '48px' }}
+                    paddingLeft={{ base: '0px', md: '48px' }} 
+                    paddingTop={{ base: '0px', md: '48px' }}
                     position='sticky'
                     top='0' 
                     background='white'
@@ -40,7 +50,6 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                         }}
                     >
                         <Flex padding='4px' gap='6px' alignItems='center'>
-                            <MdOutlineDashboard size={20} />
                             Dashboard
                         </Flex>
                     </Tab>
@@ -53,7 +62,6 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                         }}
                     >
                         <Flex padding='4px' gap='6px' alignItems='center'>
-                            <MdAutoGraph size={20} />
                             Scenarios
                         </Flex>
                     </Tab>
@@ -61,11 +69,11 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
 
                 <TabPanels>
                     <TabPanel padding='0' margin='0'>
-                        <DashboardPage {...props} />
+                        <DashboardPage outputs={outputs} />
                     </TabPanel>
 
                     <TabPanel padding='0' margin='0'>
-                        <ScenariosPage />
+                        <ScenariosPage updateEngine={engineUpdateHandler}/>
                     </TabPanel>
                 </TabPanels>
             </Tabs>

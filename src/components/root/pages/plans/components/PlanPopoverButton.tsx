@@ -13,7 +13,10 @@ export default function PlanPopoverButton(props: PlanPopoverButtonProps) {
             background='white'
             justifyContent='flex-start'
             leftIcon={props.icon}
-            onClick={props.onClick}
+            onClick={(e) => {
+                e.stopPropagation()
+                props.onClick()
+            }}
             gap='8px'
             borderRadius='0'
             fontSize='md'

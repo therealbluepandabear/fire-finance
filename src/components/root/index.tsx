@@ -6,7 +6,7 @@ import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/plans'
 import PlanResultsPage from './pages/plan-results'
-import { PlanEngine } from '../../models/retirement-calculator'
+import { PlanEngine, PlanEngineInputs } from '../../models/retirement-calculator'
 import { useAppSelector } from '../../store'
 
 interface DashboardMenuProps {
@@ -37,9 +37,11 @@ export interface RootPageProps {
 }
 
 export default function RootPage(props: RootPageProps) {
-    function planCreatedHandler(engine: PlanEngine): void {
-        setCurrentPage(<PlanResultsPage engine={engine} />)
+    function planCreatedHandler(inputs: PlanEngineInputs): void {
+        setCurrentPage(<PlanResultsPage inputs={inputs} />)
     }
+
+    const [currentTitle, setCurrentTitle] = useState('Plans')
 
     const [currentPage, setCurrentPage] = useState<JSX.Element>(
         <PlansPage userId={props.userId} onPlanCreated={planCreatedHandler} />
@@ -47,54 +49,14 @@ export default function RootPage(props: RootPageProps) {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-    const responsiveMenuContentRight = useBreakpointValue({
-        base: [
-            <IconButton
-                key={0}
-                height='49px'
-                width='49px'
-                aria-label='...'
-                icon={<MdSettings size={20} />}
-                borderRadius='999px'
-                variant='outline'
-            />,
-
-            <IconButton
-                key={1}
-                height='49px'
-                width='49px'
-                aria-label='...'
-                icon={<MdPerson size={20} />}
-                borderRadius='999px'
-                variant='outline'
-            />
-        ], 
-        md: [
-            <Button
-                key={0}
-                height='49px'
-                background='transparent'
-                border='1px solid #e1e1dc'
-                leftIcon={<MdSettings size={20} />}
-            >Settings</Button>,
-
-            <Button
-                key={1}
-                height='49px'
-                background='transparent'
-                border='1px solid #e1e1dc'
-                leftIcon={<MdPerson size={20} />}
-            >tom66</Button>
-        ] 
-    });
-
     function menuClickHandler(): void {
         setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen)
     }
 
     function menuItemClickHandler(item: MenuItem | MenuSubItem): void {
-        if ("subItems" in item && item.label === 'Plans') {
+        if ('subItems' in item && item.label === 'Plans') {
             setCurrentPage(<PlansPage userId={props.userId} onPlanCreated={planCreatedHandler} />)
+            setIsMenuOpen(false)
         }
     }
 
@@ -108,15 +70,7 @@ export default function RootPage(props: RootPageProps) {
                 height='100vh' 
                 maxHeight='100vh'
             >
-                <AppBar 
-                    isMenu={true} 
-                    onMenuClick={menuClickHandler}
-                    contentRight={
-                        <Flex gap={{ base: '8px', md: '16px' }}>
-                            {responsiveMenuContentRight}
-                        </Flex>
-                    }
-                />
+                <AppBar title={currentTitle} onMenuClick={menuClickHandler} />
 
                 <Flex 
                     flexGrow={1} 

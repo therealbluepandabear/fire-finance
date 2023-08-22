@@ -41,7 +41,7 @@ type DialogContext = { data?: NewPlan, type: 'rename' | 'editDescription' | 'del
 
 interface PlansPageProps {
     userId: string
-    onPlanCreated: (engine: PlanEngine) => void
+    onPlanCreated: (inputs: PlanEngineInputs) => void
 }
 
 export default function PlansPage(props: PlansPageProps) {
@@ -102,11 +102,11 @@ export default function PlansPage(props: PlansPageProps) {
         })
         await refetchPlans()
 
-        props.onPlanCreated(new PlanEngine(inputs))
+        props.onPlanCreated(inputs)
     }
 
     function planCardClickHandler(plan: NewPlan): void {
-        props.onPlanCreated(new PlanEngine(plan.inputs))
+        props.onPlanCreated(plan.inputs)
     }
 
     function newPlanDialogCancelHandler(): void {
@@ -132,17 +132,15 @@ export default function PlansPage(props: PlansPageProps) {
             >
                 <Flex flexDirection='column'>
                     <Flex flexDirection={{ base: 'column', md: 'row' }}>
-                        <Flex gap='16px' alignSelf='center' alignItems='center'>
+                        <Flex gap='16px' alignSelf='center' alignItems='center' display={{ base: 'none', md: 'flex' }}>
                             <Text fontSize='2xl' fontFamily='manrope'>Plans</Text>
                         </Flex>
 
                         <Flex 
                             display={{ base: 'flex', md: 'none' }}
-                            marginTop={{ base: '16px', xl: '0px' }}
                             marginBottom='36px'
                         >
                             <Tabs 
-                                isLazy={true} 
                                 marginBottom='16px' 
                                 width='100%' 
                                 isFitted={true} 
@@ -163,7 +161,6 @@ export default function PlansPage(props: PlansPageProps) {
                                         }}
                                     >
                                         <Flex padding='4px' gap='6px' alignItems='center'>
-                                            <MdChecklist size={20} />
                                             All Plans
                                         </Flex>
                                     </Tab>
@@ -176,7 +173,6 @@ export default function PlansPage(props: PlansPageProps) {
                                         }}
                                     >
                                         <Flex padding='4px' gap='6px' alignItems='center'>
-                                            <MdStarOutline size={20} />
                                             Starred
                                         </Flex>
                                     </Tab>

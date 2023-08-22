@@ -4,6 +4,8 @@ const activeLabelStyles = {
     transform: 'scale(0.85) translateY(-24px) translateX(-16px)'
 }
 
+const hoverProps = { backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)' }
+
 const theme = extendTheme({
     fonts: {
         body: 'Noto Sans, sans-serif',
@@ -17,9 +19,7 @@ const theme = extendTheme({
             variants: {
                 base: {
                     "@media (hover: hover)": {
-                        _hover: {
-                            backgroundImage: 'linear-gradient(rgb(0 0 0/15%) 0 0)'
-                        },
+                        _hover: hoverProps,
                     },
                  
                     _active: {
@@ -28,6 +28,13 @@ const theme = extendTheme({
                     height: '35px'
                 },
                 fab: {
+                    "@media (hover: hover)": {
+                        _hover: hoverProps,
+                    },
+
+                    _active: {
+
+                    },
                     width: '56px',
                     height: '56px',
                     right: '0',
@@ -36,7 +43,7 @@ const theme = extendTheme({
                     position: 'fixed',
                     borderRadius: '999px',
                     margin: '16px',
-                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;'
+                    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 3px 5px -1px, rgba(0, 0, 0, 0.14) 0px 6px 10px 0px, rgba(0, 0, 0, 0.12) 0px 1px 18px 0px'
                 }
             },
             defaultProps: {

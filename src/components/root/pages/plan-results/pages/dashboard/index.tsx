@@ -1,7 +1,7 @@
 import { Flex, Text, forwardRef, Button, HTMLChakraProps, useDisclosure, Divider, Popover, PopoverTrigger, PopoverContent, PopoverBody, FocusLock, Box, IconButton, Tab, TabList, Tabs, TabPanel, TabPanels } from '@chakra-ui/react'
-import { useState, PropsWithChildren } from 'react'
+import { useState, PropsWithChildren, useEffect } from 'react'
 import { MdBeachAccess, MdFlag, MdOutlineOpenInFull, MdCloseFullscreen, MdAdd, MdOutlineFileDownload, MdChecklist, MdStarOutline, MdDashboard, MdBarChart, MdOutlineDashboard, MdAutoGraph } from 'react-icons/md'
-import { TimeRangeFilter, PlanEngineOutputs, getExcelWorkbook, PlanEngine } from '../../../../../../models/retirement-calculator'
+import { TimeRangeFilter, PlanEngineOutputs, getExcelWorkbook, PlanEngine, RetirementProjectionPoint } from '../../../../../../models/retirement-calculator'
 import { useAppSelector } from '../../../../../../store'
 import { Goal } from '../../../../../../store/plans-slice'
 import { saveToFile } from '../../../../../../utils'
@@ -75,20 +75,22 @@ function generateGoals(outputs: PlanEngineOutputs): void {
     goals.push({ label: 'Financial Independence', icon: <MdFlag />, targetNetworth: outputs.summary.fireNumber })
 }
 
-export default function DashboardPage(props: PlanResultsPageProps) {
-    const outputs = props.engine.calculate()
+interface DashboardPageProps {
+    outputs: PlanEngineOutputs
+}
 
+export default function DashboardPage(props: DashboardPageProps) {
     const [timeRangeFilter, setTimeRangeFilter] = useState<TimeRangeFilter>('Max')
     const [showNewGoalDialog, setShowNewGoalDialog] = useState(false)
 
     if (goals.length === 0) {
-        generateGoals(outputs)
+        generateGoals(props.outputs)
     }
 
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     async function downloadExcelClickHandler(): Promise<void> {
-        const workbook = getExcelWorkbook(outputs)
+        const workbook = getExcelWorkbook(props.outputs)
 
         const xlsxId = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -99,7 +101,7 @@ export default function DashboardPage(props: PlanResultsPageProps) {
     }
 
     async function downloadCommaSeparatedValuesClickHandler(): Promise<void> {
-        const workbook = getExcelWorkbook(outputs)
+        const workbook = getExcelWorkbook(props.outputs)
 
         const buffer = await workbook.csv.writeBuffer()
         const csvBlob = new Blob([buffer])
@@ -116,7 +118,7 @@ export default function DashboardPage(props: PlanResultsPageProps) {
                 width='100%'
                 marginBottom='18px'
             >
-                <ResultSummary summary={outputs.summary} />
+                <ResultSummary summary={props.outputs.summary} />
             </Flex>
 
             <Flex
@@ -140,7 +142,7 @@ export default function DashboardPage(props: PlanResultsPageProps) {
                         </Box>
 
                         <Flex height={{ base: '320px', md: '580px' }} width='100%'>
-                            <PlanChart data={outputs.data} goals={goals} filter={timeRangeFilter} />
+                            <PlanChart data={props.outputs.data} goals={goals} filter={timeRangeFilter} />
                         </Flex>
                     </Section>
                 </Flex>
@@ -187,7 +189,7 @@ export default function DashboardPage(props: PlanResultsPageProps) {
                     ]}
                 >
 
-                    <ResultTable data={outputs.data} />
+                    <ResultTable data={props.outputs.data} />
                 </Section>
             </Flex>
         </Box>
