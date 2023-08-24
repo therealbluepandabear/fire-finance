@@ -1,22 +1,26 @@
 import { PlanEngine } from './retirement-calculator'
 
-test('(1) data correct', () => {
-    const planEngine = new PlanEngine({
-        age: 20,
-        annualIncome: 70_000,
-        annualSpending: 30_000,
-        networth: 0,
-        safeWithdrawalRate: 0.04,
-        inflationRate: 0,
-        stocksAllocationRate: 1,
-        bondsAllocationRate: 0,
-        cashAllocationRate: 0,
-        stocksReturnRate: 0.07,
-        bondsReturnRate: 0,
-        cashReturnRate: 0,
-        maximumAge: 40
-    })
+const planEngine = new PlanEngine({
+    age: 20,
+    annualIncome: 70_000,
+    annualSpending: 30_000,
+    networth: 0,
+    safeWithdrawalRate: 0.04,
+    inflationRate: 0,
+    stocksAllocationRate: 1,
+    bondsAllocationRate: 0,
+    cashAllocationRate: 0,
+    stocksReturnRate: 0.07,
+    bondsReturnRate: 0,
+    cashReturnRate: 0,
+    maximumAge: 40
+})
 
+afterEach(() => {
+    planEngine.getScenarioEngine().clearScenarios()
+})
+
+test('outputs data correct', () => {
     const outputs = planEngine.calculate()
 
     const data = outputs.data
@@ -27,5 +31,42 @@ test('(1) data correct', () => {
     expect(Math.floor(data[13].networth)).toBe(805_625)
     expect(Math.floor(data[18].networth)).toBe(1_359_961)
 })
+
+test(`scenarios action 'set' works`, () => {
+    planEngine.getScenarioEngine().addScenario({ 
+        name: 'Test Scenario 1', 
+        trigger: { property: 'age', value: 25 },
+        event: { property: 'networth', action: 'set', amount: 15_000 }
+    })
+
+    const outputs = planEngine.calculate()
+
+    expect(outputs.data[5].networth).toBe(15_000)
+})
+
+test(`scenarios action 'increase' works`, () => {
+    planEngine.getScenarioEngine().addScenario({
+        name: 'Test Scenario 1',
+        trigger: { property: 'age', value: 30 },
+        event: { property: 'networth', action: 'increase', amount: 30_000 }
+    })
+
+    const outputs = planEngine.calculate()
+
+    expect(Math.floor(outputs.data[10].networth)).toBe(582_657)
+})
+
+test(`scenarios action 'decrease' works`, () => {
+    planEngine.getScenarioEngine().addScenario({
+        name: 'Test Scenario 1',
+        trigger: { property: 'age', value: 23 },
+        event: { property: 'networth', action: 'decrease', amount: 10_000 }
+    })
+
+    const outputs = planEngine.calculate()
+
+    expect(Math.floor(outputs.data[3].networth)).toBe(118_596)
+})
+
 
 export {}

@@ -25,6 +25,18 @@ class ScenarioEngine implements PlanEngineObserver {
         }
     }
 
+    private applyAction(base: number, amount: ScenarioEvent['amount'], action: ScenarioEvent['action']): number {
+        let newNumber = amount
+
+        if (action === 'increase') {
+            newNumber = base + amount
+        } else if (action === 'decrease') {
+            newNumber = base - amount
+        }
+
+        return newNumber
+    }
+
     update(engineState: PlanEngineState): void {
         for (const scenario of this.scenarios) {
             const isAgeMatch = scenario.trigger.property === 'age' && engineState.age === scenario.trigger.value
@@ -32,16 +44,18 @@ class ScenarioEngine implements PlanEngineObserver {
 
             if (isAgeMatch || isNetworthMatch) {
                 if (scenario.event.property === 'networth') {
-                    let adjustedNetworth = scenario.event.amount
-
-                    if (scenario.event.action === 'increase') {
-                        adjustedNetworth = engineState.total.networth + scenario.event.amount
-                    } else if (scenario.event.action === 'decrease') {
-                        adjustedNetworth = engineState.total.networth - scenario.event.amount
-                    }
+                    let adjustedNetworth = this.applyAction(engineState.total.networth, scenario.event.amount, scenario.event.action)
 
                     engineState.total = this.adjustTotal(adjustedNetworth)
-                } 
+                } else if (scenario.event.property === 'income') {
+                    let adjustedIncome = this.applyAction(engineState.annualIncome, scenario.event.amount, scenario.event.action)
+
+                    engineState.annualIncome = adjustedIncome
+                } else if (scenario.event.property === 'spending') {
+                    let adjustedSpending = this.applyAction(engineState.annualSpending, scenario.event.amount, scenario.event.action)
+
+                    engineState.annualSpending = adjustedSpending
+                }
 
                 if (!this.triggeredScenarios.includes(scenario)) {
                     this.triggeredScenarios.push(scenario)
@@ -54,6 +68,9 @@ class ScenarioEngine implements PlanEngineObserver {
         this.scenarios.push(scenario)
     }
 
+    clearScenarios(): void {
+        this.scenarios.length = 0
+    }
 
     getScenarios(): Scenario[] {
         return this.scenarios
@@ -118,12 +135,19 @@ export class PlanEngine {
             age: this.inputs.age,
             year: new Date().getFullYear(),
 
-            data: []
+            data: [],
+
+            annualIncome: this.inputs.annualIncome,
+            annualSpending: this.inputs.annualSpending
         }
     }
 
     private calculateAnnualSavings(): number {
-        return this.inputs.annualIncome - this.inputs.annualSpending
+        if (this.engineState === undefined) {
+            return this.inputs.annualIncome - this.inputs.annualSpending
+        }
+
+        return this.engineState.annualIncome - this.engineState.annualSpending
     }
 
     private calculateTotalNetworth(): number {
@@ -162,7 +186,7 @@ export class PlanEngine {
 
         // Take away the expenses amount each year as the user is retired
         if (this.engineState.hasRetired) {
-            totalAmount = (this.engineState.total[type] + (this.engineState.total[type] * returnRate)) - (this.inputs.annualSpending * allocationRate)
+            totalAmount = (this.engineState.total[type] + (this.engineState.total[type] * returnRate)) - (this.engineState.annualSpending * allocationRate)
         }
 
         return totalAmount
@@ -170,14 +194,14 @@ export class PlanEngine {
 
     private updateAnnualIncomeAndSavings(): void {
         if (this.inputs.incomeGrowthRate) {
-            this.inputs.annualIncome = this.inputs.annualIncome + (this.inputs.annualIncome * this.inputs.incomeGrowthRate)
+            this.engineState.annualIncome = this.engineState.annualIncome + (this.engineState.annualIncome * this.inputs.incomeGrowthRate)
         }
 
         this.engineState.annualSavings = this.calculateAnnualSavings()
     }
 
     private isFinanciallyIndependent(): boolean {
-        return (this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.inputs.annualSpending 
+        return (this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.engineState.annualSpending 
     }
 
     private calculatePreRetirement(): void {
@@ -233,7 +257,7 @@ export class PlanEngine {
     }
 
     private getOutputs(): PlanEngineOutputs {
-        const fireNumber = this.inputs.annualSpending / this.inputs.safeWithdrawalRate
+        const fireNumber = this.engineState.annualSpending / this.inputs.safeWithdrawalRate
 
         return {
             summary: {
@@ -342,6 +366,9 @@ interface PlanEngineState {
     adjStocksReturnRate: number
     adjBondsReturnRate: number
     adjCashReturnRate: number
+
+    annualIncome: number
+    annualSpending: number
 }
 
 export interface RetirementProjectionPoint {
