@@ -40,6 +40,12 @@ class ScenarioEngine implements PlanEngineObserver {
     update(engineState: PlanEngineState): void {
         for (const scenario of this.scenarios) {
             const isAgeMatch = scenario.trigger.property === 'age' && engineState.age === scenario.trigger.value
+
+            if (isAgeMatch) {
+                console.log(scenario)
+                console.log(engineState.age)
+            }
+
             const isNetworthMatch = !this.triggeredScenarios.includes(scenario) && scenario.trigger.property === 'networth' && engineState.total.networth >= scenario.trigger.value
 
             if (isAgeMatch || isNetworthMatch) {
@@ -169,14 +175,14 @@ export class PlanEngine {
     }
 
     private update(): void {
-        this.updateTotal()
-
         // Only calculate at a point in time in which the user is not retired, this is 
         // because we are setting the savings to 0 when the user retires anyways, so this
         // function does not need to be called
         if (!this.engineState.hasRetired) {
             this.updateAnnualIncomeAndSavings()
         }
+
+        this.updateTotal()
     }
 
     private calculateTotal(type: 'stocks' | 'bonds' | 'cash', allocationRate: number, returnRate: number): number {
