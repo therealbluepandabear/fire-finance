@@ -7,14 +7,8 @@ interface PlanEngineObserver {
 }
 
 class ScenarioEngine implements PlanEngineObserver {
-    private inputs: PlanEngineInputs
-    private readonly scenarios: Scenario[] = [
-        { 
-            name: 'my scenario', 
-            trigger: { property: 'networth', value: 300_000 }, 
-            event: { property: 'networth', action: 'set', amount: 300_000 } 
-        }
-    ]
+    private readonly inputs: PlanEngineInputs
+    private readonly scenarios: Scenario[] = []
 
     private readonly triggeredScenarios: Scenario[] = []
 
@@ -42,7 +36,6 @@ class ScenarioEngine implements PlanEngineObserver {
 
                     if (scenario.event.action === 'increase') {
                         adjustedNetworth = engineState.total.networth + scenario.event.amount
-                        console.log(`Networth: ${engineState.total.networth} Amount: ${scenario.event.amount}`)
                     } else if (scenario.event.action === 'decrease') {
                         adjustedNetworth = engineState.total.networth - scenario.event.amount
                     }
@@ -67,8 +60,25 @@ class ScenarioEngine implements PlanEngineObserver {
     }
 }
 
+class StateRecorderEngine implements PlanEngineObserver {
+    private readonly inputs: PlanEngineInputs
+
+    constructor(inputs: PlanEngineInputs) {
+        this.inputs = inputs
+    }
+
+    update(engineState: PlanEngineState): void {
+        engineState.data.push({ 
+            age: engineState.age,
+            year: engineState.year, 
+            yearsElapsed: engineState.age - this.inputs.age, 
+            networth: engineState.total.networth 
+        })
+    }
+}
+
 export class PlanEngine {
-    private inputs: PlanEngineInputs
+    private readonly inputs: PlanEngineInputs
     private readonly scenarioEngine: ScenarioEngine
     private readonly observers: PlanEngineObserver[] = [];
     private engineState: PlanEngineState
@@ -80,6 +90,7 @@ export class PlanEngine {
         this.engineState = this.initEngineState()
         
         this.observers.push(this.scenarioEngine)
+        this.observers.push(new StateRecorderEngine(this.inputs))
     }
 
     private notifyObservers(): void {
@@ -165,36 +176,38 @@ export class PlanEngine {
         this.engineState.annualSavings = this.calculateAnnualSavings()
     }
 
+    private isFinanciallyIndependent(): boolean {
+        return (this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.inputs.annualSpending 
+    }
+
     private calculatePreRetirement(): void {
-        while ((this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.inputs.annualSpending) {
-            this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
+        let endPreRetirementAge: number | null = null
+        
+        if (this.inputs.retirementAge || this.inputs.maximumAge) {
+            if (this.inputs.maximumAge && !this.inputs.retirementAge) {
+                endPreRetirementAge = this.inputs.maximumAge
+            } else if (this.inputs.maximumAge && this.inputs.retirementAge) {
+                endPreRetirementAge = this.inputs.retirementAge
+            }
+        }
+
+        const runLoopCriteria = () => {
+            if (endPreRetirementAge) {
+                return this.engineState.age < endPreRetirementAge
+            }
+            return this.isFinanciallyIndependent()
+        }
+
+        // Initial state
+        this.notifyObservers()
+
+        while (runLoopCriteria()) {
             this.update()
 
             ++this.engineState.age
             ++this.engineState.year
 
             this.notifyObservers()
-        }
-
-        this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.engineState.age - this.inputs.age, networth: this.engineState.total.networth })
-
-        // Calculate for the extra years after financial independence (if the user has specified a maximum age)
-        if (this.inputs.retirementAge || this.inputs.maximumAge) {
-            let ageToQuery = 0
-
-            if (this.inputs.maximumAge && !this.inputs.retirementAge) {
-                ageToQuery = this.inputs.maximumAge
-            } else if (this.inputs.maximumAge && this.inputs.retirementAge) {
-                ageToQuery = this.inputs.retirementAge
-            }
-
-            let extraAge = this.engineState.age
-
-            while (extraAge < ageToQuery) {
-                this.update()
-                this.engineState.data.push({ age: ++extraAge, year: ++this.engineState.year, yearsElapsed: extraAge - this.inputs.age, networth: this.engineState.total.networth })
-                this.notifyObservers()
-            }
         }
     }
 
@@ -224,7 +237,7 @@ export class PlanEngine {
 
         return {
             summary: {
-                fireAge: this.engineState.age,
+                fireAge: this.engineState.data.find(point => point.networth >= fireNumber)?.age ?? NaN,
                 fireNumber: fireNumber,
                 retirementAge: this.inputs.retirementAge ?? this.engineState.age,
                 yearsTillRetirement: (this.inputs.retirementAge ?? this.engineState.age) - this.inputs.age

@@ -11,7 +11,7 @@ export interface PlanResultsPageProps {
 }
 
 export default function PlanResultsPage(props: PlanResultsPageProps) {
-    const engine = useMemo(() => new PlanEngine(props.inputs), [])
+    const engine = useMemo(() => new PlanEngine({...props.inputs, maximumAge: 40 }), [])
     
     const [outputs, setOutputs] = useState<PlanEngineOutputs>(engine.calculate())
     
