@@ -7,6 +7,7 @@ import PlanStarButton from './PlanStarButton'
 import Card from '../../../../ui/Card'
 import { PlanEngine } from '../../../../../models/retirement-calculator'
 import { NewPlan } from '../../../../../api'
+import { formatISODateToShortDateString } from '../../../../../utils'
 
 interface PlanCardProps {
     plan: NewPlan
@@ -18,16 +19,6 @@ interface PlanCardProps {
 }
 
 export default function PlanCard(props: PlanCardProps) {
-    const options: Intl.DateTimeFormatOptions = {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-    }
-
-    const formattedCreationDate = new Date(props.plan.creationDate).toLocaleString('en-US', options)
-
-    // const showDescriptionBadge = props.plan.description && props.plan.description.trim().length > 0
-
     const showDescriptionBadge = false
 
     return (
@@ -76,7 +67,7 @@ export default function PlanCard(props: PlanCardProps) {
                         whiteSpace='nowrap'
                     >{props.plan.name}</Text>
 
-                    <Text color='rgb(22, 135, 94)' fontSize='sm'>{formattedCreationDate}</Text>
+                    <Text color='rgb(22, 135, 94)' fontSize='sm'>{formatISODateToShortDateString(props.plan.creationDate)}</Text>
                 </Flex>
 
                 <PlanStarButton key={props.plan.id} plan={props.plan} />

@@ -5,14 +5,18 @@ import ScenarioListItem from './components/ScenarioListItem'
 import { useEffect, useState } from 'react'
 import CreateScenario from './components/CreateScenario'
 import { PlanEngine, Scenario } from '../../../../../../models/retirement-calculator'
+import { NewPlan, useAddScenarioToPlanMutation, useGetScenariosQuery } from '../../../../../../api'
 
 interface ScenariosPageProps {
+    plan: NewPlan
     updateEngine: (callback: (engine: PlanEngine) => void) => void
 }
 
 export default function ScenariosPage(props: ScenariosPageProps) {
-    const [scenarios, setScenarios] = useState<Scenario[]>([])
     const [showCreateScenario, setShowCreateScenario] = useState(false)
+
+    const [addScenarioToPlan] = useAddScenarioToPlanMutation()
+    const { data: scenarios, refetch: refetchScenarios } = useGetScenariosQuery(props.plan.id)
 
     function newScenarioClickHandler(): void {
         setShowCreateScenario(true)
@@ -22,13 +26,13 @@ export default function ScenariosPage(props: ScenariosPageProps) {
         setShowCreateScenario(false)
     }
 
-    function createScenarioDoneClickHandler(scenario: Scenario): void {
+    async function createScenarioDoneClickHandler(scenario: Scenario): Promise<void> {
         setShowCreateScenario(false)
-        setScenarios(prevScenarios => [...prevScenarios, scenario])
 
         props.updateEngine(engine => engine.getScenarioEngine().addScenario(scenario))
 
-        console.log(scenario)
+        await addScenarioToPlan({ planId: props.plan.id, scenario: scenario })
+        await refetchScenarios()
     }
 
     return (
@@ -60,7 +64,7 @@ export default function ScenariosPage(props: ScenariosPageProps) {
             )}
 
             <Flex flexDirection='column' gap='12px'>
-                {scenarios.map((scenario, index) => <ScenarioListItem key={index} scenario={scenario} />)}
+                {scenarios && scenarios.map((scenario, index) => <ScenarioListItem key={index} scenario={scenario} />)}
             </Flex>
 
             <IconButton

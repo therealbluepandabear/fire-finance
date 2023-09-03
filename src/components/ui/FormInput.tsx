@@ -1,4 +1,5 @@
 import { HTMLChakraProps, FormControl, InputGroup, InputLeftElement, Input, FormLabel, InputRightElement, Tooltip, InputProps, FormErrorMessage } from '@chakra-ui/react'
+import { forwardRef } from 'react'
 import { MdHelp } from 'react-icons/md'
 
 interface FormInputProps {
@@ -8,15 +9,17 @@ interface FormInputProps {
     errorText?: string
 }
 
-export default function FormInput({ inputLeftElement, placeholder, ...props }: FormInputProps & InputProps) {
+const FormInput = forwardRef<HTMLInputElement, FormInputProps & InputProps>((props, ref) => {
+    const { inputLeftElement, placeholder, isInvalid, errorText, ...inputProps } = props
+
     return (
-        <FormControl variant='floating' isInvalid={props.isInvalid}>
+        <FormControl variant='floating' isInvalid={isInvalid}>
             <InputGroup>
                 <InputLeftElement>
                     {inputLeftElement}
                 </InputLeftElement>
 
-                <Input placeholder=' ' tabIndex={-1} {...props} />
+                <Input ref={ref} placeholder=' ' tabIndex={-1} {...inputProps} />
 
                 <FormLabel
                     style={{ marginLeft: '32px' }}
@@ -24,7 +27,9 @@ export default function FormInput({ inputLeftElement, placeholder, ...props }: F
                 >{placeholder}</FormLabel>
             </InputGroup>
 
-            <FormErrorMessage>{props.errorText}</FormErrorMessage>
+            <FormErrorMessage>{errorText}</FormErrorMessage>
         </FormControl>
     )
-}
+})
+
+export default FormInput

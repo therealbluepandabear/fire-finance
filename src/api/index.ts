@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { PlanEngineInputs } from '../models/retirement-calculator'
+import { PlanEngineInputs, Scenario } from 'models/retirement-calculator'
 
 export interface User {
     id: string
@@ -18,6 +18,7 @@ export interface NewPlan {
     inputs: PlanEngineInputs
     creationDate: string
     isStarred: boolean
+    scenarios: Scenario[]
 }
 
 export type PlanRequest = Omit<NewPlan, 'id'>
@@ -77,6 +78,18 @@ export const api = createApi({
                 method: 'PATCH',
                 body: patch
             })
+        }),
+
+        addScenarioToPlan: builder.mutation<void, { planId: string, scenario: Scenario }>({
+            query: ({ planId, scenario }) => ({
+                url: `/plans/${planId}/scenarios`,
+                method: 'POST',
+                body: scenario
+            })
+        }),
+        
+        getScenarios: builder.query<Scenario[], string>({
+            query: (planId) => `/plans/${planId}/scenarios`
         })
     })
 })
@@ -88,5 +101,7 @@ export const {
     useAddPlanToUserMutation,
     useGetPlansOfUserQuery,
     useDeletePlanMutation,
-    usePatchPlanMutation
+    usePatchPlanMutation,
+    useAddScenarioToPlanMutation,
+    useGetScenariosQuery
 } = api

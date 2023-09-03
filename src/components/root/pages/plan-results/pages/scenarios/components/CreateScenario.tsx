@@ -9,9 +9,16 @@ interface CreateScenarioProps {
 
 export default function CreateScenario(props: CreateScenarioProps) {
     const { register, handleSubmit } = useForm<Scenario>()
+
+    function submitHandler(scenarioArg: Scenario): void {
+        const scenario = { ...scenarioArg }
+        scenario.creationDate = new Date().toISOString()
+
+        props.onDoneClick(scenario)
+    }
     
     return (
-        <form onSubmit={handleSubmit(props.onDoneClick)}>
+        <form onSubmit={handleSubmit(submitHandler)}>
             <Flex 
                 flexDirection='column' 
                 border='1px solid #e1e1dc'
@@ -26,8 +33,8 @@ export default function CreateScenario(props: CreateScenarioProps) {
                     <Text fontWeight='bold'>Scenario Trigger</Text>
                     <Text>Property</Text>
                     <Select {...register('trigger.property')} placeholder='Trigger'>
-                        <option value='age'>Age</option>
-                        <option value='networth'>Networth</option>
+                        <option value='AGE'>Age</option>
+                        <option value='NETWORTH'>Networth</option>
                     </Select>
 
                     <Input 
@@ -42,15 +49,15 @@ export default function CreateScenario(props: CreateScenarioProps) {
                 <Flex flexDirection='column' gap='8px'>
                     <Text fontWeight='bold'>Scenario Event</Text>
                     <Select {...register('event.property')} placeholder='Property'>
-                        <option value='income'>Income</option>
-                        <option value='spending'>Spending</option>
-                        <option value='networth'>Networth</option>
+                        <option value='INCOME'>Income</option>
+                        <option value='SPENDING'>Spending</option>
+                        <option value='NETWORTH'>Networth</option>
                     </Select>
 
                     <Select {...register('event.action')} placeholder='Action'>
-                        <option value='set'>Set</option>
-                        <option value='increase'>Increase</option>
-                        <option value='decrease'>Decrease</option>
+                        <option value='SET'>Set</option>
+                        <option value='INCREASE'>Increase</option>
+                        <option value='DECREASE'>Decrease</option>
                     </Select>
 
                     <Input

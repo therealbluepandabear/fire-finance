@@ -1,12 +1,8 @@
 import { Flex, Text, forwardRef, Button, HTMLChakraProps, useDisclosure, Divider, Popover, PopoverTrigger, PopoverContent, PopoverBody, FocusLock, Box, IconButton, Tab, TabList, Tabs, TabPanel, TabPanels } from '@chakra-ui/react'
 import { useState, PropsWithChildren, useEffect } from 'react'
 import { MdBeachAccess, MdFlag, MdOutlineOpenInFull, MdCloseFullscreen, MdAdd, MdOutlineFileDownload, MdChecklist, MdStarOutline, MdDashboard, MdBarChart, MdOutlineDashboard, MdAutoGraph } from 'react-icons/md'
-import { TimeRangeFilter, PlanEngineOutputs, getExcelWorkbook, PlanEngine, RetirementProjectionPoint } from '../../../../../../models/retirement-calculator'
-import { useAppSelector } from '../../../../../../store'
-import { Goal } from '../../../../../../store/plans-slice'
+import { TimeRangeFilter, PlanEngineOutputs, getExcelWorkbook, PlanEngine, ProjectionPoint } from '../../../../../../models/retirement-calculator'
 import { saveToFile } from '../../../../../../utils'
-import ScrollableBox from '../../../../../ui/ScrollableBox'
-import GoalListItem from './components/GoalListItem'
 import NewGoalModal from './components/NewGoalModal'
 import PlanChart from './components/PlanChart'
 import ResultSummary from './components/ResultSummary'
@@ -38,9 +34,9 @@ interface TimeRangeFilterOptionsProps {
 }
 
 function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
-    const options: TimeRangeFilter[] = ['1Y', '4Y', '12Y', 'Max']
+    const options: TimeRangeFilter[] = ['1Y', '4Y', '12Y', 'MAX']
 
-    const [selectedOption, setSelectedOption] = useState<TimeRangeFilter>('Max')
+    const [selectedOption, setSelectedOption] = useState<TimeRangeFilter>('MAX')
 
     return (
         <Flex gap='12px'>
@@ -66,26 +62,13 @@ function TimeRangeFilterOptions(props: TimeRangeFilterOptionsProps) {
     )
 }
 
-const goals: Goal[] = []
-
-function generateGoals(outputs: PlanEngineOutputs): void {
-    const retirementTargetNetworth = outputs.data.find(point => point.age === outputs.summary.retirementAge)?.networth ?? 0
-
-    goals.push({ label: 'Retirement', icon: <MdBeachAccess />, targetNetworth: retirementTargetNetworth })
-    goals.push({ label: 'Financial Independence', icon: <MdFlag />, targetNetworth: outputs.summary.fireNumber })
-}
-
 interface DashboardPageProps {
     outputs: PlanEngineOutputs
 }
 
 export default function DashboardPage(props: DashboardPageProps) {
-    const [timeRangeFilter, setTimeRangeFilter] = useState<TimeRangeFilter>('Max')
+    const [timeRangeFilter, setTimeRangeFilter] = useState<TimeRangeFilter>('MAX')
     const [showNewGoalDialog, setShowNewGoalDialog] = useState(false)
-
-    if (goals.length === 0) {
-        generateGoals(props.outputs)
-    }
 
     const { onOpen, onClose, isOpen } = useDisclosure()
 
@@ -142,7 +125,7 @@ export default function DashboardPage(props: DashboardPageProps) {
                         </Box>
 
                         <Flex height={{ base: '320px', md: '580px' }} width='100%'>
-                            <PlanChart data={props.outputs.data} goals={goals} filter={timeRangeFilter} />
+                            <PlanChart checkpoints={props.outputs.checkpoints} data={props.outputs.data} filter={timeRangeFilter} />
                         </Flex>
                     </Section>
                 </Flex>

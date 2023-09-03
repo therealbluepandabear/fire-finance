@@ -41,7 +41,7 @@ type DialogContext = { data?: NewPlan, type: 'rename' | 'editDescription' | 'del
 
 interface PlansPageProps {
     userId: string
-    onPlanCreated: (inputs: PlanEngineInputs) => void
+    onPlanCreated: (plan: NewPlan) => void
 }
 
 export default function PlansPage(props: PlansPageProps) {
@@ -77,7 +77,7 @@ export default function PlansPage(props: PlansPageProps) {
     async function onContextModalClose(): Promise<void> {
         setDialogContext(null)
 
-        if (dialogContext!!.type !== 'new-plan') {
+        if (dialogContext!.type !== 'new-plan') {
             await refetchPlans()
         }
     }
@@ -97,16 +97,18 @@ export default function PlansPage(props: PlansPageProps) {
                 name: planName, 
                 inputs: inputs as PlanEngineInputs, 
                 creationDate: new Date().toISOString(),
-                isStarred: false
+                isStarred: false,
+                scenarios: []
             }
         })
+
         await refetchPlans()
 
-        props.onPlanCreated(inputs)
+        props.onPlanCreated(plans!.at(-1)!)
     }
 
     function planCardClickHandler(plan: NewPlan): void {
-        props.onPlanCreated(plan.inputs)
+        props.onPlanCreated(plan)
     }
 
     function newPlanDialogCancelHandler(): void {
@@ -119,9 +121,9 @@ export default function PlansPage(props: PlansPageProps) {
             minHeight='0'
             overflowY='auto'
         >
-            {dialogContext && dialogContext.type === 'rename' && <RenamePlanModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
-            {dialogContext && dialogContext.type === 'editDescription' && <EditDescriptionModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
-            {dialogContext && dialogContext.type === 'delete' && <DeletePlanModal plan={dialogContext.data!!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'rename' && <RenamePlanModal plan={dialogContext.data!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'editDescription' && <EditDescriptionModal plan={dialogContext.data!} onClose={onContextModalClose} />}
+            {dialogContext && dialogContext.type === 'delete' && <DeletePlanModal plan={dialogContext.data!} onClose={onContextModalClose} />}
             {dialogContext && dialogContext.type === 'new-plan' && <NewPlanDialog onCancel={newPlanDialogCancelHandler} onClose={newPlanDialogCloseHandler} />}
 
             <Flex 
@@ -138,7 +140,7 @@ export default function PlansPage(props: PlansPageProps) {
 
                         <Flex 
                             display={{ base: 'flex', md: 'none' }}
-                            marginBottom='36px'
+                            marginBottom='16px'
                         >
                             <Tabs 
                                 marginBottom='16px' 

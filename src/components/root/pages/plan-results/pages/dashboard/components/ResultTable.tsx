@@ -1,15 +1,15 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { RetirementProjectionPoint } from '../../../../../../../models/retirement-calculator'
+import { ProjectionPoint } from '../../../../../../../models/retirement-calculator'
 import { formatCurrency } from '../../../../../../../utils'
 import DataTable from '../../../../../../ui/DataTable'
 
 
 interface ResultTableProps {
-    data: RetirementProjectionPoint[]
+    data: ProjectionPoint[]
 }
 
 export default function ResultTable(props: ResultTableProps) {
-    const columnHelper = createColumnHelper<RetirementProjectionPoint>()
+    const columnHelper = createColumnHelper<ProjectionPoint>()
 
     const columns = [
         columnHelper.accessor('age', {

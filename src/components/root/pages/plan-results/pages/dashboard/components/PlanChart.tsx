@@ -1,8 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { TooltipProps, ResponsiveContainer, AreaChart, CartesianGrid, Area, XAxis, YAxis, Tooltip, ReferenceDot } from 'recharts'
-import GoalIndicator from './GoalIndicator'
-import { RetirementProjectionPoint, TimeRangeFilter, filterTimeRange } from '../../../../../../../models/retirement-calculator'
-import { Goal } from '../../../../../../../store/plans-slice'
+import PlanCheckpointIndicator from './PlanCheckpointIndicator'
+import { PlanCheckpoint, ProjectionPoint, TimeRangeFilter, filterTimeRange } from '../../../../../../../models/retirement-calculator'
 import { formatCurrency, findIndexClosestToValue } from '../../../../../../../utils'
 
 interface TooltipRowProps {
@@ -39,9 +38,9 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, number>):
 }
 
 interface PlanChartProps {
-    data: RetirementProjectionPoint[]
+    data: ProjectionPoint[]
+    checkpoints: PlanCheckpoint[]
     filter: TimeRangeFilter
-    goals: Goal[]
 }
 
 export default function PlanChart(props: PlanChartProps) {
@@ -82,12 +81,12 @@ export default function PlanChart(props: PlanChartProps) {
                     content={<ChartTooltip />}
                 />
 
-                {props.goals.map((goal, index) => (
+                {props.checkpoints.map((checkpoint, index) => (
                     <ReferenceDot
                         key={index}
-                        shape={obj => <GoalIndicator icon={goal.icon} cx={obj.cx} cy={obj.cy} />}
-                        x={findIndexClosestToValue(data.map(point => point.networth), goal.targetNetworth)}
-                        y={goal.targetNetworth}
+                        shape={obj => <PlanCheckpointIndicator checkpoint={checkpoint} cx={obj.cx} cy={obj.cy} />}
+                        x={findIndexClosestToValue(data.map(point => point.networth), checkpoint.point.networth)}
+                        y={checkpoint.point.networth}
                     />
                 ))}
             </AreaChart>

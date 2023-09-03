@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { User } from './api'
 import LoginPage from './components/root/pages/login'
 import RootPage from './components/root/index'
 
@@ -8,7 +7,7 @@ function App() {
 
     useEffect(() => {
         if (localStorage.getItem('loggedInUserId')) {
-            setUserId(localStorage.getItem('loggedInUserId')!!)
+            setUserId(localStorage.getItem('loggedInUserId')!)
         } 
     }, [])
 
@@ -17,10 +16,11 @@ function App() {
         localStorage.setItem('loggedInUserId', id)
     }
 
+    localStorage.removeItem('AdvancedInputs')
+
     return (
         <>
             {userId ? <RootPage userId={userId} /> : <LoginPage onLogin={loginClickHandler} />}
-            {/* <RootPage user={{ id: 0, email: 'todoescode@gmail.com', password: 'DFA25013' }} /> */}
         </>
     )
 }

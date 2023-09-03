@@ -40,7 +40,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
         const options: IntersectionObserverInit = {
             rootMargin: '0px',
             threshold: 1,
-            root: rootRef.current!!
+            root: rootRef.current!
         }
         
         const observer = new IntersectionObserver(
@@ -50,7 +50,7 @@ export default function DataTable<Data extends object>(props: DataTableProps<Dat
             options
         )
 
-        const target = targetRef.current!!
+        const target = targetRef.current!
         observer.observe(target)
 
         return () => observer.disconnect()

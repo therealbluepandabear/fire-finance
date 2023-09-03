@@ -34,9 +34,10 @@ test('outputs data correct', () => {
 
 test(`scenarios action 'set' works`, () => {
     planEngine.getScenarioEngine().addScenario({ 
-        name: 'Test Scenario 1', 
-        trigger: { property: 'age', value: 25 },
-        event: { property: 'networth', action: 'set', amount: 15_000 }
+        name: 'Test Scenario 1',
+        creationDate: new Date().toISOString(),
+        trigger: { property: 'AGE', value: 25 },
+        event: { property: 'NETWORTH', action: 'SET', amount: 15_000 }
     })
 
     const outputs = planEngine.calculate()
@@ -47,8 +48,9 @@ test(`scenarios action 'set' works`, () => {
 test(`scenarios action 'increase' works`, () => {
     planEngine.getScenarioEngine().addScenario({
         name: 'Test Scenario 1',
-        trigger: { property: 'age', value: 30 },
-        event: { property: 'networth', action: 'increase', amount: 30_000 }
+        creationDate: new Date().toISOString(),
+        trigger: { property: 'AGE', value: 30 },
+        event: { property: 'NETWORTH', action: 'INCREASE', amount: 30_000 }
     })
 
     const outputs = planEngine.calculate()
@@ -59,8 +61,9 @@ test(`scenarios action 'increase' works`, () => {
 test(`scenarios action 'decrease' works`, () => {
     planEngine.getScenarioEngine().addScenario({
         name: 'Test Scenario 1',
-        trigger: { property: 'age', value: 23 },
-        event: { property: 'networth', action: 'decrease', amount: 10_000 }
+        creationDate: new Date().toISOString(),
+        trigger: { property: 'AGE', value: 23 },
+        event: { property: 'NETWORTH', action: 'DECREASE', amount: 10_000 }
     })
 
     const outputs = planEngine.calculate()

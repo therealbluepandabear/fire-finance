@@ -1,8 +1,8 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react'
-import Card from '../../../../../../ui/Card'
-import { MdAutoGraph, MdDelete, MdMoreVert, MdSignpost } from 'react-icons/md'
-import { useState } from 'react'
-import { Scenario } from '../../../../../../../models/retirement-calculator'
+import { MdMoreVert, MdSignpost } from 'react-icons/md'
+import { Scenario } from 'models/retirement-calculator'
+import { formatISODateToShortDateString } from 'utils'
+import Card from 'components/ui/Card'
 
 interface ScenarioListItemProps {
     scenario: Scenario
@@ -28,7 +28,7 @@ export default function ScenarioListItem(props: ScenarioListItemProps) {
                     whiteSpace='nowrap'
                 >{props.scenario.name}</Text>
 
-                <Text color='rgb(22, 135, 94)' fontSize='sm'>12 Jun 2023</Text>
+                <Text color='rgb(22, 135, 94)' fontSize='sm'>{formatISODateToShortDateString(props.scenario.creationDate)}</Text>
             </Flex>
 
             <IconButton

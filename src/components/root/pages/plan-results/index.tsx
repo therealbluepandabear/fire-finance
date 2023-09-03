@@ -5,13 +5,14 @@ import ScenariosPage from './pages/scenarios'
 import DashboardPage from './pages/dashboard'
 import { PlanEngine, PlanEngineInputs, PlanEngineOutputs, Scenario } from '../../../../models/retirement-calculator'
 import { useEffect, useMemo, useState } from 'react'
+import { NewPlan } from '../../../../api'
 
 export interface PlanResultsPageProps {
-    inputs: PlanEngineInputs
+    plan: NewPlan
 }
 
 export default function PlanResultsPage(props: PlanResultsPageProps) {
-    const engine = useMemo(() => new PlanEngine({...props.inputs, maximumAge: 40 }), [])
+    const engine = useMemo(() => new PlanEngine(props.plan.inputs), [])
     
     const [outputs, setOutputs] = useState<PlanEngineOutputs>(engine.calculate())
     
@@ -21,6 +22,8 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
         callback(engine)
         setOutputs(engine.calculate())
     }
+
+    console.log(props.plan.inputs)
 
     return (
         <ScrollableBox
@@ -73,7 +76,7 @@ export default function PlanResultsPage(props: PlanResultsPageProps) {
                     </TabPanel>
 
                     <TabPanel padding='0' margin='0'>
-                        <ScenariosPage updateEngine={engineUpdateHandler}/>
+                        <ScenariosPage plan={props.plan} updateEngine={engineUpdateHandler}/>
                     </TabPanel>
                 </TabPanels>
             </Tabs>

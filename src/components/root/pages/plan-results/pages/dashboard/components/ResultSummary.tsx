@@ -1,11 +1,11 @@
 import { Box, Flex, Grid } from '@chakra-ui/react'
 import { MdBeachAccess, MdSchedule, MdLocalFireDepartment, MdFlag, MdOutlineBeachAccess, MdOutlineFlag, MdOutlineLocalFireDepartment, MdLockClock, MdTimer, MdFireExtinguisher } from 'react-icons/md'
 import SummaryCard from './SummaryCard'
-import { FIRESummary } from '../../../../../../../models/retirement-calculator'
+import { PlanSummary } from '../../../../../../../models/retirement-calculator'
 import { formatCurrency } from '../../../../../../../utils'
 
 interface ResultSummaryProps {
-    summary: FIRESummary
+    summary: PlanSummary
 }
 
 export default function ResultSummary(props: ResultSummaryProps) {

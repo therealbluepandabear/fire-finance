@@ -1,7 +1,7 @@
 import { Flex, Button, useBreakpointValue, IconButton } from '@chakra-ui/react'
 import { MdAutoGraph, MdChecklist, MdHelpOutline, MdMonitor, MdOutlineCalculate, MdOutlineSchool, MdPerson, MdSettings, MdSupportAgent } from 'react-icons/md'
 import Menu, { MenuItem, MenuOverlay, MenuSubItem } from '../ui/Menu'
-import { User } from '../../api'
+import { NewPlan, User } from '../../api'
 import AppBar from '../ui/AppBar'
 import { useState } from 'react'
 import PlansPage from './pages/plans'
@@ -37,8 +37,8 @@ export interface RootPageProps {
 }
 
 export default function RootPage(props: RootPageProps) {
-    function planCreatedHandler(inputs: PlanEngineInputs): void {
-        setCurrentPage(<PlanResultsPage inputs={inputs} />)
+    function planCreatedHandler(plan: NewPlan): void {
+        setCurrentPage(<PlanResultsPage plan={plan} />)
     }
 
     const [currentTitle, setCurrentTitle] = useState('Plans')

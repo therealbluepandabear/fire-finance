@@ -47,3 +47,15 @@ export function findIndexClosestToValue(array: number[], value: number): number 
 
     return arr.indexOf(min)
 }
+
+export function formatISODateToShortDateString(isoString: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    }
+
+    const date = new Date(isoString)
+    
+    return date.toLocaleString('en-US', options)
+}

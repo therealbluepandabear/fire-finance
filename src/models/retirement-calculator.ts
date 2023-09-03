@@ -28,9 +28,9 @@ class ScenarioEngine implements PlanEngineObserver {
     private applyAction(base: number, amount: ScenarioEvent['amount'], action: ScenarioEvent['action']): number {
         let newNumber = amount
 
-        if (action === 'increase') {
+        if (action === 'INCREASE') {
             newNumber = base + amount
-        } else if (action === 'decrease') {
+        } else if (action === 'DECREASE') {
             newNumber = base - amount
         }
 
@@ -39,25 +39,20 @@ class ScenarioEngine implements PlanEngineObserver {
 
     update(engineState: PlanEngineState): void {
         for (const scenario of this.scenarios) {
-            const isAgeMatch = scenario.trigger.property === 'age' && engineState.age === scenario.trigger.value
+            const isAgeMatch = scenario.trigger.property === 'AGE' && engineState.age === scenario.trigger.value
 
-            if (isAgeMatch) {
-                console.log(scenario)
-                console.log(engineState.age)
-            }
-
-            const isNetworthMatch = !this.triggeredScenarios.includes(scenario) && scenario.trigger.property === 'networth' && engineState.total.networth >= scenario.trigger.value
+            const isNetworthMatch = !this.triggeredScenarios.includes(scenario) && scenario.trigger.property === 'NETWORTH' && engineState.total.networth >= scenario.trigger.value
 
             if (isAgeMatch || isNetworthMatch) {
-                if (scenario.event.property === 'networth') {
+                if (scenario.event.property === 'NETWORTH') {
                     let adjustedNetworth = this.applyAction(engineState.total.networth, scenario.event.amount, scenario.event.action)
 
                     engineState.total = this.adjustTotal(adjustedNetworth)
-                } else if (scenario.event.property === 'income') {
+                } else if (scenario.event.property === 'INCOME') {
                     let adjustedIncome = this.applyAction(engineState.annualIncome, scenario.event.amount, scenario.event.action)
 
                     engineState.annualIncome = adjustedIncome
-                } else if (scenario.event.property === 'spending') {
+                } else if (scenario.event.property === 'SPENDING') {
                     let adjustedSpending = this.applyAction(engineState.annualSpending, scenario.event.amount, scenario.event.action)
 
                     engineState.annualSpending = adjustedSpending
@@ -84,6 +79,7 @@ class ScenarioEngine implements PlanEngineObserver {
 }
 
 class StateRecorderEngine implements PlanEngineObserver {
+    private previousEngineState: PlanEngineState | null = null
     private readonly inputs: PlanEngineInputs
 
     constructor(inputs: PlanEngineInputs) {
@@ -91,12 +87,23 @@ class StateRecorderEngine implements PlanEngineObserver {
     }
 
     update(engineState: PlanEngineState): void {
-        engineState.data.push({ 
+        const projectionPoint: ProjectionPoint = {
             age: engineState.age,
-            year: engineState.year, 
-            yearsElapsed: engineState.age - this.inputs.age, 
-            networth: engineState.total.networth 
-        })
+            year: engineState.year,
+            yearsElapsed: engineState.age - this.inputs.age,
+            networth: engineState.total.networth
+        }
+
+        if (!this.previousEngineState?.hasRetired && engineState.hasRetired) {
+            engineState.checkpoints.push({
+                text: '...',
+                type: 'MILESTONE',
+                point: engineState.data.at(-1)!
+            })
+        }
+
+        engineState.data.push(projectionPoint)
+        this.previousEngineState = engineState
     }
 }
 
@@ -113,7 +120,7 @@ export class PlanEngine {
         this.engineState = this.initEngineState()
         
         this.observers.push(this.scenarioEngine)
-        this.observers.push(new StateRecorderEngine(this.inputs))
+        this.observers.push(new StateRecorderEngine(this.inputs)) // make sure it's added after scenario engine
     }
 
     private notifyObservers(): void {
@@ -142,6 +149,7 @@ export class PlanEngine {
             year: new Date().getFullYear(),
 
             data: [],
+            checkpoints: [],
 
             annualIncome: this.inputs.annualIncome,
             annualSpending: this.inputs.annualSpending
@@ -272,7 +280,8 @@ export class PlanEngine {
                 retirementAge: this.inputs.retirementAge ?? this.engineState.age,
                 yearsTillRetirement: (this.inputs.retirementAge ?? this.engineState.age) - this.inputs.age
             },
-            data: this.engineState.data
+            data: this.engineState.data,
+            checkpoints: this.engineState.checkpoints
         }
     }
 
@@ -317,10 +326,10 @@ export function getExcelWorkbook(outputs: PlanEngineOutputs): Workbook {
     return workbook
 }
 
-export type TimeRangeFilter = '1Y' | '4Y' | '12Y' | 'Max'
+export type TimeRangeFilter = '1Y' | '4Y' | '12Y' | 'MAX'
 
-export function filterTimeRange(data: RetirementProjectionPoint[], filter: TimeRangeFilter): RetirementProjectionPoint[] {
-    if (filter === 'Max') {
+export function filterTimeRange(data: ProjectionPoint[], filter: TimeRangeFilter): ProjectionPoint[] {
+    if (filter === 'MAX') {
         return data
     }
 
@@ -337,18 +346,19 @@ export function filterTimeRange(data: RetirementProjectionPoint[], filter: TimeR
 }
 
 interface ScenarioTrigger {
-    property: 'age' | 'networth'
+    property: 'AGE' | 'NETWORTH'
     value: number
 }
 
 interface ScenarioEvent {
-    property: 'income' | 'spending' | 'networth'
-    action: 'set' | 'increase' | 'decrease'
+    property: 'INCOME' | 'SPENDING' | 'NETWORTH'
+    action: 'SET' | 'INCREASE' | 'DECREASE'
     amount: number
 }
 
 export interface Scenario {
     name: string
+    creationDate: string
     trigger: ScenarioTrigger
     event: ScenarioEvent
 }
@@ -360,8 +370,15 @@ interface Total {
     cash: number
 }
 
+export interface PlanCheckpoint {
+    text: string
+    type: 'MILESTONE' | 'RETIREMENT' | 'FINANCIAL-INDEPENDENCE'
+    point: ProjectionPoint
+}
+
 interface PlanEngineState {
-    data: RetirementProjectionPoint[]
+    data: ProjectionPoint[]
+    checkpoints: PlanCheckpoint[]
     age: number
     year: number
     total: Total
@@ -377,14 +394,14 @@ interface PlanEngineState {
     annualSpending: number
 }
 
-export interface RetirementProjectionPoint {
+export interface ProjectionPoint {
     age: number
     year: number
     yearsElapsed: number
     networth: number
 }
 
-export interface FIRESummary {
+export interface PlanSummary {
     fireAge: number
     fireNumber: number
     retirementAge: number
@@ -392,8 +409,9 @@ export interface FIRESummary {
 }
 
 export interface PlanEngineOutputs {
-    summary: FIRESummary
-    data: RetirementProjectionPoint[]
+    summary: PlanSummary
+    data: ProjectionPoint[]
+    checkpoints: PlanCheckpoint[]
 }
 
 export interface PlanEngineInputs {

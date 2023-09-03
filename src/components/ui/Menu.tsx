@@ -224,7 +224,7 @@ export default function Menu(props: MenuProps) {
                             {...props}
                         />
 
-                        {shouldShowSubItems(menuItem) && menuItem.subItems!!.map(subItem => (
+                        {shouldShowSubItems(menuItem) && menuItem.subItems!.map(subItem => (
                             <MenuItemDisplay
                                 key={index}
                                 isSelected={selectedItem.label === subItem.label}

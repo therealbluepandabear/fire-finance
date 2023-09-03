@@ -3,50 +3,243 @@ import {
     Flex,
     Input,
     Modal,
-    ModalBody,
     ModalCloseButton,
     ModalContent,
-    ModalFooter,
-    ModalHeader,
     ModalOverlay,
-    useBreakpointValue,
-    Text,
-    Portal
-} from '@chakra-ui/react'
-import { useState } from 'react'
-import { MdAttachMoney, MdBeachAccess, MdFace, MdMonitorHeart, MdPercent } from 'react-icons/md'
+    Text} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { MdArrowForward, MdAttachMoney, MdPercent, MdPerson } from 'react-icons/md'
 import { PlanEngineInputs } from '../../../../../../models/retirement-calculator'
 import StepBar from './StepBar'
-import StepPage, { InputModel } from './StepPage'
-import { FieldErrors } from 'react-hook-form'
+import { UseFormReset, UseFormSetValue, useForm } from 'react-hook-form'
+import FormInput from '../../../../../ui/FormInput'
+
+interface PlanNameInputProps {
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+function PlanNameInput(props: PlanNameInputProps) {
+    return (
+        <Input
+            marginTop='16px'
+            size='lg'
+            onChange={props.onChange}
+            height='65px'
+            letterSpacing='0.3px'
+            placeholder='Choose a name'
+        />
+    )
+}
 
 const iconColor = 'lightgray'
+const localStorageKey = 'new_plan_inputs'
 
-const stepInputModel: InputModel[][] = [
-    [
-        { key: 'age', defaultValue: '20', placeholder: 'Age', icon: <MdFace color={iconColor} /> },
-        { key: 'annualIncome', defaultValue: '70000', placeholder: 'Annual Income', icon: <MdAttachMoney color={iconColor} /> },
-        { key: 'annualSpending', defaultValue: '30000', placeholder: 'Annual Spending', icon: <MdAttachMoney color={iconColor} /> },
-        { key: 'networth', defaultValue: '0', placeholder: 'Networth', icon: <MdAttachMoney color={iconColor} /> }
-    ],
+function updateLocalStorage(inputs: Partial<PlanEngineInputs>): void {
+    let prevInputs: Partial<PlanEngineInputs> | null = null
 
-    [
-        { key: 'safeWithdrawalRate', inputType: 'percentage', defaultValue: '4', placeholder: 'Safe Withdrawal Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'inflationRate', inputType: 'percentage', defaultValue: '0', placeholder: 'Inflation Rate', icon: <MdPercent color={iconColor} /> }
-    ],
+    if (localStorage.getItem(localStorageKey)) {
+        prevInputs = JSON.parse(localStorage.getItem(localStorageKey)!) as Partial<PlanEngineInputs>
+    }
 
-    [
-        { key: 'stocksAllocationRate', inputType: 'percentage', defaultValue: '100', placeholder: 'Stocks Allocation Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'bondsAllocationRate', inputType: 'percentage', defaultValue: '0', placeholder: 'Bonds Allocation Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'cashAllocationRate', inputType: 'percentage', defaultValue: '0', placeholder: 'Cash Allocation Rate', icon: <MdPercent color={iconColor} /> }
-    ],
-    
-    [
-        { key: 'stocksReturnRate', inputType: 'percentage', defaultValue: '7',placeholder: 'Stocks Return Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'bondsReturnRate', inputType: 'percentage', defaultValue: '0', placeholder: 'Bonds Return Rate', icon: <MdPercent color={iconColor} /> },
-        { key: 'cashReturnRate', inputType: 'percentage', defaultValue: '0', placeholder: 'Cash Return Rate', icon: <MdPercent color={iconColor} /> }
-    ]
-]
+    localStorage.setItem(localStorageKey, JSON.stringify({ ...prevInputs, ...inputs }))
+}
+
+function loadLocalStorage(reset: UseFormSetValue<Partial<PlanEngineInputs>>): void {
+    if (localStorage.getItem(localStorageKey)) {
+        const item = JSON.parse(localStorage.getItem(localStorageKey)!) as Partial<PlanEngineInputs>
+
+        for (const key in item) {
+            const asKey = key as keyof Partial<PlanEngineInputs>
+
+            reset(asKey, item[asKey])
+        }
+    }
+}
+
+function BasicInfoInputs() {
+    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+
+    useEffect(() => {
+        loadLocalStorage(setValue)
+    }, [])
+
+    watch(inputs => {
+        updateLocalStorage(inputs)
+    })
+
+    return (
+        <>
+            <FormInput
+                placeholder='Age'
+                inputLeftElement={<MdPerson color={iconColor} />}
+                type='number'
+                {...register('age', { valueAsNumber: true })}
+            />
+            
+            <FormInput
+                placeholder='Annual Income'
+                inputLeftElement={<MdAttachMoney color={iconColor} />}
+                type='number'
+                {...register('annualIncome', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Annual Spending'
+                inputLeftElement={<MdAttachMoney color={iconColor} />}
+                type='number'
+                {...register('annualSpending', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Networth'
+                inputLeftElement={<MdAttachMoney color={iconColor} />}
+                type='number'
+                {...register('networth', { valueAsNumber: true })}
+            />
+        </>
+    )
+}
+
+function FinancialFactorsInputs() {
+    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+
+    useEffect(() => {
+        loadLocalStorage(setValue)
+    }, [])
+
+    watch(inputs => {
+        updateLocalStorage(inputs)
+    })
+
+    return (
+        <>
+            <FormInput
+                placeholder='Safe Withdrawal Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('safeWithdrawalRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Inflation Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('inflationRate', { valueAsNumber: true })}
+            />
+        </>
+    )
+}
+
+function AssetAllocationRateInputs() {
+    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+
+    useEffect(() => {
+        loadLocalStorage(setValue)
+    }, [])
+
+    watch(inputs => {
+        updateLocalStorage(inputs)
+    })
+
+    return (
+        <>
+            <FormInput
+                placeholder='Stocks Allocation Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('stocksAllocationRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Bonds Allocation Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('bondsAllocationRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Cash Allocation Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('cashAllocationRate', { valueAsNumber: true })}
+            />
+        </>
+    )
+}
+
+function AssetReturnRateInputs() {
+    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+
+    useEffect(() => {
+        loadLocalStorage(setValue)
+    }, [])
+
+    watch(inputs => {
+        updateLocalStorage(inputs)
+    })
+
+    return (
+        <>
+            <FormInput
+                placeholder='Stocks Return Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('stocksReturnRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Bonds Return Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('bondsReturnRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Cash Return Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('cashReturnRate', { valueAsNumber: true })}
+            />
+        </>
+    )
+}
+
+function AdvancedInputs() {
+    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+
+    useEffect(() => {
+        loadLocalStorage(setValue)
+    }, [])
+
+    watch(inputs => {
+        updateLocalStorage(inputs)
+    })
+
+    return (
+        <>
+            <FormInput
+                placeholder='Income Growth Rate'
+                inputLeftElement={<MdPercent color={iconColor} />}
+                type='number'
+                {...register('incomeGrowthRate', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Retirement Age'
+                inputLeftElement={<MdPerson color={iconColor} />}
+                type='number'
+                {...register('retirementAge', { valueAsNumber: true })}
+            />
+
+            <FormInput
+                placeholder='Maximum Age'
+                inputLeftElement={<MdPerson color={iconColor} />}
+                type='number'
+                {...register('maximumAge', { valueAsNumber: true })}
+            />
+        </>
+    )
+}
 
 interface PlanStepDialogProps {
     onCancel: () => void
@@ -54,111 +247,115 @@ interface PlanStepDialogProps {
 }
 
 export default function PlanStepDialog(props: PlanStepDialogProps) {
-    const totalSteps = stepInputModel.length + 1
+    const pages: JSX.Element[] = [
+        <PlanNameInput onChange={planNameInputChangeHandler} />,
+        <BasicInfoInputs />, 
+        <FinancialFactorsInputs />, 
+        <AssetAllocationRateInputs />,
+        <AssetReturnRateInputs />,
+        <AdvancedInputs />
+    ]
 
-    const [step, setStep] = useState(1)
-    const [inputs, setInputs] = useState<Partial<PlanEngineInputs>>()
+    const totalSteps = pages.length
 
     const [planName, setPlanName] = useState('')
+    const [step, setStep] = useState(1)
+
+    function planNameInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
+        setPlanName(e.target.value)
+    }
+
+    useEffect(() => {
+        localStorage.setItem(localStorageKey, JSON.stringify({
+            age: 20,
+            annualIncome: 70000,
+            annualSpending: 30000,
+            bondsAllocationRate: 0,
+            bondsReturnRate: 0,
+            cashAllocationRate: 0,
+            cashReturnRate: 0,
+            incomeGrowthRate: null,
+            inflationRate: 0,
+            maximumAge: null,
+            networth: 0,
+            retirementAge: null,
+            safeWithdrawalRate: 0.04,
+            stocksAllocationRate: 1,
+            stocksReturnRate: 0.07,
+        }))
+
+        return () => {
+            localStorage.removeItem(localStorageKey)
+        }
+    }, [])
 
     function updateStep(): void {
-        setStep(prevStep => prevStep + 1)
-    }
-
-    function revertStep(): void {
-        setStep(prevStep => prevStep - 1)
-    }
-
-    function nextClickHandler(): void {
-        updateStep()
-    
-    }
-
-    function inputsChangeHandler(data: Partial<PlanEngineInputs>, errors: FieldErrors<Partial<PlanEngineInputs>>): void {
-        setInputs(prevInputs => ({ ...prevInputs, ...data }))
-    }
-
-    function closeHandler(): void {
-        if (step === totalSteps) {
-            props.onClose(planName, inputs as PlanEngineInputs)
+        if (step < totalSteps) {
+            setStep(prevStep => prevStep + 1)
         } else {
-            props.onCancel()
+            props.onClose(planName, JSON.parse(localStorage.getItem(localStorageKey)!) as PlanEngineInputs)
         }
     }
 
-    function planNameInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
-        setPlanName(e.currentTarget.value)
+    function revertStep(): void {
+        if (step > 1) {
+            setStep(prevStep => prevStep - 1)
+        }
     }
 
     return (
         <Modal isOpen={true} onClose={() => {}} isCentered={true}>
             <ModalOverlay />
 
-            <ModalContent width={{ base: '90%', md: '' }}>
-                <Flex alignItems='center'>
-                    <ModalHeader
+            <ModalContent 
+                width={{ base: '100%', md: '700px' }} 
+                maxWidth='100%' 
+                height={{ base: '100%', md: '500px' }} 
+                overflow='clip'
+                borderRadius={{ base: '0px', md: '6px' }}
+            >
+                <Flex padding='24px' alignItems='center'>
+                    <Text
                         fontWeight='normal'
                         fontFamily='Manrope'
                         fontSize='2xl'
                         alignItems='center'
                         flexGrow={1}
-                    >New Plan</ModalHeader>
+                    >New Plan</Text>
 
-
-                    <ModalCloseButton 
-                        position='static' 
-                        marginEnd='16px' 
-                        onClick={closeHandler}
-                    />
+                    <ModalCloseButton onClick={props.onCancel} position='static' />
                 </Flex>
 
-                <StepBar step={step} totalSteps={totalSteps} />
-
-                <input type='text' style={{ display: 'none' }} />
-
-                <ModalBody>
-                    {step === 1 && (
-                        <Input
-                            fontFamily='Manrope'
-                            marginTop='16px'
-                            size='lg'
-                            height='65px'
-                            fontSize='2xl'
-                            letterSpacing='0.3px'
-                            placeholder='Choose a name'
-                            variant='flushed'
-                            value={planName}
-                            onChange={planNameInputChangeHandler}
-                        />
-                    )}
-
-                    {step > 1 && stepInputModel.map((inputs, index) => (
-                        step === (index + 2) && (
-                            <StepPage 
-                                key={index}
-                                inputModels={inputs} 
-                                onInputsChange={inputsChangeHandler} 
-                            />
-                        )
-                    ))}
-                </ModalBody>
-                        
-                <ModalFooter>
-                    <Flex gap='12px'>
-                        {step > 0 && (
-                            <Button onClick={() => (step > 1) ? revertStep() : closeHandler()}>
-                                {step === 1 ? 'Cancel' : 'Back'}
-                            </Button>
-                        )}
-
-                        <Button
-                            color='white'
-                            background='buttonPrimary'
-                            onClick={() => (step < totalSteps) ? nextClickHandler() : closeHandler()}>
-                            {step === totalSteps ? 'Done' : 'Next'}
-                        </Button>
+                <Flex flexGrow={1} flexDirection='column' padding='24px' paddingBottom='40px'>
+                    <Flex gap='12px' flexDirection='column'>
+                        {pages[step - 1]}
                     </Flex>
-                </ModalFooter>
+
+                    <Flex marginTop='auto' flexDirection='column' gap='56px'>
+                        <Flex marginLeft={{ base: '0px', md: 'auto' }} gap='8px'>
+                            <Button 
+                                background='white' 
+                                border='1px solid #e1e1dc' 
+                                onClick={revertStep}
+                                justifySelf={{ base: 'flex-start', md: 'flex-end' }}
+                            >
+                                {step === 1 ? 'Exit' : 'Back'}
+                            </Button>
+
+                            <Button 
+                                background='buttonPrimary' 
+                                color='white' 
+                                onClick={updateStep} 
+                                rightIcon={<MdArrowForward />}
+                                marginLeft={{ base: 'auto', md: '0px' }}
+                            >
+                                Continue
+                            </Button>
+                        </Flex>
+
+                        <StepBar step={step} totalSteps={totalSteps} />
+                    </Flex>
+                </Flex>
             </ModalContent>
         </Modal>
     )

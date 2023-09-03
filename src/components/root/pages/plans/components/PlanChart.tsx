@@ -1,9 +1,9 @@
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis } from 'recharts'
-import { RetirementProjectionPoint } from '../../../../../models/retirement-calculator'
+import { ProjectionPoint } from '../../../../../models/retirement-calculator'
 import { formatCurrency } from '../../../../../utils'
 
 interface PlanChartProps {
-    data: RetirementProjectionPoint[]
+    data: ProjectionPoint[]
 }
 
 export default function PlanChart(props: PlanChartProps) {

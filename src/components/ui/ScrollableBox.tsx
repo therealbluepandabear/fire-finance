@@ -5,23 +5,6 @@ export default function ScrollableBox({ children, ...props }: PropsWithChildren<
     return (
         <Flex 
             {...props}
-            sx={{
-                '::-webkit-scrollbar': {
-                    width: '9px',
-                    height: '9px',
-                    overflowY: 'auto'
-                },
-                '::-webkit-scrollbar-thumb:hover': {
-                    background: 'darkgray'
-                },
-                '::-webkit-scrollbar-thumb:active': {
-                    background: 'gray'
-                },
-                '::-webkit-scrollbar-thumb': {
-                    background: 'lightgray',
-                    borderRadius: '999px'
-                }
-            }}
         >
             {children}
         </Flex>
