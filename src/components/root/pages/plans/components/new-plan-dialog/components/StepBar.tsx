@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { range } from '../../../../../../utils'
+import { range } from '../../../../../../../utils'
 
 interface StepBarProps {
     step: number

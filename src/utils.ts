@@ -59,3 +59,18 @@ export function formatISODateToShortDateString(isoString: string): string {
     
     return date.toLocaleString('en-US', options)
 }
+
+export function accessNestedObject(object: object, path: string): any {
+    const split = path.split('.')
+    let toReturn: any = null
+
+    split.forEach((value, index) => {
+        if (index === 0) {
+            toReturn = object[value as keyof object]
+        } else {
+            toReturn = toReturn[value]
+        }
+    })
+
+    return toReturn
+}
