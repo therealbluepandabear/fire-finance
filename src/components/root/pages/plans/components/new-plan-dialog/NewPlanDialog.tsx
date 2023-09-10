@@ -6,13 +6,66 @@ import {
     ModalCloseButton,
     ModalContent,
     ModalOverlay,
+    Select,
     Text} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { MdArrowForward, MdAttachMoney, MdPercent, MdPerson } from 'react-icons/md'
 import { PlanEngineInputs } from '../../../../../../models/retirement-calculator'
 import StepBar from './StepBar'
-import { UseFormReset, UseFormSetValue, useForm } from 'react-hook-form'
-import FormInput from '../../../../../ui/FormInput'
+import { UseFormRegister, UseFormRegisterReturn, UseFormSetValue, useForm } from 'react-hook-form'
+import FormInput from 'components/ui/FormInput'
+
+const iconColor = 'lightgray'
+
+const rawInputsKey = 'new_plan_inputs_raw'
+const formattedInputsKey = 'new_plan_inputs_formatted'
+
+function updateLocalStorage(key: string, inputs: Partial<PlanEngineInputs>): void {
+    let prevInputs: Partial<PlanEngineInputs> | null = null
+
+    if (localStorage.getItem(key)) {
+        prevInputs = JSON.parse(localStorage.getItem(key)!) as Partial<PlanEngineInputs>
+    }
+
+    localStorage.setItem(key, JSON.stringify({ ...prevInputs, ...inputs }))
+}
+
+function updateFormattedInputs(inputs: Partial<PlanEngineInputs>) {
+    updateLocalStorage(formattedInputsKey, inputs)
+}
+
+function updateRawInputs(inputs: Partial<PlanEngineInputs>): void {
+    updateLocalStorage(rawInputsKey, inputs)
+}
+
+function loadLocalStorage(reset: UseFormSetValue<Partial<PlanEngineInputs>>): void {
+    if (localStorage.getItem(rawInputsKey)) {
+        const item = JSON.parse(localStorage.getItem(rawInputsKey)!) as Partial<PlanEngineInputs>
+
+        for (const key in item) {
+            const asKey = key as keyof Partial<PlanEngineInputs>
+
+            reset(asKey, item[asKey])
+        }
+    }
+}
+
+function shouldShowDefaultValue(key: keyof PlanEngineInputs): boolean {
+    if (localStorage.getItem(rawInputsKey)) {
+        return (JSON.parse(localStorage.getItem(rawInputsKey)!) as Partial<PlanEngineInputs>)[key] === undefined
+    }
+    return true
+}
+
+function globalOnInput(e: React.FormEvent<HTMLInputElement>, percentage: boolean = false): void {
+    let newValue = parseInt(e.currentTarget.value)
+
+    if (percentage) {
+        newValue /= 100
+    }
+
+    updateFormattedInputs({ [e.currentTarget.name]: newValue })
+}
 
 interface PlanNameInputProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -31,29 +84,42 @@ function PlanNameInput(props: PlanNameInputProps) {
     )
 }
 
-const iconColor = 'lightgray'
-const localStorageKey = 'new_plan_inputs'
-
-function updateLocalStorage(inputs: Partial<PlanEngineInputs>): void {
-    let prevInputs: Partial<PlanEngineInputs> | null = null
-
-    if (localStorage.getItem(localStorageKey)) {
-        prevInputs = JSON.parse(localStorage.getItem(localStorageKey)!) as Partial<PlanEngineInputs>
-    }
-
-    localStorage.setItem(localStorageKey, JSON.stringify({ ...prevInputs, ...inputs }))
+interface LocalInputProps {
+    placeholder: string
+    icon: JSX.Element
+    register: UseFormRegisterReturn
 }
 
-function loadLocalStorage(reset: UseFormSetValue<Partial<PlanEngineInputs>>): void {
-    if (localStorage.getItem(localStorageKey)) {
-        const item = JSON.parse(localStorage.getItem(localStorageKey)!) as Partial<PlanEngineInputs>
+function LocalInput(props: LocalInputProps) {
+    return (
+        <FormInput
+            placeholder={props.placeholder}
+            inputLeftElement={props.icon}
+            type='number'
+            onInput={globalOnInput}
+            defaultValue={shouldShowDefaultValue(props.register.name as keyof PlanEngineInputs) ? defaultTextualInput[props.register.name as keyof PlanEngineInputs]?.toString() : undefined}
+            {...props.register}
+        />
+    )
+}
 
-        for (const key in item) {
-            const asKey = key as keyof Partial<PlanEngineInputs>
-
-            reset(asKey, item[asKey])
-        }
-    }
+// IMPORTANT: Percentages are formatted differently as this is a textual input :)
+const defaultTextualInput: PlanEngineInputs = {
+    age: 20,
+    annualIncome: 70_000,
+    annualSpending: 30_000,
+    networth: 0,
+    withdrawalStrategy: { type: 'DEFAULT', safeWithdrawalRate: 0.04 },
+    inflationRate: 0,
+    stocksAllocationRate: 100,
+    bondsAllocationRate: 0,
+    cashAllocationRate: 0,
+    stocksReturnRate: 7,
+    bondsReturnRate: 0,
+    cashReturnRate: 0,
+    maximumAge: 100,
+    retirementAge: 70,
+    incomeGrowthRate: 0
 }
 
 function BasicInfoInputs() {
@@ -64,67 +130,93 @@ function BasicInfoInputs() {
     }, [])
 
     watch(inputs => {
-        updateLocalStorage(inputs)
+        updateRawInputs(inputs as Partial<PlanEngineInputs>)
     })
 
     return (
         <>
-            <FormInput
+            <LocalInput
                 placeholder='Age'
-                inputLeftElement={<MdPerson color={iconColor} />}
-                type='number'
-                {...register('age', { valueAsNumber: true })}
+                icon={<MdPerson color={iconColor} />}
+                register={register('age')}
             />
             
-            <FormInput
+            <LocalInput
                 placeholder='Annual Income'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-                type='number'
-                {...register('annualIncome', { valueAsNumber: true })}
+                icon={<MdAttachMoney color={iconColor} />}
+                register={register('annualIncome')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Annual Spending'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-                type='number'
-                {...register('annualSpending', { valueAsNumber: true })}
+                icon={<MdAttachMoney color={iconColor} />}
+                register={register('annualSpending')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Networth'
-                inputLeftElement={<MdAttachMoney color={iconColor} />}
-                type='number'
-                {...register('networth', { valueAsNumber: true })}
+                icon={<MdAttachMoney color={iconColor} />}
+                register={register('networth')}
             />
         </>
     )
 }
 
 function FinancialFactorsInputs() {
-    const { register, setValue, watch } = useForm<Partial<PlanEngineInputs>>()
+    const { register, setValue, watch, unregister } = useForm<Partial<PlanEngineInputs>>()
+
+    const withdrawalStrategyType = watch('withdrawalStrategy.type')
 
     useEffect(() => {
         loadLocalStorage(setValue)
     }, [])
 
     watch(inputs => {
-        updateLocalStorage(inputs)
+        updateRawInputs(inputs as Partial<PlanEngineInputs>)
     })
+
+    function selectChangeHandler(): void {
+        // not the cleanest of code, but will do for now
+        unregister('withdrawalStrategy.amount')
+        unregister('withdrawalStrategy.safeWithdrawalRate')
+    }
 
     return (
         <>
-            <FormInput
-                placeholder='Safe Withdrawal Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('safeWithdrawalRate', { valueAsNumber: true })}
-            />
+            <Select {...register('withdrawalStrategy.type', { onChange: selectChangeHandler })} >
+                <option value='DEFAULT'>Default</option>
+                <option value='FIXED_PERCENTAGE'>Fixed Percentage</option>
+                <option value='FIXED_DOLLAR'>Fixed Dollar</option>
+            </Select>
 
-            <FormInput
+            {withdrawalStrategyType === 'FIXED_DOLLAR' && (
+                <LocalInput 
+                    placeholder='Amount'
+                    icon={<MdAttachMoney color={iconColor} />}
+                    register={register('withdrawalStrategy.amount')}
+                />
+            )}
+
+            {withdrawalStrategyType === 'FIXED_PERCENTAGE' && (
+                <LocalInput
+                    placeholder='Amount'
+                    icon={<MdPercent color={iconColor} />}
+                    register={register('withdrawalStrategy.amount')}
+                />
+            )}
+
+            {withdrawalStrategyType === 'DEFAULT' && (
+                <LocalInput
+                    placeholder='Safe Withdrawal Rate'
+                    icon={<MdPercent color={iconColor} />}
+                    register={register('withdrawalStrategy.safeWithdrawalRate')}
+                />
+            )}
+
+            <LocalInput
                 placeholder='Inflation Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('inflationRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('inflationRate')}
             />
         </>
     )
@@ -138,30 +230,27 @@ function AssetAllocationRateInputs() {
     }, [])
 
     watch(inputs => {
-        updateLocalStorage(inputs)
+        updateRawInputs(inputs as Partial<PlanEngineInputs>)
     })
 
     return (
         <>
-            <FormInput
+            <LocalInput
                 placeholder='Stocks Allocation Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('stocksAllocationRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('stocksAllocationRate')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Bonds Allocation Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('bondsAllocationRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('bondsAllocationRate')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Cash Allocation Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('cashAllocationRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('cashAllocationRate')}
             />
         </>
     )
@@ -175,30 +264,27 @@ function AssetReturnRateInputs() {
     }, [])
 
     watch(inputs => {
-        updateLocalStorage(inputs)
+        updateRawInputs(inputs as Partial<PlanEngineInputs>)
     })
 
     return (
         <>
-            <FormInput
+            <LocalInput
                 placeholder='Stocks Return Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('stocksReturnRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('stocksReturnRate')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Bonds Return Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('bondsReturnRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('bondsReturnRate')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Cash Return Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('cashReturnRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('cashReturnRate')}
             />
         </>
     )
@@ -212,30 +298,27 @@ function AdvancedInputs() {
     }, [])
 
     watch(inputs => {
-        updateLocalStorage(inputs)
+        updateRawInputs(inputs as Partial<PlanEngineInputs>)
     })
 
     return (
         <>
-            <FormInput
+            <LocalInput
                 placeholder='Income Growth Rate'
-                inputLeftElement={<MdPercent color={iconColor} />}
-                type='number'
-                {...register('incomeGrowthRate', { valueAsNumber: true })}
+                icon={<MdPercent color={iconColor} />}
+                register={register('incomeGrowthRate')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Retirement Age'
-                inputLeftElement={<MdPerson color={iconColor} />}
-                type='number'
-                {...register('retirementAge', { valueAsNumber: true })}
+                icon={<MdPerson color={iconColor} />}
+                register={register('retirementAge')}
             />
 
-            <FormInput
+            <LocalInput
                 placeholder='Maximum Age'
-                inputLeftElement={<MdPerson color={iconColor} />}
-                type='number'
-                {...register('maximumAge', { valueAsNumber: true })}
+                icon={<MdPerson color={iconColor} />}
+                register={register('maximumAge')}
             />
         </>
     )
@@ -253,7 +336,7 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
         <FinancialFactorsInputs />, 
         <AssetAllocationRateInputs />,
         <AssetReturnRateInputs />,
-        <AdvancedInputs />
+        <AdvancedInputs />,
     ]
 
     const totalSteps = pages.length
@@ -266,26 +349,9 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
     }
 
     useEffect(() => {
-        localStorage.setItem(localStorageKey, JSON.stringify({
-            age: 20,
-            annualIncome: 70000,
-            annualSpending: 30000,
-            bondsAllocationRate: 0,
-            bondsReturnRate: 0,
-            cashAllocationRate: 0,
-            cashReturnRate: 0,
-            incomeGrowthRate: null,
-            inflationRate: 0,
-            maximumAge: null,
-            networth: 0,
-            retirementAge: null,
-            safeWithdrawalRate: 0.04,
-            stocksAllocationRate: 1,
-            stocksReturnRate: 0.07,
-        }))
-
         return () => {
-            localStorage.removeItem(localStorageKey)
+            localStorage.removeItem(rawInputsKey)
+            localStorage.removeItem(formattedInputsKey)
         }
     }, [])
 
@@ -293,7 +359,7 @@ export default function PlanStepDialog(props: PlanStepDialogProps) {
         if (step < totalSteps) {
             setStep(prevStep => prevStep + 1)
         } else {
-            props.onClose(planName, JSON.parse(localStorage.getItem(localStorageKey)!) as PlanEngineInputs)
+            props.onClose(planName, JSON.parse(localStorage.getItem(rawInputsKey)!) as PlanEngineInputs)
         }
     }
 

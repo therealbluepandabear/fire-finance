@@ -31,7 +31,7 @@ export default function PlanCard(props: PlanCardProps) {
             onClick={() => props.onClick(props.plan)}
         >
             <Box height='240px' position='relative'>
-                <PlanChart data={new PlanEngine(props.plan.inputs).calculate().data} />
+                {/* <PlanChart data={new PlanEngine(props.plan.inputs).calculate().data} /> */}
 
                 <Flex
                     position='absolute'

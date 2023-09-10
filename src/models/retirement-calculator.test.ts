@@ -5,7 +5,7 @@ const planEngine = new PlanEngine({
     annualIncome: 70_000,
     annualSpending: 30_000,
     networth: 0,
-    safeWithdrawalRate: 0.04,
+    withdrawalStrategy: { type: 'DEFAULT', safeWithdrawalRate: 0.04 },
     inflationRate: 0,
     stocksAllocationRate: 1,
     bondsAllocationRate: 0,
@@ -13,7 +13,8 @@ const planEngine = new PlanEngine({
     stocksReturnRate: 0.07,
     bondsReturnRate: 0,
     cashReturnRate: 0,
-    maximumAge: 40
+    maximumAge: 100,
+    retirementAge: 70
 })
 
 afterEach(() => {
@@ -30,6 +31,17 @@ test('outputs data correct', () => {
     expect(Math.floor(data[8].networth)).toBe(410_392)
     expect(Math.floor(data[13].networth)).toBe(805_625)
     expect(Math.floor(data[18].networth)).toBe(1_359_961)
+    expect(Math.floor(data[19].networth)).toBe(1_495_158)
+    expect(Math.floor(data[36].networth)).toBe(5_956_538)
+    expect(Math.floor(data[50].networth)).toBe(16_261_157)
+    expect(Math.floor(data[51].networth)).toBe(17_369_438)
+    expect(Math.floor(data[52].networth)).toBe(18_555_298)
+    expect(Math.floor(data[53].networth)).toBe(19_824_169)
+    expect(Math.floor(data[54].networth)).toBe(21_181_861)
+    expect(Math.floor(data[55].networth)).toBe(22_634_591)
+    expect(Math.floor(data[66].networth)).toBe(47_168_957)
+    expect(Math.floor(data[74].networth)).toBe(80_737_256)
+    expect(Math.floor(data[79].networth)).toBe(113_065_656)
 })
 
 test(`scenarios action 'set' works`, () => {
@@ -69,6 +81,10 @@ test(`scenarios action 'decrease' works`, () => {
     const outputs = planEngine.calculate()
 
     expect(Math.floor(outputs.data[3].networth)).toBe(118_596)
+})
+
+test(`fixed dollar withdrawal strategy works`, () => {
+    
 })
 
 

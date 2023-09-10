@@ -2,27 +2,48 @@ import { Workbook } from 'exceljs'
 import { formatCurrency } from '../utils'
 import { adjustForInflation } from './calculator-utils'
 
+function adjustEngineTotal(target: number, inputs: PlanEngineInputs): Total {
+    return {
+        stocks: target * inputs.stocksAllocationRate,
+        bonds: target * inputs.bondsAllocationRate,
+        cash: target * inputs.cashAllocationRate,
+        networth: target
+    }
+}
+
 interface PlanEngineObserver {
     update(engineState: PlanEngineState): void
 }
 
+class WithdrawalEngine implements PlanEngineObserver {
+    constructor(private readonly inputs: PlanEngineInputs) {
+        this.inputs = inputs
+    }
+
+    update(engineState: PlanEngineState): void {
+        if (engineState.hasRetired) {
+            switch (this.inputs.withdrawalStrategy.type) {
+                case 'DEFAULT':
+                    engineState.total = adjustEngineTotal(engineState.total.networth - engineState.annualSpending, this.inputs)
+                    break
+                case 'FIXED_DOLLAR':
+                    engineState.total = adjustEngineTotal(engineState.total.networth - this.inputs.withdrawalStrategy.amount, this.inputs)
+                    break
+                case 'FIXED_PERCENTAGE':
+                    engineState.total = adjustEngineTotal(engineState.total.networth - this.inputs.withdrawalStrategy.amount, this.inputs)
+                    break  
+            }
+        }
+    }
+}
+
 class ScenarioEngine implements PlanEngineObserver {
-    private readonly inputs: PlanEngineInputs
     private readonly scenarios: Scenario[] = []
 
     private readonly triggeredScenarios: Scenario[] = []
 
-    constructor(inputs: PlanEngineInputs) {
+    constructor(private readonly inputs: PlanEngineInputs) {
         this.inputs = inputs
-    }
-
-    private adjustTotal(targetNetworth: number): Total {
-        return {
-            stocks: targetNetworth * this.inputs.stocksAllocationRate,
-            bonds: targetNetworth * this.inputs.bondsAllocationRate,
-            cash: targetNetworth * this.inputs.cashAllocationRate,
-            networth: targetNetworth 
-        }
     }
 
     private applyAction(base: number, amount: ScenarioEvent['amount'], action: ScenarioEvent['action']): number {
@@ -47,7 +68,7 @@ class ScenarioEngine implements PlanEngineObserver {
                 if (scenario.event.property === 'NETWORTH') {
                     let adjustedNetworth = this.applyAction(engineState.total.networth, scenario.event.amount, scenario.event.action)
 
-                    engineState.total = this.adjustTotal(adjustedNetworth)
+                    engineState.total = adjustEngineTotal(adjustedNetworth, this.inputs)
                 } else if (scenario.event.property === 'INCOME') {
                     let adjustedIncome = this.applyAction(engineState.annualIncome, scenario.event.amount, scenario.event.action)
 
@@ -79,33 +100,19 @@ class ScenarioEngine implements PlanEngineObserver {
 }
 
 class StateRecorderEngine implements PlanEngineObserver {
-    private previousEngineState: PlanEngineState | null = null
-    private readonly inputs: PlanEngineInputs
-
-    constructor(inputs: PlanEngineInputs) {
+    constructor(private readonly inputs: PlanEngineInputs) {
         this.inputs = inputs
     }
 
     update(engineState: PlanEngineState): void {
-        const projectionPoint: ProjectionPoint = {
+        engineState.data.push({
             age: engineState.age,
             year: engineState.year,
             yearsElapsed: engineState.age - this.inputs.age,
             networth: engineState.total.networth
-        }
-
-        if (!this.previousEngineState?.hasRetired && engineState.hasRetired) {
-            engineState.checkpoints.push({
-                text: '...',
-                type: 'MILESTONE',
-                point: engineState.data.at(-1)!
-            })
-        }
-
-        engineState.data.push(projectionPoint)
-        this.previousEngineState = engineState
+        })
     }
-}
+} 
 
 export class PlanEngine {
     private readonly inputs: PlanEngineInputs
@@ -119,6 +126,8 @@ export class PlanEngine {
 
         this.engineState = this.initEngineState()
         
+        // It's important the observers are added in this order
+        this.observers.push(new WithdrawalEngine(this.inputs))
         this.observers.push(this.scenarioEngine)
         this.observers.push(new StateRecorderEngine(this.inputs)) // make sure it's added after scenario engine
     }
@@ -131,12 +140,7 @@ export class PlanEngine {
 
     private initEngineState(): PlanEngineState {
         return { 
-            total: {
-                networth: this.inputs.networth,
-                stocks: this.inputs.networth * this.inputs.stocksAllocationRate,
-                bonds: this.inputs.networth * this.inputs.bondsAllocationRate,
-                cash: this.inputs.networth * this.inputs.cashAllocationRate
-            },
+            total: adjustEngineTotal(this.inputs.networth, this.inputs),
 
             annualSavings: this.calculateAnnualSavings(),
             hasRetired: false,
@@ -196,12 +200,7 @@ export class PlanEngine {
     private calculateTotal(type: 'stocks' | 'bonds' | 'cash', allocationRate: number, returnRate: number): number {
         const savingsContribution = this.engineState.annualSavings * allocationRate
 
-        let totalAmount = this.engineState.total[type] + (this.engineState.total[type] * returnRate) + savingsContribution
-
-        // Take away the expenses amount each year as the user is retired
-        if (this.engineState.hasRetired) {
-            totalAmount = (this.engineState.total[type] + (this.engineState.total[type] * returnRate)) - (this.engineState.annualSpending * allocationRate)
-        }
+        const totalAmount = this.engineState.total[type] + (this.engineState.total[type] * returnRate) + savingsContribution
 
         return totalAmount
     }
@@ -215,7 +214,7 @@ export class PlanEngine {
     }
 
     private isFinanciallyIndependent(): boolean {
-        return (this.engineState.total.networth * this.inputs.safeWithdrawalRate) < this.engineState.annualSpending 
+        return this.inputs.withdrawalStrategy.type === 'DEFAULT' && ((this.engineState.total.networth * this.inputs.withdrawalStrategy.safeWithdrawalRate) < this.engineState.annualSpending)
     }
 
     private calculatePreRetirement(): void {
@@ -254,13 +253,9 @@ export class PlanEngine {
         // capable of 'saving' anything as they are not working at a job
         this.engineState.annualSavings = 0
 
-        ++this.engineState.age
-        ++this.engineState.year
-
         if (this.inputs.maximumAge && this.inputs.retirementAge) {
             for (let i = 1; i <= (this.inputs.maximumAge - this.inputs.retirementAge); ++i) {
                 this.update()
-                this.engineState.data.push({ age: this.engineState.age, year: this.engineState.year, yearsElapsed: this.inputs.retirementAge + i - this.inputs.age, networth: this.engineState.total.networth })
             
                 ++this.engineState.age
                 ++this.engineState.year
@@ -271,7 +266,7 @@ export class PlanEngine {
     }
 
     private getOutputs(): PlanEngineOutputs {
-        const fireNumber = this.engineState.annualSpending / this.inputs.safeWithdrawalRate
+        const fireNumber = this.inputs.withdrawalStrategy.type === 'DEFAULT' ? (this.engineState.annualSpending / this.inputs.withdrawalStrategy.safeWithdrawalRate) : NaN
 
         return {
             summary: {
@@ -376,6 +371,11 @@ export interface PlanCheckpoint {
     point: ProjectionPoint
 }
 
+export type WithdrawalStrategy = 
+    { type: 'DEFAULT', safeWithdrawalRate: number } | 
+    { type: 'FIXED_PERCENTAGE', amount: number } | 
+    { type: 'FIXED_DOLLAR', amount: number }
+
 interface PlanEngineState {
     data: ProjectionPoint[]
     checkpoints: PlanCheckpoint[]
@@ -420,7 +420,6 @@ export interface PlanEngineInputs {
     annualSpending: number
     networth: number
 
-    safeWithdrawalRate: number
     inflationRate: number
 
     stocksAllocationRate: number
@@ -430,6 +429,8 @@ export interface PlanEngineInputs {
     stocksReturnRate: number
     bondsReturnRate: number
     cashReturnRate: number
+
+    withdrawalStrategy: WithdrawalStrategy
 
     incomeGrowthRate?: number
     retirementAge?: number

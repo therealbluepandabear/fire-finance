@@ -104,7 +104,10 @@ export default function PlansPage(props: PlansPageProps) {
 
         await refetchPlans()
 
-        props.onPlanCreated(plans!.at(-1)!)
+        let plan = { ...plans!.at(-1)! }
+        plan.inputs = inputs
+        
+        props.onPlanCreated(plan)
     }
 
     function planCardClickHandler(plan: NewPlan): void {
